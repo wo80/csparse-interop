@@ -1,7 +1,5 @@
 ﻿namespace CSparse.Interop.Umfpack
 {
-    using System;
-
     #region Enums
 
     /// <summary>
@@ -349,7 +347,7 @@
         #region Public properties
 
         /// <summary>
-        /// Gets or sets the print level
+        /// Gets or sets the print level.
         /// </summary>
         public int PrintLevel
         {
@@ -360,7 +358,7 @@
         // Used in UMFPACK_*symbolic only:
 
         /// <summary>
-        /// Gets or sets the dense row parameter
+        /// Gets or sets the dense row parameter for COLAMD.
         /// </summary>
         public double DenseRow
         {
@@ -369,7 +367,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the dense column parameter
+        /// Gets or sets the dense column parameter for COLAMD.
         /// </summary>
         public double DenseColumn
         {
@@ -378,7 +376,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the BLAS-3 block size
+        /// Gets or sets the BLAS-3 block size.
         /// </summary>
         public int BlockSize
         {
@@ -396,7 +394,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the ordering method to use
+        /// Gets or sets the ordering method to use.
         /// </summary>
         public UmfpackOrdering Ordering
         {
@@ -405,7 +403,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the fixQ parameter (-1: no fixQ, 0: default, 1: fixQ).
+        /// Gets or sets a value indicating whether the pre-ordering Q may be modified during factorization (-1: no fixQ, 0: default, 1: fixQ).
         /// </summary>
         public int FixQ
         {
@@ -414,7 +412,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the for AMD ordering
+        /// Gets or sets the dense row/column threshold for AMD ordering.
         /// </summary>
         public double AMD_Dense
         {
@@ -423,7 +421,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the whether or not to use aggressive
+        /// Gets or sets a value indicating whether aggressive absorption is used in COLAMD and AMD.
         /// </summary>
         public bool Aggressive
         {
@@ -432,7 +430,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the singleton filter on if true
+        /// Gets or sets a value indicating whether singletons are removed prior to factorization.
         /// </summary>
         public bool Singletons
         {
@@ -443,7 +441,7 @@
         // Used in UMFPACK_numeric only:
 
         /// <summary>
-        /// Gets or sets the threshold partial pivoting setting
+        /// Gets or sets the partial pivoting tolerance.
         /// </summary>
         public double PivotTolerance
         {
@@ -452,7 +450,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the initial allocation ratio
+        /// Gets or sets the initial allocation ratio.
         /// </summary>
         public double AllocInit
         {
@@ -461,7 +459,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the threshold, only for diag. entries
+        /// Gets or sets the threshold, if diagonal pivoting is attempted (symmetric strategy).
         /// </summary>
         public double SymPivotTolerance
         {
@@ -470,7 +468,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the what row scaling to do
+        /// Gets or sets the row scaling strategy.
         /// </summary>
         public UmfpackScale Scale
         {
@@ -479,7 +477,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the frontal matrix allocation ratio
+        /// Gets or sets the frontal matrix allocation ratio.
         /// </summary>
         public double FrontAllocInit
         {
@@ -488,7 +486,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the drop tolerance for entries in L,U
+        /// Gets or sets the drop tolerance for entries in L and U.
         /// </summary>
         public double DropTolerance
         {
@@ -499,7 +497,7 @@
         // used in UMFPACK_*solve only:
 
         /// <summary>
-        /// Gets or sets the maximum number of iterative refinements
+        /// Gets or sets the maximum number of iterative refinements.
         /// </summary>
         public int IterativeRefinement
         {
