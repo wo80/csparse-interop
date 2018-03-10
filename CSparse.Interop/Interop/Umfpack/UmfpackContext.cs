@@ -66,7 +66,7 @@
         /// <summary>
         /// Solves a system of linear equations, Ax = b.
         /// </summary>
-        /// <param name="input">Right hand side b</param>
+        /// <param name="input">Right hand side vector b.</param>
         /// <param name="result">Solution vector x.</param>
         public void Solve(T[] input, T[] result)
         {
@@ -76,7 +76,7 @@
         /// <summary>
         /// Solves the transpose system of linear equations, A'x = b.
         /// </summary>
-        /// <param name="input">Right hand side b</param>
+        /// <param name="input">Right hand side vector b</param>
         /// <param name="result">Solution vector x.</param>
         public void SolveTranspose(T[] input, T[] result)
         {
@@ -84,31 +84,13 @@
         }
 
         /// <summary>
-        /// Solves multiple systems of linear equations, AX = B.
+        /// Solves a system of linear equations for multiple right-hand sides, AX = B.
         /// </summary>
-        /// <param name="input">Right hand side B</param>
+        /// <param name="input">Right hand side matrix B.</param>
         /// <param name="result">Solution matrix X.</param>
         public void Solve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
-            int count = input.RowCount;
-
-            int rows = input.RowCount;
-            int columns = matrix.ColumnCount;
-
-            var wi = new int[columns];
-            var wx = CreateWorkspace(columns, Control.IterativeRefinement > 0);
-
-            var x = new T[columns];
-            var b = new T[rows];
-
-            for (int i = 0; i < count; i++)
-            {
-                input.Column(i, x);
-
-                DoSolve(UmfpackSolve.A, x, b, wi, wx);
-
-                result.SetColumn(i, b);
-            }
+            Solve(UmfpackSolve.A, input, result);
         }
 
         private void Solve(UmfpackSolve sys, T[] input, T[] result)
@@ -123,6 +105,45 @@
             if (status != Constants.UMFPACK_OK)
             {
                 throw new UmfpackException(status);
+            }
+        }
+
+        private void Solve(UmfpackSolve sys, DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
+        {
+            if (!factorized)
+            {
+                Factorize();
+            }
+
+            // The number of right-hand sides.
+            int count = input.ColumnCount;
+
+            if (count != result.ColumnCount)
+            {
+                throw new ArgumentException("result");
+            }
+
+            int rows = matrix.RowCount;
+            int columns = matrix.ColumnCount;
+
+            var wi = new int[columns];
+            var wx = CreateWorkspace(columns, Control.IterativeRefinement > 0);
+
+            var x = new T[columns];
+            var b = new T[rows];
+
+            for (int i = 0; i < count; i++)
+            {
+                input.Column(i, b);
+
+                int status = DoSolve(sys, b, x, wi, wx);
+
+                if (status != Constants.UMFPACK_OK)
+                {
+                    throw new UmfpackException(status);
+                }
+
+                result.SetColumn(i, x);
             }
         }
 
@@ -161,7 +182,7 @@
         /// <param name="sys">The system to solve.</param>
         /// <param name="input">Right-hand side b.</param>
         /// <param name="result">The solution x.</param>
-        /// <param name="wi">Interger workspace.</param>
+        /// <param name="wi">Integer workspace.</param>
         /// <param name="wx">Double workspace.</param>
         /// <returns></returns>
         protected abstract int DoSolve(UmfpackSolve sys, T[] input, T[] result, int[] wi, double[] wx);
