@@ -24,19 +24,19 @@ namespace CSparse.Benchmark
         }
 
         public void Add(string name, List<BenchmarkResult> results)
-		{
+        {
             sections[name] = results;
         }
 
         public void Save(string file)
-		{
+        {
             using (var writer = new StreamWriter(file))
             {
                 writer.WriteLine("{");
 
                 writer.WriteLine("\"name\": \"{0}\",", name);
                 writer.WriteLine("\"info\": \"{0}\",", info);
-
+                
                 foreach (var section in sections)
                 {
                     WriteSection(section.Key, section.Value, writer);
@@ -52,12 +52,16 @@ namespace CSparse.Benchmark
         {
             writer.WriteLine("\"total\": [");
 
+            int count = totals.Count;
+
             foreach (var tuple in totals)
             {
-                writer.WriteLine("    {{ \"{0}\": {1} }},", tuple.Item1, tuple.Item2.ToString("0.000", CultureInfo.InvariantCulture));
+                writer.WriteLine("    {{ \"{0}\": {1} }}{2}",
+                    tuple.Item1, tuple.Item2.ToString("0.000", CultureInfo.InvariantCulture),
+                    (--count == 0) ? "" : ",");
             }
 
-            writer.WriteLine("],");
+            writer.WriteLine("]");
         }
 
         private void WriteSection(string name, List<BenchmarkResult> results, StreamWriter writer)
@@ -66,9 +70,11 @@ namespace CSparse.Benchmark
 
             writer.WriteLine("\"{0}\": [", name);
 
+            int count = results.Count;
+
             foreach (var result in results)
             {
-                WriteResult(result, writer);
+                WriteResult(result, writer, (--count == 0));
 
                 total += result.Time;
             }
@@ -78,7 +84,7 @@ namespace CSparse.Benchmark
             totals.Add(new Tuple<string, double>(name, total));
         }
 
-        private void WriteResult(BenchmarkResult result, StreamWriter writer)
+        private void WriteResult(BenchmarkResult result, StreamWriter writer, bool last)
         {
             string name = Path.GetFileName(result.File.Path);
 
@@ -88,11 +94,12 @@ namespace CSparse.Benchmark
 
                 return;
             }
-            
-            writer.WriteLine("    {{ \"file\": \"{0}\", \"size\": {1}, \"values\": {2}, \"time\": {3}, \"error\": {4} }},",
+
+            writer.WriteLine("    {{ \"file\": \"{0}\", \"size\": {1}, \"values\": {2}, \"time\": {3}, \"error\": {4} }}{5}",
                 name, result.RowCount, result.NonZerosCount,
                 result.Time.ToString("0.000", CultureInfo.InvariantCulture),
-                result.Residual.ToString("0.00000e00", CultureInfo.InvariantCulture));
+                result.Residual.ToString("0.00000e00", CultureInfo.InvariantCulture),
+                last ? "" : ",");
         }
     }
 }

@@ -66,6 +66,11 @@ namespace CSparse.Benchmark
 
                     line = line.Trim();
 
+                    if (line.StartsWith("#"))
+                    {
+                        continue;
+                    }
+
                     if (line.StartsWith("["))
                     {
                         symmetric = line.Contains("symmetric");
