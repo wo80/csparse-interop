@@ -190,7 +190,7 @@
         /// <summary>
         /// Create workspace for solving multiple right-hand sides.
         /// </summary>
-        /// <param name="n">Number of right-hand sides</param>
+        /// <param name="n">Size of the linear system.</param>
         /// <param name="refine">Perform iterative refinement.</param>
         /// <returns></returns>
         protected abstract double[] CreateWorkspace(int n, bool refine);

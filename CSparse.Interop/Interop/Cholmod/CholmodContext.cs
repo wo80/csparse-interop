@@ -76,21 +76,21 @@
         /// <summary>
         /// Solves a system of linear equations, Ax = b.
         /// </summary>
-        /// <param name="input">Right hand side b</param>
+        /// <param name="input">Right hand side vector b.</param>
         /// <param name="result">Solution vector x.</param>
         public abstract void Solve(T[] input, T[] result);
 
         /// <summary>
         /// Solves the transpose system of linear equations, A'x = b.
         /// </summary>
-        /// <param name="input">Right hand side b</param>
+        /// <param name="input">Right hand side vector b.</param>
         /// <param name="result">Solution vector x.</param>
         public abstract void SolveTranspose(T[] input, T[] result);
 
         /// <summary>
         /// Solves multiple systems of linear equations, AX = B.
         /// </summary>
-        /// <param name="input">Right hand side B</param>
+        /// <param name="input">Right hand side matrix B.</param>
         /// <param name="result">Solution matrix X.</param>
         public virtual void Solve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
