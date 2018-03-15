@@ -53,11 +53,9 @@ namespace CSparse.Benchmark
             {
                 results.Add(new BenchmarkResult(file, "File not found."));
 
-                Console.WriteLine("File not found: {0}", Path.GetFullPath(file.Path));
-
                 return;
             }
-
+            
             try
             {
                 var A = MatrixMarketReader.ReadMatrix<T>(file.Path);

@@ -28,6 +28,9 @@ namespace CSparse.Double
 
             Console.WriteLine("Starting CHOLMOD benchmark ...");
             RunCholmod(collection);
+
+            Console.WriteLine("Starting SuperLU benchmark ...");
+            RunSuperLU(collection);
         }
 
         private static void RunUmfpack(MatrixFileCollection collection)
@@ -50,6 +53,17 @@ namespace CSparse.Double
             benchmark.Run(export);
 
             export.Save("benchmark-cholmod.json");
+        }
+
+        private static void RunSuperLU(MatrixFileCollection collection)
+        {
+            var benchmark = new BenchmarkSuperLU(collection);
+
+            var export = new JsonExport("SuperLU", DateTime.UtcNow.ToString("s"));
+
+            benchmark.Run(export);
+
+            export.Save("benchmark-superlu.json");
         }
     }
 }
