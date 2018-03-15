@@ -75,8 +75,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Complex\Factorization\Cholmod.cs" />
+    <Compile Include="Complex\Factorization\SuperLU.cs" />
     <Compile Include="Complex\Factorization\Umfpack.cs" />
     <Compile Include="Double\Factorization\Cholmod.cs" />
+    <Compile Include="Double\Factorization\SuperLU.cs" />
     <Compile Include="Double\Factorization\Umfpack.cs" />
     <Compile Include="Interop\Cholmod\CholmodCommon.cs" />
     <Compile Include="Interop\Cholmod\CholmodContext.cs" />
@@ -88,6 +90,13 @@
     <Compile Include="Interop\Cholmod\Constants.cs" />
     <Compile Include="Interop\Cholmod\NativeMethods.cs" />
     <Compile Include="Interop\Common\InteropHelper.cs" />
+    <Compile Include="Interop\SuperLU\Constants.cs" />
+    <Compile Include="Interop\SuperLU\NativeMethods.cs" />
+    <Compile Include="Interop\SuperLU\OrderingMethod.cs" />
+    <Compile Include="Interop\SuperLU\SuperLUContext.cs" />
+    <Compile Include="Interop\SuperLU\SuperLUException.cs" />
+    <Compile Include="Interop\SuperLU\SuperLUOptions.cs" />
+    <Compile Include="Interop\SuperLU\SuperMatrix.cs" />
     <Compile Include="Interop\Umfpack\Constants.cs" />
     <Compile Include="Interop\Umfpack\NativeMethods.cs" />
     <Compile Include="Interop\Umfpack\UmfpackContext.cs" />
