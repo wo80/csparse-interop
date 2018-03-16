@@ -87,6 +87,7 @@
     <Compile Include="Benchmark\MatrixFileCollection.cs" />
     <Compile Include="Complex\Util.cs" />
     <Compile Include="Double\BenchmarkRunner.cs" />
+    <Compile Include="Double\BenchmarkPardiso.cs" />
     <Compile Include="Double\BenchmarkSuperLU.cs" />
     <Compile Include="Double\BenchmarkUmfpack.cs" />
     <Compile Include="Double\BenchmarkCholmod.cs" />

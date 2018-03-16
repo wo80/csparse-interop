@@ -7,7 +7,7 @@ namespace CSparse.Double
 
     public class BenchmarkRunner
     {
-        public static void Run(string dataDirectory, string benchmarkFile)
+        public static void Run(string dataDirectory, string benchmarkFile, bool preload = true)
         {
             if (!File.Exists(benchmarkFile))
             {
@@ -23,6 +23,13 @@ namespace CSparse.Double
 
             var collection = new MatrixFileCollection(benchmarkFile, dataDirectory);
 
+            // Preloading will speed up the benchmark, but consume more memory.
+            if (preload)
+            {
+                Console.WriteLine("Loading matrix collection ...");
+                collection.Preload<double>();
+            }
+
             Console.WriteLine("Starting UMFPACK benchmark ...");
             RunUmfpack(collection);
 
@@ -31,6 +38,9 @@ namespace CSparse.Double
 
             Console.WriteLine("Starting SuperLU benchmark ...");
             RunSuperLU(collection);
+
+            Console.WriteLine("Starting PARDISO benchmark ...");
+            RunPardiso(collection);
         }
 
         private static void RunUmfpack(MatrixFileCollection collection)
@@ -64,6 +74,17 @@ namespace CSparse.Double
             benchmark.Run(export);
 
             export.Save("benchmark-superlu.json");
+        }
+
+        private static void RunPardiso(MatrixFileCollection collection)
+        {
+            var benchmark = new BenchmarkPardiso(collection);
+
+            var export = new JsonExport("PARDISO", DateTime.UtcNow.ToString("s"));
+
+            benchmark.Run(export);
+
+            export.Save("benchmark-pardiso.json");
         }
     }
 }

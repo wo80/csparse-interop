@@ -1,6 +1,7 @@
 ﻿
 namespace CSparse.Benchmark
 {
+    using CSparse.IO;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -9,6 +10,7 @@ namespace CSparse.Benchmark
     {
         public bool Symmetric { get; set; }
         public string Path { get; set; }
+        public object Matrix { get; set; }
     }
 
     public class MatrixFileCollection
@@ -32,6 +34,25 @@ namespace CSparse.Benchmark
             }
 
             return generalList.Count;
+        }
+
+        public int Preload<T>() where T : struct, IEquatable<T>, IFormattable
+        {
+            int count = 0;
+
+            foreach (var item in generalList)
+            {
+                item.Matrix = MatrixMarketReader.ReadMatrix<T>(item.Path);
+                count++;
+            }
+
+            foreach (var item in symmetricList)
+            {
+                item.Matrix = MatrixMarketReader.ReadMatrix<T>(item.Path);
+                count++;
+            }
+
+            return count;
         }
 
         public List<MatrixFile> Get(bool symmetric)

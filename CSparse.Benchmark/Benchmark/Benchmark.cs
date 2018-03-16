@@ -57,7 +57,12 @@ namespace CSparse.Benchmark
             
             try
             {
-                var A = MatrixMarketReader.ReadMatrix<T>(file.Path);
+                var A = (CompressedColumnStorage<T>)file.Matrix;
+
+                if (A == null)
+                {
+                    A = MatrixMarketReader.ReadMatrix<T>(file.Path);
+                }
 
                 int columns = A.ColumnCount;
 
