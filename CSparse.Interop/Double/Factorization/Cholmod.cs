@@ -27,12 +27,6 @@ namespace CSparse.Double.Factorization
             Solve(new DenseMatrix(matrix.RowCount, 1, input), new DenseMatrix(matrix.ColumnCount, 1, result));
         }
 
-        /// <inheritdoc />
-        public override void SolveTranspose(double[] input, double[] result)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override CholmodDense CreateDense(DenseColumnMajorStorage<double> matrix, List<GCHandle> handles)
         {
             var A = new CholmodDense();

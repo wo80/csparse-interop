@@ -81,13 +81,6 @@
         public abstract void Solve(T[] input, T[] result);
 
         /// <summary>
-        /// Solves the transpose system of linear equations, A'x = b.
-        /// </summary>
-        /// <param name="input">Right hand side vector b.</param>
-        /// <param name="result">Solution vector x.</param>
-        public abstract void SolveTranspose(T[] input, T[] result);
-
-        /// <summary>
         /// Solves multiple systems of linear equations, AX = B.
         /// </summary>
         /// <param name="input">Right hand side matrix B.</param>

@@ -30,12 +30,6 @@ namespace CSparse.Complex.Factorization
             Solve(new DenseMatrix(matrix.RowCount, 1, input), new DenseMatrix(matrix.ColumnCount, 1, result));
         }
 
-        /// <inheritdoc />
-        public override void SolveTranspose(Complex[] input, Complex[] result)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override CholmodDense CreateDense(DenseColumnMajorStorage<Complex> matrix, List<GCHandle> handles)
         {
             var A = new CholmodDense();
