@@ -75,9 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Complex\Factorization\Cholmod.cs" />
+    <Compile Include="Complex\Factorization\Pardiso.cs" />
     <Compile Include="Complex\Factorization\SuperLU.cs" />
     <Compile Include="Complex\Factorization\Umfpack.cs" />
     <Compile Include="Double\Factorization\Cholmod.cs" />
+    <Compile Include="Double\Factorization\Pardiso.cs" />
     <Compile Include="Double\Factorization\SuperLU.cs" />
     <Compile Include="Double\Factorization\Umfpack.cs" />
     <Compile Include="Factorization\IDisposableSolver.cs" />
@@ -91,6 +93,13 @@
     <Compile Include="Interop\Cholmod\Constants.cs" />
     <Compile Include="Interop\Cholmod\NativeMethods.cs" />
     <Compile Include="Interop\Common\InteropHelper.cs" />
+    <Compile Include="Interop\Pardiso\Constants.cs" />
+    <Compile Include="Interop\Pardiso\NativeMethods.cs" />
+    <Compile Include="Interop\Pardiso\PardisoContext.cs" />
+    <Compile Include="Interop\Pardiso\PardisoException.cs" />
+    <Compile Include="Interop\Pardiso\PardisoMatrixType.cs" />
+    <Compile Include="Interop\Pardiso\PardisoOptions.cs" />
+    <Compile Include="Interop\Pardiso\PardisoOrdering.cs" />
     <Compile Include="Interop\SuperLU\Constants.cs" />
     <Compile Include="Interop\SuperLU\NativeMethods.cs" />
     <Compile Include="Interop\SuperLU\OrderingMethod.cs" />
