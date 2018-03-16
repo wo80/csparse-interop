@@ -11,7 +11,7 @@ namespace CSparse.Interop.SuperLU
     /// <summary>
     /// SuperLU context wrapping native factorization.
     /// </summary>
-    public abstract class SuperLUContext<T> : IDisposable, ISolver<T>
+    public abstract class SuperLUContext<T> : IDisposableSolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         protected readonly CompressedColumnStorage<T> matrix;

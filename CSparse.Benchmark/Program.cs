@@ -8,14 +8,14 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            var c = GetCommendLine(args);
+            var c = GetCommandLine(args);
 
             CSparse.Double.BenchmarkRunner.Run(c["data"], c["benchmark"]);
 
             Console.WriteLine("Done.");
         }
 
-        private static Dictionary<string, string> GetCommendLine(string[] args)
+        private static Dictionary<string, string> GetCommandLine(string[] args)
         {
             var c = new Dictionary<string, string>();
 

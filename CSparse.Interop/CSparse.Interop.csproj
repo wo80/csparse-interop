@@ -80,6 +80,7 @@
     <Compile Include="Double\Factorization\Cholmod.cs" />
     <Compile Include="Double\Factorization\SuperLU.cs" />
     <Compile Include="Double\Factorization\Umfpack.cs" />
+    <Compile Include="Factorization\IDisposableSolver.cs" />
     <Compile Include="Interop\Cholmod\CholmodCommon.cs" />
     <Compile Include="Interop\Cholmod\CholmodContext.cs" />
     <Compile Include="Interop\Cholmod\CholmodDense.cs" />
@@ -106,9 +107,7 @@
     <Compile Include="Interop\Umfpack\UmfpackSolve.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Factorization\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

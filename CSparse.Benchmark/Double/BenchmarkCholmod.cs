@@ -3,17 +3,18 @@ namespace CSparse.Double
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
+    using CSparse.Factorization;
     using CSparse.Storage;
     using System;
 
-    class BenchmarkCholmod : Benchmark<Cholmod, double>
+    class BenchmarkCholmod : Benchmark<double>
     {
         public BenchmarkCholmod(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
-        protected override Cholmod CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
+        protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
             var solver = new Cholmod((SparseMatrix)matrix);
 

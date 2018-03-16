@@ -9,8 +9,7 @@ namespace CSparse.Benchmark
     using System.Diagnostics;
     using System.IO;
 
-    public abstract class Benchmark<S, T>
-        where S : IDisposable, ISolver<T>
+    public abstract class Benchmark<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         private MatrixFileCollection collection;
@@ -109,7 +108,7 @@ namespace CSparse.Benchmark
 
         protected abstract T[] CreateTestVector(int size);
 
-        protected abstract S CreateSolver(CompressedColumnStorage<T> matrix, bool symmetric);
+        protected abstract IDisposableSolver<T> CreateSolver(CompressedColumnStorage<T> matrix, bool symmetric);
 
         protected abstract double ComputeError(T[] actual, T[] expected);
     }

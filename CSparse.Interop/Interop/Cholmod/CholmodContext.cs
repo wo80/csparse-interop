@@ -10,7 +10,7 @@
     /// <summary>
     /// CHOLMOD context wrapping native factorization.
     /// </summary>
-    public abstract class CholmodContext<T> : IDisposable, ISolver<T>
+    public abstract class CholmodContext<T> : IDisposableSolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         protected readonly CompressedColumnStorage<T> matrix;
@@ -31,7 +31,7 @@
         /// <summary>
         /// Return the CHOLMOD version.
         /// </summary>
-        /// <returns>The CHOLMOD version</returns>
+        /// <returns>The CHOLMOD version.</returns>
         public static Version Version()
         {
             int[] version = new int[3];

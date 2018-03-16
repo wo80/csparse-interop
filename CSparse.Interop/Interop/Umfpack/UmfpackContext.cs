@@ -7,7 +7,7 @@
     /// <summary>
     /// UMFPACK context wrapping native factorization.
     /// </summary>
-    public abstract class UmfpackContext<T> : IDisposable, ISolver<T>
+    public abstract class UmfpackContext<T> : IDisposableSolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         protected readonly CompressedColumnStorage<T> matrix;

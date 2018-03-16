@@ -3,17 +3,18 @@ namespace CSparse.Double
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
+    using CSparse.Factorization;
     using CSparse.Interop.SuperLU;
     using CSparse.Storage;
 
-    class BenchmarkSuperLU : Benchmark<SuperLU, double>
+    class BenchmarkSuperLU : Benchmark<double>
     {
         public BenchmarkSuperLU(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
-        protected override SuperLU CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
+        protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
             var solver = new SuperLU((SparseMatrix)matrix);
 

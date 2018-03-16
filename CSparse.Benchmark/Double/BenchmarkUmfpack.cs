@@ -3,17 +3,18 @@ namespace CSparse.Double
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
+    using CSparse.Factorization;
     using CSparse.Interop.Umfpack;
     using CSparse.Storage;
 
-    class BenchmarkUmfpack : Benchmark<Umfpack, double>
+    class BenchmarkUmfpack : Benchmark<double>
     {
         public BenchmarkUmfpack(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
-        protected override Umfpack CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
+        protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
             var solver = new Umfpack((SparseMatrix)matrix);
 
