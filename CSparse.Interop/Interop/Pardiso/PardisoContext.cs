@@ -79,8 +79,8 @@ namespace CSparse.Interop.Pardiso
         /// <param name="result">Solution vector x.</param>
         public void Solve(T[] input, T[] result)
         {
-            // NOTE: use conjugate-transposed, since PARDISO expects CSR storage, but CSparse uses CSC storage.
-            Solve(Constants.ConjugateTransposed, input, result);
+            // NOTE: use transposed, since PARDISO expects CSR storage, but CSparse uses CSC storage.
+            Solve(Constants.Transposed, input, result);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace CSparse.Interop.Pardiso
         /// <param name="result">Solution matrix X.</param>
         public void Solve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
-            Solve(Constants.ConjugateTransposed, input, result);
+            Solve(Constants.Transposed, input, result);
         }
 
         protected void Solve(int sys, DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
@@ -209,7 +209,7 @@ namespace CSparse.Interop.Pardiso
             var iparm = options.iparm;
 
             var h = new List<GCHandle>();
-
+            
             try
             {
                 var a = InteropHelper.Pin(matrix.Values, h);
