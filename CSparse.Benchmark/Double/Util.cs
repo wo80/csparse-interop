@@ -1,8 +1,8 @@
 ﻿
-using CSparse.Storage;
-
 namespace CSparse.Double
 {
+    using CSparse.Storage;
+
     static class Util
     {
         public static double ComputeError(double[] actual, double[] expected, bool relativeError = true)

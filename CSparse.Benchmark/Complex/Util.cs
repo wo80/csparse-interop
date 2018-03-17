@@ -1,7 +1,6 @@
 ﻿
-namespace ConsoleApp.Complex
+namespace CSparse.Complex
 {
-    using CSparse.Complex;
     using CSparse.Storage;
     using System.Numerics;
 

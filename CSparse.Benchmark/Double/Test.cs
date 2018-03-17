@@ -1,0 +1,198 @@
+﻿
+namespace CSparse.Double
+{
+    using CSparse.Factorization;
+    using System;
+
+    abstract class Test
+    {
+        private const double ERROR_THRESHOLD = 1e-3;
+
+        private string name;
+
+        public Test(string name)
+        {
+            this.name = name;
+        }
+
+        public void Run(SparseMatrix A, SparseMatrix B)
+        {
+            TestRandom(A);
+            TestRandomSymmetric(B);
+            //TestRandomMulti(A);
+        }
+
+        protected virtual void TestRandom(SparseMatrix matrix)
+        {
+            Console.Write("Testing {0} ... ", name);
+
+            var A = (SparseMatrix)matrix.Clone();
+
+            int n = A.RowCount;
+
+            var x = Vector.Create(n, 1.0);
+            var b = Vector.Create(n, 0.0);
+            var s = Vector.Clone(x);
+
+            A.Multiply(x, b);
+
+            Vector.Clear(x);
+
+            try
+            {
+                using (var solver = CreateSolver(A, false))
+                {
+                    solver.Solve(b, x);
+                }
+
+                double error = Util.ComputeError(x, s);
+
+                if (error > ERROR_THRESHOLD)
+                {
+                    Warning("relative error too large");
+                }
+                else
+                {
+                    Ok("OK");
+                }
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
+        }
+
+        protected virtual void TestRandomSymmetric(SparseMatrix matrix)
+        {
+            Console.Write("Testing {0} (symmetric) ... ", name);
+
+            var A = (SparseMatrix)matrix.Clone();
+
+            int n = A.RowCount;
+
+            var x = Vector.Create(n, 1.0);
+            var b = Vector.Create(n, 0.0);
+            var s = Vector.Clone(x);
+
+            A.Multiply(x, b);
+
+            Vector.Clear(x);
+
+            try
+            {
+                using (var solver = CreateSolver(A, true))
+                {
+                    solver.Solve(b, x);
+                }
+                
+                double error = Util.ComputeError(x, s);
+
+                if (error > ERROR_THRESHOLD)
+                {
+                    Warning("relative error too large");
+                }
+                else
+                {
+                    Ok("OK");
+                }
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
+        }
+
+        protected virtual void TestRandomMulti(SparseMatrix matrix)
+        {
+            Console.Write("Testing {0} (multi) ... ", name);
+
+            var A = (SparseMatrix)matrix.Clone();
+
+            int count = 3;
+
+            int n = A.RowCount;
+
+            var b = Vector.Create(n, 0.0);
+            var x = Vector.Create(n, 0.0);
+            var s = Vector.Create(n, 0.0);
+
+            var X = new DenseMatrix(n, count);
+            var S = new DenseMatrix(n, count);
+            var B = new DenseMatrix(n, count);
+
+            for (int i = 0; i < count; i++)
+            {
+                x = Vector.Create(n, i + 1);
+
+                X.SetColumn(i, x);
+                S.SetColumn(i, x);
+
+                A.Multiply(x, b);
+
+                B.SetColumn(i, b);
+            }
+
+            X.Clear();
+
+            try
+            {
+                using (var solver = CreateSolver(A, false))
+                {
+                    //solver.Solve(B, X);
+                }
+
+                double error = 0.0;
+
+                for (int i = 0; i < count; i++)
+                {
+                    X.Column(i, x);
+                    S.Column(i, s);
+
+                    error += Util.ComputeError(x, s);
+                }
+                
+                if (error / count > ERROR_THRESHOLD)
+                {
+                    Warning("relative error too large");
+                }
+                else
+                {
+                    Ok("OK");
+                }
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
+        }
+
+        protected abstract IDisposableSolver<double> CreateSolver(SparseMatrix matrix, bool symmetric);
+
+        private void Ok(string message)
+        {
+            var color = Console.ForegroundColor;
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(message);
+            Console.ForegroundColor = color;
+        }
+
+        private void Warning(string message)
+        {
+            var color = Console.ForegroundColor;
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(message);
+            Console.ForegroundColor = color;
+        }
+
+        private void Error(string message)
+        {
+            var color = Console.ForegroundColor;
+
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine(message);
+            Console.ForegroundColor = color;
+        }
+    }
+}
