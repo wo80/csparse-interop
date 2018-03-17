@@ -197,11 +197,12 @@
 
         #region IDisposable
 
-        // See https://msdn.microsoft.com/de-de/library/ms244737.aspx
+        // See https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected abstract void Dispose(bool disposing);

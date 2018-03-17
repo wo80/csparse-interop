@@ -2,6 +2,7 @@
 namespace CSparse.Double.Factorization
 {
     using CSparse.Interop.Pardiso;
+    using System;
 
     /// <summary>
     /// PARDISO wrapper.
@@ -22,6 +23,16 @@ namespace CSparse.Double.Factorization
         public Pardiso(SparseMatrix matrix, int mtype)
             : base(matrix, mtype)
         {
+            switch (mtype)
+            {
+                case PardisoMatrixType.RealNonsymmetric:
+                case PardisoMatrixType.RealStructurallySymmetric:
+                case PardisoMatrixType.RealSymmetricIndefinite:
+                case PardisoMatrixType.RealSymmetricPositiveDefinite:
+                    break;
+                default:
+                    throw new ArgumentException("Invalid matrix type: expected real.", "mtype");
+            }
         }
 
         /// <inheritdoc />

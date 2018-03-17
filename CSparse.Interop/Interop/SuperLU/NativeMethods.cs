@@ -970,7 +970,7 @@ namespace CSparse.Interop.SuperLU
         public static extern void zgssv(ref superlu_options options, ref SuperMatrix A, int[] perm_c, int[] perm_r, ref SuperMatrix L,
               ref SuperMatrix U, ref SuperMatrix B, ref SuperLUStat stat, out int info);
 
-        [DllImport(SuperLU, EntryPoint = "dgssvx", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SuperLU, EntryPoint = "zgssvx", CallingConvention = CallingConvention.Cdecl)]
         public static extern void zgssvx(ref superlu_options options, ref SuperMatrix A, int[] perm_c, int[] perm_r, int[] etree,
                byte[] equed, double[] R, double[] C, ref SuperMatrix L, ref SuperMatrix U,
                IntPtr work, int lwork, ref SuperMatrix _B, ref SuperMatrix X,

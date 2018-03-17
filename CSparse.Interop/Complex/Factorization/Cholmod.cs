@@ -39,7 +39,7 @@ namespace CSparse.Complex.Factorization
             A.nzmax = (uint)(matrix.RowCount * matrix.ColumnCount);
 
             A.dtype = Dtype.Double;
-            A.xtype = Xtype.Real;
+            A.xtype = Xtype.Complex;
 
             A.x = InteropHelper.Pin(matrix.Values, handles);
             A.z = IntPtr.Zero;
@@ -56,7 +56,7 @@ namespace CSparse.Complex.Factorization
             A.ncol = (uint)matrix.ColumnCount;
 
             A.dtype = Dtype.Double;
-            A.xtype = Xtype.Real;
+            A.xtype = Xtype.Complex;
             A.stype = Stype.Upper; // TODO: this should be configurable!
 
             A.itype = Constants.CHOLMOD_INT;

@@ -257,6 +257,7 @@
         /* cholmod_analyze can try. Must be >= 9. */
 
         public const int CHOLMOD_OK = 0;			/* success */
+        public const int TRUE = 1;
 
         /* ordering method (also used for L->ordering) */
         public const int CHOLMOD_NATURAL = 0;	/* use natural ordering */

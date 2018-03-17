@@ -2,6 +2,7 @@
 namespace CSparse.Complex.Factorization
 {
     using CSparse.Interop.Pardiso;
+    using System;
     using System.Numerics;
 
     /// <summary>
@@ -23,6 +24,17 @@ namespace CSparse.Complex.Factorization
         public Pardiso(SparseMatrix matrix, int mtype)
             : base(matrix, mtype)
         {
+            switch (mtype)
+            {
+                case PardisoMatrixType.ComplexHermitianIndefinite:
+                case PardisoMatrixType.ComplexHermitianPositiveDefinite:
+                case PardisoMatrixType.ComplexNonsymmetric:
+                case PardisoMatrixType.ComplexStructurallySymmetric:
+                case PardisoMatrixType.ComplexSymmetric:
+                    break;
+                default:
+                    throw new ArgumentException("Invalid matrix type: expected complex.", "mtype");
+            }
         }
 
         /// <inheritdoc />

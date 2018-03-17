@@ -51,15 +51,12 @@ namespace CSparse.Interop.Pardiso
 
             DoInitialize();
         }
-
-        // Since L and U store unmanaged memory, the finalizer will
-        // dispose of the resources.
+        
         ~PardisoContext()
         {
             Dispose(false);
         }
-
-
+        
         /// <summary>
         /// Factorizes the matrix associated to this UMFPACK instance.
         /// </summary>
@@ -293,7 +290,7 @@ namespace CSparse.Interop.Pardiso
 
         #region IDisposable
 
-        // IDisposable, see https://msdn.microsoft.com/de-de/library/ms244737.aspx
+        // See https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 
         public void Dispose()
         {

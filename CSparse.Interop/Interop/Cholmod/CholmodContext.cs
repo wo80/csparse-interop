@@ -51,8 +51,13 @@
             this.handles = new List<GCHandle>();
 
             common = new CholmodCommon();
+            common.Initialize();
 
             NativeMethods.cholmod_start(ref common);
+
+#if !DEBUG
+            common.print = 0; // Disable all errors and warnings.
+#endif
         }
 
         ~CholmodContext()
@@ -65,7 +70,9 @@
         /// </summary>
         public void Factorize()
         {
-            if (DoFactorize() != 1)
+            DoFactorize();
+
+            if (common.status != Constants.CHOLMOD_OK)
             {
                 throw new CholmodException(common.status);
             }
@@ -92,7 +99,9 @@
                 Factorize();
             }
 
-            if (DoSolve(CholmodSolve.A, input, result) != 1)
+            DoSolve(CholmodSolve.A, input, result);
+
+            if (common.status != Constants.CHOLMOD_OK)
             {
                 throw new CholmodException(common.status);
             }
@@ -105,12 +114,17 @@
         {
             A = CreateSparse(matrix, handles);
 
-            if (NativeMethods.cholmod_check_sparse(ref A, ref common) != 1)
+            if (NativeMethods.cholmod_check_sparse(ref A, ref common) != Constants.TRUE)
             {
-                return -1;
+                return -1000;
             }
 
             Lp = NativeMethods.cholmod_analyze(ref A, ref common);
+
+            if (common.status != Constants.CHOLMOD_OK)
+            {
+                return common.status;
+            }
 
             L = (CholmodFactor)Marshal.PtrToStructure(Lp, typeof(CholmodFactor));
 
@@ -135,7 +149,7 @@
 
                 if (common.status != Constants.CHOLMOD_OK)
                 {
-                    throw new CholmodException(common.status);
+                    return common.status;
                 }
 
                 var X = (CholmodDense)Marshal.PtrToStructure(ptr, typeof(CholmodDense));
@@ -144,7 +158,7 @@
 
                 NativeMethods.cholmod_free_dense(ref ptr, ref common);
 
-                return 1;
+                return common.status;
             }
             finally
             {
@@ -177,11 +191,12 @@
 
         #region IDisposable
 
-        // See https://msdn.microsoft.com/de-de/library/ms244737.aspx
+        // See https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose
 
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -197,7 +212,7 @@
 
                 NativeMethods.cholmod_finish(ref common);
 
-                L = default(CholmodFactor);
+                Lp = IntPtr.Zero;
             }
         }
 
