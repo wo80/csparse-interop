@@ -63,6 +63,10 @@ namespace CSparse.Double
                     Ok("OK");
                 }
             }
+            catch (DllNotFoundException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 Error(e.Message);
@@ -102,6 +106,10 @@ namespace CSparse.Double
                 {
                     Ok("OK");
                 }
+            }
+            catch (DllNotFoundException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -166,6 +174,10 @@ namespace CSparse.Double
                 {
                     Ok("OK");
                 }
+            }
+            catch (DllNotFoundException)
+            {
+                throw;
             }
             catch (Exception e)
             {

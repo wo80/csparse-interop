@@ -64,6 +64,10 @@ namespace CSparse.Complex
                     Ok("OK");
                 }
             }
+            catch (DllNotFoundException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 Error(e.Message);
@@ -103,6 +107,10 @@ namespace CSparse.Complex
                 {
                     Ok("OK");
                 }
+            }
+            catch (DllNotFoundException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -167,6 +175,10 @@ namespace CSparse.Complex
                 {
                     Ok("OK");
                 }
+            }
+            catch (DllNotFoundException)
+            {
+                throw;
             }
             catch (Exception e)
             {
