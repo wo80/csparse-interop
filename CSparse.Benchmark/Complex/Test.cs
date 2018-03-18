@@ -18,9 +18,16 @@ namespace CSparse.Complex
 
         public void Run(SparseMatrix A, SparseMatrix B)
         {
-            TestRandom(A);
-            TestRandomSymmetric(B);
-            //TestRandomMulti(A);
+            try
+            {
+                TestRandom(A);
+                TestRandomSymmetric(B);
+                //TestRandomMulti(A);
+            }
+            catch (Exception e)
+            {
+                Error(e.Message);
+            }
         }
 
         protected virtual void TestRandom(SparseMatrix matrix)
