@@ -2,9 +2,7 @@
 namespace CSparse.Double.Factorization
 {
     using CSparse.Interop.Cholmod;
-    using CSparse.Interop.Common;
     using CSparse.Storage;
-    using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
 
@@ -29,46 +27,13 @@ namespace CSparse.Double.Factorization
 
         protected override CholmodDense CreateDense(DenseColumnMajorStorage<double> matrix, List<GCHandle> handles)
         {
-            var A = new CholmodDense();
-
-            A.nrow = (uint)matrix.RowCount;
-            A.ncol = (uint)matrix.ColumnCount;
-            A.nzmax = (uint)(matrix.RowCount * matrix.ColumnCount);
-
-            A.dtype = Dtype.Double;
-            A.xtype = Xtype.Real;
-
-            A.x = InteropHelper.Pin(matrix.Values, handles);
-            A.z = IntPtr.Zero;
-            A.d = (uint)matrix.RowCount; // TODO: cholmod_dense leading dimension?
-
-            return A;
+            return CholmodHelper.CreateDense(matrix, handles);
         }
 
         protected override CholmodSparse CreateSparse(CompressedColumnStorage<double> matrix, List<GCHandle> handles)
         {
-            var A = new CholmodSparse();
-
-            A.nrow = (uint)matrix.RowCount;
-            A.ncol = (uint)matrix.ColumnCount;
-
-            A.dtype = Dtype.Double;
-            A.xtype = Xtype.Real;
-            A.stype = Stype.Upper; // TODO: this should be configurable!
-
-            A.itype = Constants.CHOLMOD_INT;
-
-            A.nzmax = (uint)matrix.Values.Length;
-            A.packed = 1;
-            A.sorted = 1;
-
-            A.nz = IntPtr.Zero;
-            A.p = InteropHelper.Pin(matrix.ColumnPointers, handles);
-            A.i = InteropHelper.Pin(matrix.RowIndices, handles);
-            A.x = InteropHelper.Pin(matrix.Values, handles);
-            A.z = IntPtr.Zero;
-
-            return A;
+            // TODO: Stype this should be configurable!
+            return CholmodHelper.CreateSparse(matrix, Stype.Upper, handles);
         }
 
         protected override void CopyDense(CholmodDense dense, DenseColumnMajorStorage<double> matrix)
