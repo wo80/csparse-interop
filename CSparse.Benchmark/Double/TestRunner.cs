@@ -15,6 +15,7 @@ namespace CSparse.Double
 
             new TestUmfpack().Run(A, B);
             new TestCholmod().Run(A, B);
+            new TestSPQR().Run(A, B);
             new TestSuperLU().Run(A, B);
             new TestPardiso().Run(A, B);
 

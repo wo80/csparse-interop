@@ -94,11 +94,6 @@
         /// <param name="result">Solution matrix X.</param>
         public virtual void Solve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
-            if (!factorized)
-            {
-                Factorize();
-            }
-
             DoSolve(CholmodSolve.A, input, result);
 
             if (common.status != Constants.CHOLMOD_OK)
@@ -139,6 +134,11 @@
         /// <param name="result">Solution matrix X.</param>
         protected virtual int DoSolve(CholmodSolve sys, DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
+            if (!factorized)
+            {
+                Factorize();
+            }
+
             var h = new List<GCHandle>();
 
             try

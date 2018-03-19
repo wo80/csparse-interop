@@ -87,6 +87,7 @@
     <Compile Include="Benchmark\MatrixFileCollection.cs" />
     <Compile Include="Complex\Test.cs" />
     <Compile Include="Complex\TestCholmod.cs" />
+    <Compile Include="Complex\TestSPQR.cs" />
     <Compile Include="Complex\TestSuperLU.cs" />
     <Compile Include="Complex\TestRunner.cs" />
     <Compile Include="Complex\TestPardiso.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Double\BenchmarkCholmod.cs" />
     <Compile Include="Double\TestCholmod.cs" />
     <Compile Include="Double\Test.cs" />
+    <Compile Include="Double\TestSPQR.cs" />
     <Compile Include="Double\TestSuperLU.cs" />
     <Compile Include="Double\TestRunner.cs" />
     <Compile Include="Double\TestPardiso.cs" />
