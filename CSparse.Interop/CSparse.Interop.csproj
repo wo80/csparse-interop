@@ -80,7 +80,6 @@
     <Compile Include="Complex\Factorization\SPQR.cs" />
     <Compile Include="Complex\Factorization\SuperLU.cs" />
     <Compile Include="Complex\Factorization\Umfpack.cs" />
-
     <Compile Include="Double\Factorization\CholmodHelper.cs" />
     <Compile Include="Double\Factorization\Cholmod.cs" />
     <Compile Include="Double\Factorization\Pardiso.cs" />

@@ -3,12 +3,16 @@ namespace CSparse.Double
 {
     using CSparse.Factorization;
     using System;
+    using System.Diagnostics;
+    using System.Globalization;
 
     abstract class Test
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
         private string name;
+
+        private Stopwatch timer = new Stopwatch();
 
         public Test(string name)
         {
@@ -47,10 +51,16 @@ namespace CSparse.Double
 
             try
             {
+                timer.Restart();
+
                 using (var solver = CreateSolver(A, false))
                 {
                     solver.Solve(b, x);
                 }
+
+                timer.Stop();
+
+                Time(timer.ElapsedMilliseconds);
 
                 double error = Util.ComputeError(x, s);
 
@@ -91,11 +101,17 @@ namespace CSparse.Double
 
             try
             {
+                timer.Restart();
+
                 using (var solver = CreateSolver(A, true))
                 {
                     solver.Solve(b, x);
                 }
-                
+
+                timer.Stop();
+
+                Time(timer.ElapsedMilliseconds);
+
                 double error = Util.ComputeError(x, s);
 
                 if (error > ERROR_THRESHOLD)
@@ -151,10 +167,16 @@ namespace CSparse.Double
 
             try
             {
+                timer.Restart();
+
                 using (var solver = CreateSolver(A, false))
                 {
                     //solver.Solve(B, X);
                 }
+
+                timer.Stop();
+
+                Time(timer.ElapsedMilliseconds);
 
                 double error = 0.0;
 
@@ -165,7 +187,7 @@ namespace CSparse.Double
 
                     error += Util.ComputeError(x, s);
                 }
-                
+
                 if (error / count > ERROR_THRESHOLD)
                 {
                     Warning("relative error too large");
@@ -186,6 +208,15 @@ namespace CSparse.Double
         }
 
         protected abstract IDisposableSolver<double> CreateSolver(SparseMatrix matrix, bool symmetric);
+
+        private void Time(long ms)
+        {
+            var color = Console.ForegroundColor;
+            
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.0s}] ", ms / 1000.0));
+            Console.ForegroundColor = color;
+        }
 
         private void Ok(string message)
         {

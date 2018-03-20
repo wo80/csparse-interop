@@ -10,8 +10,8 @@ namespace CSparse.Double
         {
             Console.WriteLine("Running tests (Double) ...");
 
-            var A = Random(1000, 1000, 0.1);
-            var B = RandomSymmetric(1000, 0.1, true);
+            var A = Random(1000, 1000, 0.05);
+            var B = RandomSymmetric(1000, 0.05, true);
 
             new TestUmfpack().Run(A, B);
             new TestCholmod().Run(A, B);
