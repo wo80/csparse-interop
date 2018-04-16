@@ -6,6 +6,7 @@ namespace CSparse.Interop.Pardiso
     using CSparse.Storage;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.InteropServices;
 
     public abstract class PardisoContext<T> : IDisposableSolver<T>
@@ -147,10 +148,10 @@ namespace CSparse.Interop.Pardiso
                 var ia = InteropHelper.Pin(matrix.ColumnPointers, h);
                 var ja = InteropHelper.Pin(matrix.RowIndices, h);
 
-                int phase = 11;
-
                 // Reordering and Symbolic Factorization. This step also allocates
                 // all memory that is necessary for the factorization.
+                int phase = 11;
+
                 NativeMethods.pardiso(pt, ref maxfct, ref mnum, ref mtype, ref phase,
                              ref n, a, ia, ja, perm, ref nrhs, iparm, ref msglvl,
                              IntPtr.Zero, IntPtr.Zero, out error);
@@ -182,9 +183,9 @@ namespace CSparse.Interop.Pardiso
                 var ia = InteropHelper.Pin(matrix.ColumnPointers, h);
                 var ja = InteropHelper.Pin(matrix.RowIndices, h);
 
+                // Numerical factorization.
                 int phase = 22;
 
-                // Numerical factorization.
                 NativeMethods.pardiso(pt, ref maxfct, ref mnum, ref mtype, ref phase,
                              ref n, a, ia, ja, perm, ref nrhs, iparm, ref msglvl,
                              IntPtr.Zero, IntPtr.Zero, out error);
@@ -270,12 +271,11 @@ namespace CSparse.Interop.Pardiso
                 var b = InteropHelper.Pin(input.Values, h);
                 var x = InteropHelper.Pin(result.Values, h);
 
-                int phase = 33;
-
                 iparm[11] = sys;
 
-                // Reordering and Symbolic Factorization. This step also allocates
-                // all memory that is necessary for the factorization.
+                // Solve system.
+                int phase = 33;
+                
                 NativeMethods.pardiso(pt, ref maxfct, ref mnum, ref mtype, ref phase,
                              ref n, a, ia, ja, perm, ref nrhs, iparm, ref msglvl,
                              b, x, out error);
@@ -300,7 +300,7 @@ namespace CSparse.Interop.Pardiso
 
         protected void Dispose(bool disposing)
         {
-            if (pt != null)
+            if (pt != null && pt.Any(p => p != IntPtr.Zero))
             {
                 int n = matrix.ColumnCount;
                 int nrhs = 1;
