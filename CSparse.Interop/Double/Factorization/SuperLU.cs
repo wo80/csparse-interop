@@ -76,7 +76,6 @@ namespace CSparse.Double.Factorization
             
             var h = new List<GCHandle>();
 
-            // Create matrix with ncol = 0 to indicate not to solve the system.
             var B = CreateDense(Dtype.SLU_D, input, h);
             var X = CreateDense(Dtype.SLU_D, result, h);
 
