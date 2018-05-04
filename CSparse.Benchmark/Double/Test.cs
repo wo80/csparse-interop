@@ -4,7 +4,6 @@ namespace CSparse.Double
     using CSparse.Factorization;
     using System;
     using System.Diagnostics;
-    using System.Globalization;
 
     abstract class Test
     {
@@ -29,7 +28,7 @@ namespace CSparse.Double
             }
             catch (Exception e)
             {
-                Error(e.Message);
+                Display.Error(e.Message);
             }
         }
 
@@ -60,17 +59,17 @@ namespace CSparse.Double
 
                 timer.Stop();
 
-                Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedMilliseconds);
 
                 double error = Util.ComputeError(x, s);
 
                 if (error > ERROR_THRESHOLD)
                 {
-                    Warning("relative error too large");
+                    Display.Warning("relative error too large");
                 }
                 else
                 {
-                    Ok("OK");
+                    Display.Ok("OK");
                 }
             }
             catch (DllNotFoundException)
@@ -79,7 +78,7 @@ namespace CSparse.Double
             }
             catch (Exception e)
             {
-                Error(e.Message);
+                Display.Error(e.Message);
             }
         }
 
@@ -110,17 +109,17 @@ namespace CSparse.Double
 
                 timer.Stop();
 
-                Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedMilliseconds);
 
                 double error = Util.ComputeError(x, s);
 
                 if (error > ERROR_THRESHOLD)
                 {
-                    Warning("relative error too large");
+                    Display.Warning("relative error too large");
                 }
                 else
                 {
-                    Ok("OK");
+                    Display.Ok("OK");
                 }
             }
             catch (DllNotFoundException)
@@ -129,7 +128,7 @@ namespace CSparse.Double
             }
             catch (Exception e)
             {
-                Error(e.Message);
+                Display.Error(e.Message);
             }
         }
 
@@ -176,7 +175,7 @@ namespace CSparse.Double
 
                 timer.Stop();
 
-                Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedMilliseconds);
 
                 double error = 0.0;
 
@@ -190,11 +189,11 @@ namespace CSparse.Double
 
                 if (error / count > ERROR_THRESHOLD)
                 {
-                    Warning("relative error too large");
+                    Display.Warning("relative error too large");
                 }
                 else
                 {
-                    Ok("OK");
+                    Display.Ok("OK");
                 }
             }
             catch (DllNotFoundException)
@@ -203,46 +202,10 @@ namespace CSparse.Double
             }
             catch (Exception e)
             {
-                Error(e.Message);
+                Display.Error(e.Message);
             }
         }
 
         protected abstract IDisposableSolver<double> CreateSolver(SparseMatrix matrix, bool symmetric);
-
-        private void Time(long ms)
-        {
-            var color = Console.ForegroundColor;
-            
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.0s}] ", ms / 1000.0));
-            Console.ForegroundColor = color;
-        }
-
-        private void Ok(string message)
-        {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(message);
-            Console.ForegroundColor = color;
-        }
-
-        private void Warning(string message)
-        {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(message);
-            Console.ForegroundColor = color;
-        }
-
-        private void Error(string message)
-        {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine(message);
-            Console.ForegroundColor = color;
-        }
     }
 }
