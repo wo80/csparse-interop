@@ -85,6 +85,7 @@
     <Compile Include="Benchmark\IBenchmarkResultWriter.cs" />
     <Compile Include="Benchmark\JsonExport.cs" />
     <Compile Include="Benchmark\MatrixFileCollection.cs" />
+    <Compile Include="Complex\Generate.cs" />
     <Compile Include="Complex\Test.cs" />
     <Compile Include="Complex\TestCholmod.cs" />
     <Compile Include="Complex\TestSPQR.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Double\BenchmarkSuperLU.cs" />
     <Compile Include="Double\BenchmarkUmfpack.cs" />
     <Compile Include="Double\BenchmarkCholmod.cs" />
+    <Compile Include="Double\Generate.cs" />
     <Compile Include="Double\TestCholmod.cs" />
     <Compile Include="Double\Test.cs" />
     <Compile Include="Double\TestSPQR.cs" />
