@@ -1,26 +1,30 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
+    using CSparse.Interop.SuperLU;
     using CSparse.Storage;
-    using System;
 
-    class BenchmarkCholmod : Benchmark<double>
+    class BenchmarkSuperLU : Benchmark<double>
     {
-        public BenchmarkCholmod(MatrixFileCollection collection)
+        public BenchmarkSuperLU(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
         protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
-            var solver = new Cholmod((SparseMatrix)matrix);
+            var solver = new SuperLU((SparseMatrix)matrix);
 
-            if (!symmetric)
+            if (symmetric)
             {
-                throw new Exception("CHOLMOD expects symmetric matrix.");
+                var options = solver.Options;
+
+                options.SymmetricMode = true;
+                options.ColumnOrderingMethod = OrderingMethod.MinimumDegreeAtPlusA;
+                options.DiagonalPivotThreshold = 0.001;
             }
 
             return solver;

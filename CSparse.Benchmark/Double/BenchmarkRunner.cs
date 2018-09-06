@@ -2,6 +2,7 @@
 namespace CSparse.Double
 {
     using CSparse.Benchmark;
+    using CSparse.Double.Benchmarks;
     using System;
     using System.IO;
 

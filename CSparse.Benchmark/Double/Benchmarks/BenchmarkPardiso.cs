@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;

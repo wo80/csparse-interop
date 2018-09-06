@@ -1,26 +1,26 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
-    using CSparse.Interop.Umfpack;
     using CSparse.Storage;
+    using System;
 
-    class BenchmarkUmfpack : Benchmark<double>
+    class BenchmarkCholmod : Benchmark<double>
     {
-        public BenchmarkUmfpack(MatrixFileCollection collection)
+        public BenchmarkCholmod(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
         protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
-            var solver = new Umfpack((SparseMatrix)matrix);
+            var solver = new Cholmod((SparseMatrix)matrix);
 
-            if (symmetric)
+            if (!symmetric)
             {
-                solver.Control.Strategy = UmfpackStrategy.Symmetric;
+                throw new Exception("CHOLMOD expects symmetric matrix.");
             }
 
             return solver;

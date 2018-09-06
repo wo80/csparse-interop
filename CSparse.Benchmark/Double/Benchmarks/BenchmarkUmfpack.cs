@@ -1,30 +1,26 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
-    using CSparse.Interop.SuperLU;
+    using CSparse.Interop.Umfpack;
     using CSparse.Storage;
 
-    class BenchmarkSuperLU : Benchmark<double>
+    class BenchmarkUmfpack : Benchmark<double>
     {
-        public BenchmarkSuperLU(MatrixFileCollection collection)
+        public BenchmarkUmfpack(MatrixFileCollection collection)
             :  base(collection)
         {
         }
         
         protected override IDisposableSolver<double> CreateSolver(CompressedColumnStorage<double> matrix, bool symmetric)
         {
-            var solver = new SuperLU((SparseMatrix)matrix);
+            var solver = new Umfpack((SparseMatrix)matrix);
 
             if (symmetric)
             {
-                var options = solver.Options;
-
-                options.SymmetricMode = true;
-                options.ColumnOrderingMethod = OrderingMethod.MinimumDegreeAtPlusA;
-                options.DiagonalPivotThreshold = 0.001;
+                solver.Control.Strategy = UmfpackStrategy.Symmetric;
             }
 
             return solver;
