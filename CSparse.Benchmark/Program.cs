@@ -10,10 +10,10 @@ namespace ConsoleApp
         {
             var c = GetCommandLine(args);
             
-            if (args.Length == 0 || c.ContainsKey("test"))
+            if (args.Length == 0 || args[0] == "--test")
             {
-                CSparse.Double.TestRunner.Run();
-                CSparse.Complex.TestRunner.Run();
+                CSparse.Double.TestRunner.Run(1500);
+                CSparse.Complex.TestRunner.Run(1000);
             }
             else
             {
@@ -46,10 +46,6 @@ namespace ConsoleApp
                 {
                     c["benchmark"] = args[i + 1];
                     i++;
-                }
-                else if (i == 0 && args[i] == "-t")
-                {
-                    c["test"] = "1";
                 }
             }
 
