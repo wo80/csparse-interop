@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Complex
+namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Factorization;
     using CSparse.Factorization;

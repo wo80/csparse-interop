@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Complex
+namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
     using System;
@@ -16,7 +16,7 @@ namespace CSparse.Complex
 
             var timer = new Stopwatch();
 
-            // Initial subspace dimesnion.
+            // Initial subspace dimension.
             int m0 = 25;
 
             // Exact eigenvalues.
@@ -43,7 +43,7 @@ namespace CSparse.Complex
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedTicks);
 
                 if (result.RelativeTraceError > ERROR_THRESHOLD)
                 {

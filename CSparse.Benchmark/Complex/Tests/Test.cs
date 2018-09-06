@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Complex
+namespace CSparse.Complex.Tests
 {
     using CSparse.Factorization;
     using System;
@@ -37,58 +37,18 @@ namespace CSparse.Complex
         {
             Console.Write("Testing {0} ... ", name);
 
-            var A = (SparseMatrix)matrix.Clone();
-
-            int n = A.RowCount;
-
-            var x = Vector.Create(n, 1.0);
-            var b = Vector.Create(n, 0.0);
-            var s = Vector.Clone(x);
-
-            A.Multiply(x, b);
-
-            Vector.Clear(x);
-
-            try
-            {
-                timer.Restart();
-
-                using (var solver = CreateSolver(A, false))
-                {
-                    solver.Solve(b, x);
-                }
-
-                timer.Stop();
-
-                Display.Time(timer.ElapsedMilliseconds);
-
-                double error = Util.ComputeError(x, s);
-
-                if (error > ERROR_THRESHOLD)
-                {
-                    Display.Warning("relative error too large");
-                }
-                else
-                {
-                    Display.Ok("OK");
-                }
-            }
-            catch (DllNotFoundException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                Display.Error(e.Message);
-            }
+            RunTest((SparseMatrix)matrix.Clone(), false);
         }
 
         protected virtual void TestRandomSymmetric(SparseMatrix matrix)
         {
             Console.Write("Testing {0} (symmetric) ... ", name);
 
-            var A = (SparseMatrix)matrix.Clone();
+            RunTest((SparseMatrix)matrix.Clone(), true);
+        }
 
+        protected virtual void RunTest(SparseMatrix A, bool symmetric)
+        {
             int n = A.RowCount;
 
             var x = Vector.Create(n, 1.0);
@@ -103,18 +63,22 @@ namespace CSparse.Complex
             {
                 timer.Restart();
 
-                using (var solver = CreateSolver(A, true))
+                using (var solver = CreateSolver(A, symmetric))
                 {
                     solver.Solve(b, x);
                 }
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedTicks);
 
                 double error = Util.ComputeError(x, s);
 
-                if (error > ERROR_THRESHOLD)
+                if (double.IsNaN(error))
+                {
+                    Display.Warning("solver failed");
+                }
+                else if (error > ERROR_THRESHOLD)
                 {
                     Display.Warning("relative error too large");
                 }
@@ -176,7 +140,7 @@ namespace CSparse.Complex
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedTicks);
 
                 double error = 0.0;
 

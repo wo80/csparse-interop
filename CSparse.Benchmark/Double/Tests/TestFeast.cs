@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
     using System;
@@ -15,7 +15,7 @@ namespace CSparse.Double
 
             var timer = new Stopwatch();
 
-            // Initial subspace dimesnion.
+            // Initial subspace dimension.
             int m0 = 25;
 
             // Exact eigenvalues.
@@ -42,7 +42,7 @@ namespace CSparse.Double
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedMilliseconds);
+                Display.Time(timer.ElapsedTicks);
 
                 if (result.RelativeTraceError > ERROR_THRESHOLD)
                 {

@@ -6,15 +6,15 @@ namespace CSparse
 
     static class Display
     {
-        public static void Time(long ms)
+        public static void Time(long ticks)
         {
             var color = Console.ForegroundColor;
 
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.0s}] ", ms / 1000.0));
+            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.000s}] ", TimeSpan.FromTicks(ticks).TotalSeconds));
             Console.ForegroundColor = color;
         }
-
+        
         public static void Ok(string message)
         {
             var color = Console.ForegroundColor;
