@@ -84,6 +84,8 @@
     <Compile Include="Complex\Solver\FeastResult.cs" />
     <Compile Include="Double\Factorization\CholmodHelper.cs" />
     <Compile Include="Double\Factorization\Cholmod.cs" />
+    <Compile Include="Double\Factorization\CudaCholesky.cs" />
+    <Compile Include="Double\Factorization\CudaQR.cs" />
     <Compile Include="Double\Factorization\Pardiso.cs" />
     <Compile Include="Double\Factorization\SPQR.cs" />
     <Compile Include="Double\Factorization\SuperLU.cs" />
@@ -101,6 +103,16 @@
     <Compile Include="Interop\Cholmod\Constants.cs" />
     <Compile Include="Interop\Cholmod\NativeMethods.cs" />
     <Compile Include="Interop\Common\InteropHelper.cs" />
+    <Compile Include="Interop\CUDA\Cuda.cs" />
+    <Compile Include="Interop\CUDA\CudaDevice.cs" />
+    <Compile Include="Interop\CUDA\CudaException.cs" />
+    <Compile Include="Interop\CUDA\CudaStream.cs" />
+    <Compile Include="Interop\CUDA\NativeMethods.cs" />
+    <Compile Include="Interop\CUDA\CuSolverContext.cs" />
+    <Compile Include="Interop\CUDA\CuSolverException.cs" />
+    <Compile Include="Interop\CUDA\CuSparseContext.cs" />
+    <Compile Include="Interop\CUDA\CuSparseException.cs" />
+    <Compile Include="Interop\CUDA\Types.cs" />
     <Compile Include="Interop\Feast\FeastContext.cs" />
     <Compile Include="Interop\Feast\FeastException.cs" />
     <Compile Include="Interop\Feast\FeastOptions.cs" />
