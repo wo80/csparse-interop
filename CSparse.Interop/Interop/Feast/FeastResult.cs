@@ -19,13 +19,13 @@ namespace CSparse.Interop.Feast
         /// <param name="info">The status returned by FEAST.</param>
         /// <param name="m0">The number of eigenvalues requested.</param>
         /// <param name="size">The matrix size.</param>
-        /// <param name="loops">The number of refinement loop executed.</param>
+        /// <param name="loops">The number of refinement loops executed.</param>
         /// <param name="error">The relative error on the trace.</param>
-        /// <param name="m">The number of eigenvalues found (m &lt; k).</param>
-        /// <param name="e">Array of length k. The first m entries of e are eigenvalues found in the interval.</param>
-        /// <param name="x">Matrix with m columns containing the orthonormal eigenvectors corresponding to the
+        /// <param name="m">The number of eigenvalues found (m &lt; m0).</param>
+        /// <param name="e">Array of length m0. The first m entries of e are eigenvalues found in the interval.</param>
+        /// <param name="x">Matrix with m0 columns containing the orthonormal eigenvectors corresponding to the
         /// computed eigenvalues e, with the i-th column of x holding the eigenvector associated with e[i].</param>
-        /// <param name="r">Array of length k containing the relative residual vector (in the first m components).</param>
+        /// <param name="r">Array of length m0 containing the relative residual vector (in the first m components).</param>
         public FeastResult(int info, int m0, int size, int loops, double error, int m, double[] e, DenseColumnMajorStorage<T> x, double[] r)
         {
             this.size = size;

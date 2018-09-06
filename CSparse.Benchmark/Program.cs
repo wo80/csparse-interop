@@ -9,11 +9,19 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             var c = GetCommandLine(args);
-            
+
             if (args.Length == 0 || args[0] == "--test")
             {
-                CSparse.Double.TestRunner.Run(1500);
-                CSparse.Complex.TestRunner.Run(1000);
+                int size = GetSize(args);
+
+                CSparse.Double.TestRunner.Run(size);
+                CSparse.Complex.TestRunner.Run(size);
+            }
+            else if (args[0] == "--cuda")
+            {
+                int size = GetSize(args);
+
+                CSparse.Double.TestCuda.Run(size);
             }
             else
             {
@@ -21,6 +29,25 @@ namespace ConsoleApp
             }
 
             Console.WriteLine("Done.");
+        }
+
+        private static int GetSize(string[] args)
+        {
+            int size = 1000;
+
+            if (args.Length > 1)
+            {
+                int.TryParse(args[1], out size);
+            }
+
+            Console.WriteLine("Parameter 'size' out of range: reset to default 1000.");
+
+            if (size < 0 || size > 10000)
+            {
+                size = 1000;
+            }
+
+            return size;
         }
 
         private static Dictionary<string, string> GetCommandLine(string[] args)
