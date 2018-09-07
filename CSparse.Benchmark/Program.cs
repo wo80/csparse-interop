@@ -8,7 +8,6 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            var c = GetCommandLine(args);
 
             if (args.Length == 0 || args[0] == "--test")
             {
@@ -25,6 +24,8 @@ namespace ConsoleApp
             }
             else
             {
+                var c = GetCommandLine(args);
+
                 CSparse.Double.BenchmarkRunner.Run(c["data"], c["benchmark"]);
             }
 
@@ -40,10 +41,10 @@ namespace ConsoleApp
                 int.TryParse(args[1], out size);
             }
 
-            Console.WriteLine("Parameter 'size' out of range: reset to default 1000.");
-
             if (size < 0 || size > 10000)
             {
+                Console.WriteLine("Parameter 'size' out of range: reset to default (1000)");
+
                 size = 1000;
             }
 

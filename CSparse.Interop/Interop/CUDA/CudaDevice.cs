@@ -10,15 +10,24 @@ namespace CSparse.Interop.CUDA
         public static int Initialize()
         {
             // Otherwise pick the device with highest Gflops/s
-            int devID = GetMaxGflopsDeviceId();
+            int devID = GetMaxGflopsDevice();
 
             Check(NativeMethods.cudaSetDevice(devID));
             
             return devID;
         }
 
+        public static int GetAttribute(DeviceAttribute attribute, int device)
+        {
+            int value = 0;
+
+            Check(NativeMethods.cudaDeviceGetAttribute(ref value, attribute, device));
+            
+            return value;
+        }
+
         // This function returns the best GPU (with maximum GFLOPS)
-        private static int GetMaxGflopsDeviceId()
+        private static int GetMaxGflopsDevice()
         {
             int current_device = 0, sm_per_multiproc = 0;
             int max_perf_device = 0;

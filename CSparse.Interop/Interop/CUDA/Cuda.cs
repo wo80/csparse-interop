@@ -16,14 +16,29 @@ namespace CSparse.Interop.CUDA
             return CudaDevice.Initialize();
         }
 
-        public static int DriverVersion()
+        /// <summary>
+        /// Returns the requested CUDA device attribute.
+        /// </summary>
+        /// <param name="attribute">The <see cref="DeviceAttribute"/>.</param>
+        /// <param name="device">The device id.</param>
+        /// <returns></returns>
+        public static int GetDeviceAttribute(DeviceAttribute attribute, int device)
+        {
+            int value = 0;
+
+            Check(NativeMethods.cudaDeviceGetAttribute(ref value, attribute, device));
+
+            return value;
+        }
+
+        public static int GetDriverVersion()
         {
             int version = 0;
             Check(NativeMethods.cudaDriverGetVersion(ref version));
             return version;
         }
 
-        public static int RuntimeVersion()
+        public static int GetRuntimeVersion()
         {
             int version = 0;
             Check(NativeMethods.cudaRuntimeGetVersion(ref version));
