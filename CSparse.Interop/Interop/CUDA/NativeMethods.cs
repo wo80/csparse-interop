@@ -6,7 +6,7 @@ namespace CSparse.Interop.CUDA
     using System.Runtime.InteropServices;
 
     using size_t = System.Int32; // TODO: x64
-    
+
     internal class NativeMethods
     {
         #region Core
@@ -178,6 +178,150 @@ namespace CSparse.Interop.CUDA
         /// <param name="streamId">the stream to be used by the library.</param>
         [DllImport(CUSOLVER_DLL)]
         public static extern SolverStatus cusolverSpGetStream(IntPtr handle, ref IntPtr streamId);
+
+        #region High level interface
+
+        #region LU (Host)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsvluHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsvluHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsvluHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsvluHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        #endregion
+
+        #region Cholesky (Host)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsvcholHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsvcholHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsvcholHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsvcholHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        #endregion
+
+        #region Cholesky (GPU)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsvchol(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsvchol(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsvchol(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsvchol(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        #endregion
+
+        #region QR (GPU)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsvqr(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsvqr(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsvqr(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsvqr(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrVal, IntPtr csrRowPtr, IntPtr csrColInd, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        #endregion
+
+        #region QR (Host)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsvqrHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsvqrHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsvqrHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, int reorder, IntPtr x, ref int singularity);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsvqrHost(IntPtr handle, int m, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, int reorder, IntPtr x, ref int singularity);
+
+        #endregion
+
+        #region QR least squares (Host)
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpScsrlsqvqrHost(IntPtr handle, int m, int n, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, ref int rankA, IntPtr x, IntPtr p, ref float min_norm);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpDcsrlsqvqrHost(IntPtr handle, int m, int n, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, ref int rankA, IntPtr x, IntPtr p, ref double min_norm);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpCcsrlsqvqrHost(IntPtr handle, int m, int n, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, float tol, ref int rankA, IntPtr x, IntPtr p, ref float min_norm);
+
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpZcsrlsqvqrHost(IntPtr handle, int m, int n, int nnz, IntPtr descrA, IntPtr csrValA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr b, double tol, ref int rankA, IntPtr x, IntPtr p, ref double min_norm);
+
+        #endregion
+
+        #region Ordering
+
+        /// <summary>
+        /// Symmetric reverse Cuthill McKee permutation. 
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrsymrcmHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr p);
+        
+        /// <summary>
+        /// Symmetric minimum degree algorithm by quotient graph.
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrsymmdqHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr p);
+        
+        /// <summary>
+        /// Symmetric Approximate minimum degree algorithm by quotient graph.
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrsymamdHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr p);
+        
+        /// <summary>
+        /// Symmetric reordering nested dissection (METIS).
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrmetisndHost(IntPtr handle, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA,
+            IntPtr options, // int64*
+            IntPtr p);
+        
+        /// <summary>
+        /// Calculate buffer size for P*A*Q^T.
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrperm_bufferSizeHost(IntPtr handle, int m, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr p, IntPtr q, ref size_t bufferSizeInBytes);
+
+        /// <summary>
+        /// Apply permutation P*A*Q^T.
+        /// </summary>
+        [DllImport(CUSOLVER_DLL)]
+        public static extern SolverStatus cusolverSpXcsrpermHost(IntPtr handle, int m, int n, int nnzA, IntPtr descrA, IntPtr csrRowPtrA, IntPtr csrColIndA, IntPtr p, IntPtr q, IntPtr map, IntPtr pBuffer);
+
+        #endregion
+
+        #endregion
+
+        #region Low level interface
 
         #region LU (Host)
 
@@ -541,6 +685,8 @@ namespace CSparse.Interop.CUDA
 
         [DllImport(CUSOLVER_DLL)]
         public static extern SolverStatus cusolverSpZcsrqrSolveHost(IntPtr handle, int m, int n, IntPtr b, IntPtr x, IntPtr info, IntPtr pBuffer);
+
+        #endregion
 
         #endregion
 
