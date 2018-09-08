@@ -5,7 +5,11 @@
 
     internal static class NativeMethods
     {
-        const string DLL = "libumfpack";
+#if SUITESPARSE_AIO
+        const string UMFPACK_DLL = "libsuitesparse";
+#else
+        const string UMFPACK_DLL = "libumfpack";
+#endif
 
         #region Double / int
 
@@ -16,14 +20,14 @@
         /// <param name="Ap">The column pointers of the column-oriented form of the matrix.</param>
         /// <param name="Tj">Integer array of size nz on input, where nz = Ap [n_col].</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_col_to_triplet(int n_col, int[] Ap, int[] Tj);
 
         /// <summary>
         /// Sets the default control parameter settings.
         /// </summary>
         /// <param name="Control">Control is set to the default control parameter settings.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_di_defaults", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_defaults", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_di_defaults(
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control
         );
@@ -33,7 +37,7 @@
         /// routine is the only valid way of destroying the Numeric object.
         /// </summary>
         /// <param name="Numeric">Numeric points to a valid Numeric object, computed by umfpack_*_numeric.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_di_free_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_free_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_di_free_numeric(ref IntPtr Numeric);
 
         /// <summary>
@@ -41,7 +45,7 @@
         /// routine is the only valid way of destroying the Symbolic object.
         /// </summary>
         /// <param name="Symbolic">Points to a valid Symbolic object computed by umfpack_*_symbolic.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_di_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_di_free_symbolic(ref IntPtr Symbolic);
 
         /// <summary>
@@ -53,7 +57,7 @@
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <param name="Info">Contains information about the calculation of the determinant.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_get_determinant", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_get_determinant", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_get_determinant(
             double[] Mx, double[] Ex, IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
@@ -82,7 +86,7 @@
         /// will occur if nz_diag &lt; n_row == n_col when solving a sparse system
         /// involving the matrix U in umfpack_*_*solve.
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "umfpack_di_get_lunz", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_get_lunz", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_get_lunz(out int lnz, out int unz, out int n_row, out int n_col,
             out int nz_udiag, IntPtr Numeric);
 
@@ -103,7 +107,7 @@
         /// <param name="Rs">The row scale factors are returned in Rs [0..n_row-1].</param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_get_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_get_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_get_numeric(
             int[] Lp, int[] Lj, double[] Lx,
             int[] Up, int[] Ui, double[] Ux,
@@ -131,7 +135,7 @@
         /// <param name="Chain_maxcols">Chain_maxcols [n_col+1]</param>
         /// <param name="Symbolic">The Symbolic object, which holds the symbolic factorization.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_get_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_get_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_get_symbolic(
             out int n_row, out int n_col, out int n1, out int nz, out int nfr, out int nchains,
             int[] P, int[] Q,
@@ -147,7 +151,7 @@
         /// object (if successful), or NULL if a failure occurred.</param>
         /// <param name="filename">A string that contains the filename from which to read the Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_load_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_load_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_load_numeric(out IntPtr Numeric, /*char* */ string filename);
 
         /// <summary>
@@ -157,7 +161,7 @@
         /// object (if successful), or NULL if a failure occurred.</param>
         /// <param name="filename">A string that contains the filename from which to read the Symbolic object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_load_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_load_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_load_symbolic(out IntPtr Symbolic, /*char* */ string filename);
 
         /// <summary>
@@ -176,7 +180,7 @@
         /// settings are used.  Otherwise, the settings are determined from the Control array.</param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_numeric(
             int[] Ap, int[] Ai, double[] Ax, IntPtr Symbolic, out IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -214,7 +218,7 @@
         /// routine, the performance of UMFPACK is your responsibility;  UMFPACK will
         /// not try to second-guess a poor choice of Qinit.
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "umfpack_di_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_qsymbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, int[] Qinit, out IntPtr Symbolic,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -228,7 +232,7 @@
         /// <param name="Numeric">Numeric must point to a valid Numeric object</param>
         /// <param name="filename">A string that contains the filename to which the Numeric object is written.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_save_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_save_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_save_numeric(IntPtr Numeric, /*char* */ string filename);
 
         /// <summary>
@@ -238,7 +242,7 @@
         /// <param name="Symbolic">Symbolic must point to a valid Symbolic object.</param>
         /// <param name="filename">A string that contains the filename to which the Symbolic object is written.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_save_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_save_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_save_symbolic(IntPtr Symbolic, /*char* */ string filename);
 
         /// <summary>
@@ -251,7 +255,7 @@
         /// <param name="B">The input vector B [n_row].</param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_scale", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_scale", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_scale(double[] X, double[] B, IntPtr Numeric);
 
         /// <summary>
@@ -305,7 +309,7 @@
         /// For the other values of the sys argument, iterative refinement is not
         /// performed (Control [UMFPACK_IRSTEP], Ap, Ai, Ax, and Az are ignored).
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "umfpack_di_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_solve(
             int sys, int[] Ap, int[] Ai, double[] Ax, double[] X, double[] B, IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -327,7 +331,7 @@
         /// <param name="Control"></param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_symbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, out IntPtr Symbolic,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -348,7 +352,7 @@
         /// <param name="Ri">The row indices of the matrix R.</param>
         /// <param name="Rx">If present, these are the numerical values of the sparse matrix R.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_transpose", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_transpose", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_transpose(
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, int[] P, int[] Q,
             int[] Rp, int[] Ri, double[] Rx
@@ -369,7 +373,7 @@
         /// <param name="Ax">Array of size nz. Note that only the first Ap [n_col] entries are used (optional).</param>
         /// <param name="Map">Array of size nz. If present, then on output it holds the position of the triplets in the column-form matrix.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_di_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_triplet_to_col
         (
             int n_row, int n_col, int nz,
@@ -407,7 +411,7 @@
         ///    real     	n		5*n
         ///    complex  	4*n		10*n
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "umfpack_di_wsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_wsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_di_wsolve
         (
             int sys, int[] Ap, int[] Ai, double[] Ax, double[] X, double[] B, IntPtr Numeric,
@@ -427,14 +431,14 @@
         /// <param name="Ap">The column pointers of the column-oriented form of the matrix.</param>
         /// <param name="Tj">Integer array of size nz on input, where nz = Ap [n_col].</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_col_to_triplet(int n_col, int[] Ap, int[] Tj);
 
         /// <summary>
         /// Sets the default control parameter settings.
         /// </summary>
         /// <param name="Control">Control is set to the default control parameter settings.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_defaults", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_defaults", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_zi_defaults(
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control
         );
@@ -444,7 +448,7 @@
         /// routine is the only valid way of destroying the Numeric object.
         /// </summary>
         /// <param name="Numeric">Numeric points to a valid Numeric object, computed by umfpack_*_numeric.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_free_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_free_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_zi_free_numeric(ref IntPtr Numeric);
 
         /// <summary>
@@ -452,7 +456,7 @@
         /// routine is the only valid way of destroying the Symbolic object.
         /// </summary>
         /// <param name="Symbolic">Points to a valid Symbolic object computed by umfpack_*_symbolic.</param>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_zi_free_symbolic(ref IntPtr Symbolic);
 
         /// <summary>
@@ -465,7 +469,7 @@
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <param name="Info">Contains information about the calculation of the determinant.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_get_determinant", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_get_determinant", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_get_determinant(
             double[] Mx, double[] Mz, double[] Ex, IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
@@ -481,7 +485,7 @@
         /// <param name="nz_udiag">The number of numerically nonzero values on the diagonal of U.</param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_get_lunz", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_get_lunz", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_get_lunz(out int lnz, out int unz, out int n_row, out int n_col,
             out int nz_udiag, IntPtr Numeric);
 
@@ -505,7 +509,7 @@
         /// <param name="Rs">The row scale factors are returned in Rs [0..n_row-1].</param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_get_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_get_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_get_numeric(
             int[] Lp, int[] Lj, double[] Lx, double[] Lz,
             int[] Up, int[] Ui, double[] Ux, double[] Uz,
@@ -513,7 +517,7 @@
             out int do_recip, double[] Rs, IntPtr Numeric
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_get_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_get_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_get_numeric(
             int[] Lp, int[] Lj, IntPtr Lx, IntPtr Lz,
             int[] Up, int[] Ui, IntPtr Ux, IntPtr Uz,
@@ -541,7 +545,7 @@
         /// <param name="Chain_maxcols">Chain_maxcols [n_col+1]</param>
         /// <param name="Symbolic">The Symbolic object, which holds the symbolic factorization.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_get_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_get_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_get_symbolic
         (
             out int n_row, out int n_col, out int n1, out int nz, out int nfr, out int nchains,
@@ -558,7 +562,7 @@
         /// object (if successful), or NULL if a failure occurred.</param>
         /// <param name="filename">A string that contains the filename from which to read the Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_load_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_load_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_load_numeric(out IntPtr Numeric, /*char* */ string filename);
 
         /// <summary>
@@ -568,7 +572,7 @@
         /// object (if successful), or NULL if a failure occurred.</param>
         /// <param name="filename">A string that contains the filename from which to read the Symbolic object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_load_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_load_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_load_symbolic(out IntPtr Symbolic, /*char* */ string filename);
 
         /// <summary>
@@ -588,14 +592,14 @@
         /// settings are used.  Otherwise, the settings are determined from the Control array.</param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_numeric(
             int[] Ap, int[] Ai, double[] Ax, double[] Az, IntPtr Symbolic, out IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_numeric(
             int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az, IntPtr Symbolic, out IntPtr Numeric,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -618,14 +622,14 @@
         /// <param name="Control"></param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_qsymbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, double[] Az, int[] Qinit, out IntPtr Symbolic,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_qsymbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_qsymbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az, int[] Qinit, out IntPtr Symbolic,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
@@ -639,7 +643,7 @@
         /// <param name="Numeric">Numeric must point to a valid Numeric object</param>
         /// <param name="filename">A string that contains the filename to which the Numeric object is written.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_save_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_save_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_save_numeric(IntPtr Numeric, /*char* */ string filename);
 
         /// <summary>
@@ -649,7 +653,7 @@
         /// <param name="Symbolic">Symbolic must point to a valid Symbolic object.</param>
         /// <param name="filename">A string that contains the filename to which the Symbolic object is written.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_save_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_save_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_save_symbolic(IntPtr Symbolic, /*char* */ string filename);
 
         /// <summary>
@@ -664,7 +668,7 @@
         /// <param name="Bz"></param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_scale", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_scale", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_scale(double[] Xx, double[] Xz, double[] Bx, double[] Bz, IntPtr Numeric);
 
         /// <summary>
@@ -685,7 +689,7 @@
         /// <param name="Control"></param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_solve(
             int sys, int[] Ap, int[] Ai, double[] Ax, double[] Az,
             double[] Xx, double[] Xz, double[] Bx, double[] Bz,
@@ -694,7 +698,7 @@
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_solve(
             int sys, int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az,
             IntPtr Xx, IntPtr Xz, IntPtr Bx, IntPtr Bz,
@@ -719,7 +723,7 @@
         /// <param name="Control"></param>
         /// <param name="Info"></param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_symbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, double[] Az,
             out IntPtr Symbolic,
@@ -727,7 +731,7 @@
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_symbolic(
             int n_row, int n_col, int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az,
             out IntPtr Symbolic,
@@ -754,7 +758,7 @@
         /// linear algebraic transpose is computed (complex conjugate).  If false, the
         /// array transpose is computed instead.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_transpose", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_transpose", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_transpose
         (
             int n_row, int n_col, int[] Ap, int[] Ai, double[] Ax, double[] Az,
@@ -762,7 +766,7 @@
             int[] Rp, int[] Ri, double[] Rx, double[] Rz, int do_conjugate
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_transpose", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_transpose", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_transpose
         (
             int n_row, int n_col, int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az,
@@ -787,7 +791,7 @@
         /// <param name="Az"></param>
         /// <param name="Map">Array of size nz. If present, then on output it holds the position of the triplets in the column-form matrix.</param>
         /// <returns>UMFPACK status code.</returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_triplet_to_col
         (
             int n_row, int n_col, int nz,
@@ -796,7 +800,7 @@
             int[] Map
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_triplet_to_col", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_triplet_to_col
         (
             int n_row, int n_col, int nz,
@@ -825,7 +829,7 @@
         /// <param name="Wi"></param>
         /// <param name="W"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "umfpack_zi_wsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_wsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_wsolve
         (
             int sys, int[] Ap, int[] Ai, double[] Ax, double[] Az,
@@ -837,7 +841,7 @@
             int[] Wi, double[] W
         );
 
-        [DllImport(DLL, EntryPoint = "umfpack_zi_wsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_zi_wsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int umfpack_zi_wsolve
         (
             int sys, int[] Ap, int[] Ai, IntPtr Ax, IntPtr Az,

@@ -12,21 +12,25 @@ namespace CSparse.Interop.Cholmod
 
 #if X64
     using size_t = System.UInt64;
-    using SuiteSparse_long = System.Int64;
+    using sp_long = System.Int64;
 #else
     using size_t = System.UInt32;
-    using SuiteSparse_long = System.Int32;
+    using sp_long = System.Int32;
 #endif
 
     internal static class NativeMethods
     {
-        const string DLL = "libcholmod";
+#if SUITESPARSE_AIO
+        const string CHOLMOD_DLL = "libsuitesparse";
+#else
+        const string CHOLMOD_DLL = "libcholmod";
+#endif
 
         /// <summary>
         /// Returns a pointer to a cholmod_common struct.
         /// </summary>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_init", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_common cholmod_init();
 
         #region Core
@@ -36,7 +40,7 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_start", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_start", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_start(ref CholmodCommon c);
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_finish", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_finish", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_finish(ref CholmodCommon c);
 
         /// <summary>
@@ -52,9 +56,15 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_defaults", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_defaults", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_defaults(ref CholmodCommon c);
+        
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_free", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr cholmod_free(size_t n, size_t size, IntPtr p, ref CholmodCommon c);
 
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_free_sparse", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int cholmod_free_sparse(ref IntPtr A, ref CholmodCommon c);
+        
         /*
 
         /// <summary>
@@ -63,7 +73,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="n">A and L will have n rows</param>
         /// <param name="c"></param>
         /// <returns>returns validated value of Common->maxrank</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_maxrank", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_maxrank", CallingConvention = CallingConvention.Cdecl)]
         public static extern size_t cholmod_maxrank(size_t n, ref CholmodCommon c);
 
         /// <summary>
@@ -74,7 +84,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xworksize">size of Common->Xwork</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_allocate_work", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_allocate_work", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_allocate_work(size_t nrow, size_t iworksize, size_t xworksize, ref CholmodCommon c);
 
         /// <summary>
@@ -82,7 +92,7 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_work", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_work", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_work(ref CholmodCommon c);
 
         /// <summary>
@@ -90,7 +100,7 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_clear_flag", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_clear_flag", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_clear_flag(ref CholmodCommon c);
 
         /// <summary>
@@ -99,7 +109,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_hypot", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_hypot", CallingConvention = CallingConvention.Cdecl)]
         public static extern double cholmod_hypot (
             double x, double y
         );
@@ -114,7 +124,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="cr">real and imaginary parts of c </param>
         /// <param name="ci"></param>
         /// <returns>return 1 if divide-by-zero, 0 otherise</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_divcomplex", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_divcomplex", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_divcomplex (
             double ar, double ai,
             double br, double bi,
@@ -133,7 +143,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_PATTERN, _REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_allocate_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_allocate_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_allocate_sparse (
             size_t nrow,
             size_t ncol,
@@ -150,7 +160,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to deallocate, NULL on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_sparse(
             ref cholmod_sparse A,
             ref CholmodCommon c);
@@ -162,7 +172,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to reallocate</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_reallocate_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_reallocate_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_reallocate_sparse (
             size_t nznew,
             ref CholmodSparse A,
@@ -174,7 +184,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_nnz", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_nnz", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_nnz (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -187,7 +197,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_PATTERN, _REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_speye", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_speye", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_speye (
             size_t nrow,
             size_t ncol,
@@ -203,7 +213,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_PATTERN, _REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_spzeros", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_spzeros", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_spzeros (
             size_t nrow,
             size_t ncol,
@@ -221,7 +231,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="c"></param>
         /// <returns>Return A' or A.'  The "values" parameter is 0, 1, or 2 to denote the pattern
         /// transpose, the array transpose (A.'), and the complex conjugate transpose (A').</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_transpose", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_transpose", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_transpose (
             ref CholmodSparse A,
             int values,
@@ -242,7 +252,7 @@ namespace CSparse.Interop.Cholmod
         /// Compute F = A', A (:,f)', or A (p,f)', where A is unsymmetric and F is
         /// already allocated.  See cholmod_transpose for a simpler routine.
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_transpose_unsym", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_transpose_unsym", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_transpose_unsym (
             ref CholmodSparse A,
             int values,
@@ -265,7 +275,7 @@ namespace CSparse.Interop.Cholmod
         /// Compute F = A' or A (p,p)', where A is symmetric and F is already allocated.
         /// See cholmod_transpose for a simpler routine.
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_transpose_sym", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_transpose_sym", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_transpose_sym (
             ref CholmodSparse A,
             int values,
@@ -285,7 +295,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="fsize">size of fset</param>
         /// <param name="c"></param>
         /// <returns>Return A' or A(p,p)' if A is symmetric.  Return A', A(:,f)', or A(p,f)' if A is unsymmetric.</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_ptranspose", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_ptranspose", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_ptranspose (
             ref CholmodSparse A,
             int values,
@@ -300,7 +310,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to sort</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sort", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sort", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_sort(
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -314,7 +324,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="mode">>0: numerical, 0: pattern, &lt;0: pattern (no diag)</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_band", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_band", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_band (
             ref CholmodSparse A,
             SuiteSparse_long k1,
@@ -331,7 +341,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix from which entries not in band are removed</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_band_inplace", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_band_inplace", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_band_inplace (
             SuiteSparse_long k1,
             SuiteSparse_long k2,
@@ -349,7 +359,7 @@ namespace CSparse.Interop.Cholmod
         ///  -2: pattern only, no diagonal, add 50%+n extra space to C</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_aat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_aat", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_aat (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -363,7 +373,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_copy_sparse (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -376,7 +386,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="mode">>0: numerical, 0: pattern, &lt;0: pattern (no diag)</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_copy (
             ref CholmodSparse A,
             int stype,
@@ -396,7 +406,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="sorted">if TRUE, sort columns of C</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_add", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_add", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_add (
             ref CholmodSparse A,
             ref CholmodSparse B,
@@ -415,7 +425,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">sparse matrix to change</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sparse_xtype", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sparse_xtype", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_sparse_xtype (
             int to_xtype,
             ref CholmodSparse A,
@@ -433,7 +443,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="n">L is n-by-n</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_allocate_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_allocate_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_factor cholmod_allocate_factor (
             size_t n,
             ref CholmodCommon c);
@@ -447,7 +457,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to free, NULL on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_free_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_free_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_free_factor(
             ref cholmod_factor L,
             ref CholmodCommon c);
@@ -461,7 +471,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_reallocate_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_reallocate_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_reallocate_factor (
             size_t nznew,
             ref CholmodFactor L,
@@ -478,7 +488,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_change_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_change_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_change_factor (
             int to_xtype,
             int to_ll,
@@ -499,7 +509,7 @@ namespace CSparse.Interop.Cholmod
         /// it can pack the columns of a factor even if they are not stored in their
         /// natural order (non-monotonic).
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_pack_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_pack_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_pack_factor(
             ref CholmodFactor L,
             ref CholmodCommon c);
@@ -512,7 +522,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_reallocate_column", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_reallocate_column", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_reallocate_column (
             size_t j,
             size_t need,
@@ -528,7 +538,7 @@ namespace CSparse.Interop.Cholmod
         /// <remarks>
         /// Only operates on numeric factors, not symbolic ones
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_factor_to_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_factor_to_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_factor_to_sparse(
             ref CholmodFactor L,
             ref CholmodCommon c);
@@ -539,7 +549,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_factor cholmod_copy_factor (
             ref CholmodFactor L,
             ref CholmodCommon c);
@@ -551,7 +561,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to change</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_factor_xtype", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_factor_xtype", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_factor_xtype (
             int to_xtype,
             ref CholmodFactor L,
@@ -572,7 +582,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_allocate_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_allocate_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_allocate_dense (
             size_t nrow,
             size_t ncol,
@@ -588,7 +598,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_zeros", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_zeros", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_zeros (
             size_t nrow,
             size_t ncol,
@@ -603,7 +613,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_ones", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_ones", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_ones (
             size_t nrow,
             size_t ncol,
@@ -618,7 +628,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_eye", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_eye", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_eye (
             size_t nrow,
             size_t ncol,
@@ -633,7 +643,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="X">dense matrix to deallocate, NULL on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_free_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_free_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_free_dense(
             ref cholmod_dense X,
             ref CholmodCommon c);
@@ -650,7 +660,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_ensure_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_ensure_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_ensure_dense(
             ref cholmod_dense XHandle,
             size_t nrow,
@@ -665,7 +675,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sparse_to_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sparse_to_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_sparse_to_dense (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -677,7 +687,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="values">TRUE if values to be copied, FALSE otherwise</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_dense_to_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_dense_to_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_dense_to_sparse (
             ref CholmodDense X,
             int values,
@@ -689,7 +699,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="X">matrix to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_copy_dense (
             ref CholmodDense X,
             ref CholmodCommon c);
@@ -701,7 +711,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Y">copy of matrix X</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy_dense2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy_dense2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_copy_dense2 (
             ref CholmodDense X,
             ref CholmodDense Y,
@@ -714,7 +724,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="X">dense matrix to change</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_dense_xtype", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_dense_xtype", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_dense_xtype (
             int to_xtype,
             ref CholmodDense X,
@@ -736,7 +746,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="xtype">CHOLMOD_PATTERN, _REAL, _COMPLEX, or _ZOMPLEX</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_allocate_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_allocate_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_triplet cholmod_allocate_triplet (
             size_t nrow,
             size_t ncol,
@@ -751,7 +761,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="T">triplet matrix to deallocate, NULL on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_free_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_free_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_free_triplet(
             ref cholmod_triplet T,
             ref CholmodCommon c);
@@ -763,7 +773,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="T">triplet matrix to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_reallocate_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_reallocate_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_reallocate_triplet (
             size_t nznew,
             ref CholmodTriplet T,
@@ -775,7 +785,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sparse_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sparse_to_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_triplet cholmod_sparse_to_triplet (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -787,7 +797,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="nzmax">allocate at least this much space in output matrix</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_triplet_to_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_triplet_to_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_triplet_to_sparse (
             ref CholmodTriplet T,
             size_t nzmax,
@@ -799,7 +809,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="T">matrix to copy</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_copy_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_copy_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_triplet cholmod_copy_triplet (
             ref CholmodTriplet T,
             ref CholmodCommon c);
@@ -811,7 +821,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="T">triplet matrix to change</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_triplet_xtype", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_triplet_xtype", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_triplet_xtype (
             int to_xtype,
             ref CholmodTriplet T,
@@ -831,7 +841,7 @@ namespace CSparse.Interop.Cholmod
         ///    version [1] = CHOLMOD_SUB_VERSION
         ///    version [2] = CHOLMOD_SUBSUB_VERSION
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_version", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_version", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_version([MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] int[] version);
 
         #endregion
@@ -852,7 +862,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm">size A->nrow, output permutation</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_ccolamd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_ccolamd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_ccolamd (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -869,7 +879,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm">size A->nrow, output permutation</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_csymamd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_csymamd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_csymamd (
             ref CholmodSparse A,
             IntPtr Cmember, // (int*)
@@ -886,7 +896,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm">size A->nrow, output permutation</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_camd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_camd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_camd (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -906,7 +916,7 @@ namespace CSparse.Interop.Cholmod
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_common", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_common", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_common(ref CholmodCommon c);
 
         /// <summary>
@@ -915,7 +925,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">sparse matrix to check</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_sparse (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -926,7 +936,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="X">dense matrix to check</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_dense (
             ref CholmodDense X,
             ref CholmodCommon c);
@@ -937,7 +947,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to check</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_factor", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_factor", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_factor (
             ref CholmodFactor L,
             ref CholmodCommon c);
@@ -948,7 +958,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="T">triplet matrix to check</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_triplet", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_triplet (
             ref CholmodTriplet T,
             ref CholmodCommon c);
@@ -961,10 +971,10 @@ namespace CSparse.Interop.Cholmod
         /// <param name="n">0:n-1 is valid range</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_subset", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_subset", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_subset (
             /* (int*) */ IntPtr Set,
-            SuiteSparse_long len,
+            sp_long len,
             size_t n,
             ref CholmodCommon c);
 
@@ -976,7 +986,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="n">0:n-1 is valid range</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_check_perm", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_check_perm", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_check_perm (
             /* (int*) */ IntPtr Perm,
             size_t len,
@@ -993,7 +1003,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to order and analyze</param>
         /// <param name="c"></param>
         /// <returns>cholmod_factor</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_analyze", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_analyze", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_factor cholmod_analyze (
             ref CholmodSparse A,
             ref CholmodCommon c);
@@ -1007,7 +1017,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="fsize">size of fset</param>
         /// <param name="c"></param>
         /// <returns>cholmod_factor</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_analyze_p", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_analyze_p", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_factor cholmod_analyze_p (
             ref CholmodSparse A,
             IntPtr UserPerm, // (int*)
@@ -1029,7 +1039,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="fsize">size of fset</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_analyze_p2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_analyze_p2", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_factor cholmod_analyze_p2 (
             int for_whom,
             ref CholmodSparse A,
@@ -1045,7 +1055,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">resulting factorization</param>
         /// <param name="c"></param>
         /// <returns>returns TRUE on success, FALSE on failure</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_factorize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_factorize", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_factorize (
             ref CholmodSparse A,
             ref CholmodFactor L,
@@ -1061,7 +1071,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">resulting factorization</param>
         /// <param name="c"></param>
         /// <returns>returns TRUE on success, FALSE on failure</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_factorize_p", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_factorize_p", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_factorize_p (
             ref CholmodSparse A,
             double[] beta,
@@ -1078,7 +1088,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="B">right-hand-side</param>
         /// <param name="c"></param>
         /// <returns>returns the solution X</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_dense cholmod_solve(
             int sys,
             ref CholmodFactor L,
@@ -1098,7 +1108,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="E_Handle">workspace, or NULL (cholmod_dense)</param>
         /// <param name="c"></param>
         /// <returns>returns TRUE on success, FALSE on failure</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_solve2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_solve2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_solve2 (
             int sys,
             ref CholmodFactor L,
@@ -1118,7 +1128,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="B">right-hand-side</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_spsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_spsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_spsolve (
             int sys,
             ref CholmodFactor L,
@@ -1134,7 +1144,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Parent">size ncol.  Parent [j] = p if p is the parent of j</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_etree", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_etree", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_etree (
             ref CholmodSparse A,
             IntPtr Parent, // (int*)
@@ -1154,7 +1164,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Level">size nrow.  Level [i] is the length of the path from i to the root, with Level [root] = 0.</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowcolcounts", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowcolcounts", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowcolcounts (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1182,7 +1192,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Level">size n workspace for cholmod_postorder</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_analyze_ordering", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_analyze_ordering", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_analyze_ordering (
             ref CholmodSparse A,
             int ordering,
@@ -1205,7 +1215,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm"size A->nrow, output permutation></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_amd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_amd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_amd (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1223,7 +1233,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm">size A->nrow, output permutation</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_colamd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_colamd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_colamd (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1243,7 +1253,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowfac", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowfac", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowfac (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -1266,7 +1276,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowfac_mask", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowfac_mask", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowfac_mask (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -1292,7 +1302,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowfac_mask2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowfac_mask2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowfac_mask2 (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -1316,7 +1326,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="R">pattern of L(k,:), n-by-1 with R->nzmax >= n</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_row_subtree", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_row_subtree", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_row_subtree (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -1333,7 +1343,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="X">pattern of X=L\B, n-by-1 with X->nzmax >= n</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_lsolve_pattern", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_lsolve_pattern", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_lsolve_pattern (
             ref CholmodSparse B,
             ref CholmodFactor L,
@@ -1351,7 +1361,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="R">pattern of L(k,:), n-by-1 with R->nzmax >= n</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_row_lsubtree", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_row_lsubtree", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_row_lsubtree (
             ref CholmodSparse A,
             IntPtr Fi, // (int*)
@@ -1372,7 +1382,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factorization, entries pruned on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_resymbol", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_resymbol", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_resymbol (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1392,7 +1402,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factorization, entries pruned on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_resymbol_noperm", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_resymbol_noperm", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_resymbol_noperm (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1407,7 +1417,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L"></param>
         /// <param name="c"></param>
         /// <returns>return min(diag(L)) / max(diag(L))</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rcond", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rcond", CallingConvention = CallingConvention.Cdecl)]
         public static extern double cholmod_rcond (
             ref CholmodFactor L,
             ref CholmodCommon c);
@@ -1421,7 +1431,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Post">size n. Post [k] = j is kth in postordered tree</param>
         /// <param name="c"></param>
         /// <returns>return # of nodes postordered</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_postorder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_postorder", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_postorder (
             IntPtr Parent, // (int*)
             size_t n,
@@ -1444,7 +1454,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to drop entries from</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_drop", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_drop", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_drop (
             double tol,
             ref CholmodSparse A,
@@ -1457,7 +1467,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="norm">type of norm: 0: inf. norm, 1: 1-norm, 2: 2-norm</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_norm_dense", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_norm_dense", CallingConvention = CallingConvention.Cdecl)]
         public static extern double cholmod_norm_dense (
             ref CholmodDense X,
             int norm,
@@ -1470,7 +1480,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="norm">type of norm: 0: inf. norm, 1: 1-norm</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_norm_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_norm_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern double cholmod_norm_sparse (
             ref CholmodSparse A,
             int norm,
@@ -1484,7 +1494,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="values">if TRUE compute the numerical values of C</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_horzcat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_horzcat", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_horzcat (
             ref CholmodSparse A,
             ref CholmodSparse B,
@@ -1499,7 +1509,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="A">matrix to scale</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_scale", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_scale", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_scale (
             ref CholmodDense S,
             int scale,
@@ -1517,7 +1527,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Y">resulting dense matrix</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_sdmult", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_sdmult", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_sdmult (
             ref CholmodSparse A,
             int transpose,
@@ -1537,7 +1547,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="sorted">if TRUE then return C with sorted columns</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_ssmult", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_ssmult", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_ssmult (
             ref CholmodSparse A,
             ref CholmodSparse B,
@@ -1563,7 +1573,7 @@ namespace CSparse.Interop.Cholmod
         /// In this case, r can be NULL.  An rsize of zero, or r = NULL and rsize >= 0,
         /// denotes "[ ]" in MATLAB notation (the empty set). Similar rules hold for csize.
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "cholmod_submatrix", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_submatrix", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_submatrix (
             ref CholmodSparse A,
             IntPtr rset, // (int*)
@@ -1582,7 +1592,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="values">if TRUE compute the numerical values of C</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_vertcat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_vertcat", CallingConvention = CallingConvention.Cdecl)]
         public static extern cholmod_sparse cholmod_vertcat (
             ref CholmodSparse A,
             ref CholmodSparse B,
@@ -1600,7 +1610,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="nzdiag">output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_symmetry", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_symmetry", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_symmetry (
             ref CholmodSparse A,
             int option,
@@ -1624,7 +1634,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_updown", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_updown", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_updown (
             int update,
             ref CholmodSparse C,
@@ -1641,7 +1651,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_updown_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_updown_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_updown_solve (
             int update,
             ref CholmodSparse C,
@@ -1663,7 +1673,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_updown_mark", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_updown_mark", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_updown_mark (
             int update,
             ref CholmodSparse C,
@@ -1685,7 +1695,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_updown_mask", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_updown_mask", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_updown_mask (
             int update,
             ref CholmodSparse C,
@@ -1709,7 +1719,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_updown_mask2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_updown_mask2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_updown_mask2 (
             int update,
             ref CholmodSparse C,
@@ -1729,7 +1739,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowadd", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowadd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowadd (
             size_t k,
             ref CholmodSparse R,
@@ -1747,7 +1757,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowadd_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowadd_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowadd_solve (
             size_t k,
             ref CholmodSparse R,
@@ -1769,7 +1779,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowadd_mark", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowadd_mark", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowadd_mark (
             size_t k,
             ref CholmodSparse R,
@@ -1788,7 +1798,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factor to modify</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowdel", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowdel", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowdel (
             size_t k,
             ref CholmodSparse R,
@@ -1806,7 +1816,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowdel_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowdel_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowdel_solve (
             size_t k,
             ref CholmodSparse R,
@@ -1828,7 +1838,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="DeltaB">change in b, zero on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_rowdel_mark", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_rowdel_mark", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_rowdel_mark (
             size_t k,
             ref CholmodSparse R,
@@ -1863,7 +1873,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Cmember">size A->nrow.  Cmember [j] = c if node j of A is in component c</param>
         /// <param name="c"></param>
         /// <returns>returns # of components</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_nested_dissection", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_nested_dissection", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_nested_dissection	(
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1883,7 +1893,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Perm">size A->nrow, output permutation</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_metis", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_metis", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_metis (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1903,7 +1913,7 @@ namespace CSparse.Interop.Cholmod
         /// Partition [i] = 0, the right graph if 1, and in the separator if 2.</param>
         /// <param name="c"></param>
         /// <returns>returns # of nodes in separator</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_bisect", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_bisect", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_bisect (
             ref CholmodSparse A,
             IntPtr fset, // (int*)
@@ -1924,7 +1934,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Partition"></param>
         /// <param name="c">size A->nrow</param>
         /// <returns>returns separator size</returns>
-        [DllImport(DLL, EntryPoint = "cholmod_metis_bisector", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_metis_bisector", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_metis_bisector (
             ref CholmodSparse A,
             IntPtr Anw, // (int*)
@@ -1943,7 +1953,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="Cmember">size n; from cholmod_nested_dissection</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_collapse_septree", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_collapse_septree", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long cholmod_collapse_septree (
             size_t n,
             size_t ncomponents,
@@ -1972,7 +1982,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">simplicial symbolic on input, supernodal symbolic on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_super_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_super_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_super_symbolic (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -1992,7 +2002,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">simplicial symbolic on input, supernodal symbolic on output</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_super_symbolic2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_super_symbolic2", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_super_symbolic2 (
             int for_whom,
             ref CholmodSparse A,
@@ -2012,7 +2022,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="L">factorization</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_super_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_super_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_super_numeric (
             ref CholmodSparse A,
             ref CholmodSparse F,
@@ -2030,7 +2040,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="E">workspace of size nrhs*(L->maxesize)</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_super_lsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_super_lsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_super_lsolve (
             ref CholmodFactor L,
             ref CholmodDense X,
@@ -2047,7 +2057,7 @@ namespace CSparse.Interop.Cholmod
         /// <param name="E">workspace of size nrhs*(L->maxesize)</param>
         /// <param name="c"></param>
         /// <returns></returns>
-        [DllImport(DLL, EntryPoint = "cholmod_super_ltsolve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CHOLMOD_DLL, EntryPoint = "cholmod_super_ltsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern int cholmod_super_ltsolve (
             ref CholmodFactor L,
             ref CholmodDense X,

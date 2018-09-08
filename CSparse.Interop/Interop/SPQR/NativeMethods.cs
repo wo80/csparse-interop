@@ -7,40 +7,21 @@ namespace CSparse.Interop.SPQR
 
 #if X64
     using size_t = System.UInt64;
-    using SuiteSparse_long = System.Int64;
+    using sp_long = System.Int32; // Modified version of SPQR uses Long = int
 #else
     using size_t = System.UInt32;
-    using SuiteSparse_long = System.Int32;
+    using sp_long = System.Int32;
 #endif
 
     internal static class NativeMethods
     {
-        public static void Free(int n, IntPtr p, ref CholmodCommon c)
-        {
-            cholmod_l_free((size_t)n, (size_t)sizeof(SuiteSparse_long), p, ref c);
-        }
+#if SUITESPARSE_AIO
+        const string SPQR_DLL = "libsuitesparse";
+#else
+        const string SPQR_DLL = "libspqr";
+#endif
 
-        const string DLL = "libspqr";
-
-        [DllImport(DLL, EntryPoint = "cholmod_l_start", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int cholmod_l_start(ref CholmodCommon c);
-
-        [DllImport(DLL, EntryPoint = "cholmod_l_finish", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int cholmod_l_finish(ref CholmodCommon c);
-
-        [DllImport(DLL, EntryPoint = "cholmod_l_defaults", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int cholmod_l_defaults(ref CholmodCommon c);
-        
-        [DllImport(DLL, EntryPoint = "cholmod_l_free", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr cholmod_l_free(size_t n, size_t size, IntPtr p, ref CholmodCommon c);
-
-        [DllImport(DLL, EntryPoint = "cholmod_l_free_sparse", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int cholmod_l_free_sparse(ref IntPtr A, ref CholmodCommon c);
-
-        [DllImport(DLL, EntryPoint = "cholmod_l_free_dense", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int cholmod_l_free_dense(ref IntPtr A, ref CholmodCommon c);
-        
-        [DllImport(DLL, EntryPoint = "SuiteSparse_free", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparse_free", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SuiteSparse_free(IntPtr p);
 
         /// <summary>
@@ -62,13 +43,13 @@ namespace CSparse.Interop.SPQR
         /// <param name="HTau">1-by-nh Householder coefficients</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns rank(A) estimate, (-1) if failure</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C", CallingConvention = CallingConvention.Cdecl)]
-        public static extern SuiteSparse_long SuiteSparseQR_C
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C", CallingConvention = CallingConvention.Cdecl)]
+        public static extern sp_long SuiteSparseQR_C
         (
             /* inputs: */
             int ordering,
             double tol,
-            SuiteSparse_long econ,
+            sp_long econ,
             int getCTX,
             ref CholmodSparse A,
             IntPtr Bsparse, // ref CholmodSparse
@@ -96,13 +77,13 @@ namespace CSparse.Interop.SPQR
         /// <param name="E">size n column perm, NULL if identity</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns rank(A) est., (-1) if failure</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_QR", CallingConvention = CallingConvention.Cdecl)]
-        public static extern SuiteSparse_long SuiteSparseQR_C_QR
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_QR", CallingConvention = CallingConvention.Cdecl)]
+        public static extern sp_long SuiteSparseQR_C_QR
         (
             /* inputs: */
             int ordering,
             double tol,
-            SuiteSparse_long econ,
+            sp_long econ,
             ref CholmodSparse A,
             /* outputs: */
             out IntPtr Q, // CholmodSparse
@@ -120,7 +101,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="B">m-by-k</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns X, NULL if failure</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_backslash", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_backslash", CallingConvention = CallingConvention.Cdecl)]
         public static extern CholmodDense SuiteSparseQR_C_backslash
         (
             int ordering,
@@ -137,7 +118,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="B">m-by-k</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns X, NULL if failure</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_backslash_default", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_backslash_default", CallingConvention = CallingConvention.Cdecl)]
         public static extern CholmodDense SuiteSparseQR_C_backslash_default
         (
             ref CholmodSparse A,
@@ -154,7 +135,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="B">m-by-k</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns X, or NULL</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_backslash_sparse", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_backslash_sparse", CallingConvention = CallingConvention.Cdecl)]
         public static extern CholmodSparse SuiteSparseQR_C_backslash_sparse
         (
             /* inputs: */
@@ -176,7 +157,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="A">m-by-n sparse matrix</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>SuiteSparseQR_C_factorization</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_factorize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_factorize", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SuiteSparseQR_C_factorize
         (
             /* inputs: */
@@ -195,7 +176,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="A">m-by-n sparse matrix, A->x ignored</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>SuiteSparseQR_C_factorization</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SuiteSparseQR_C_symbolic
         (
             /* inputs: */
@@ -215,7 +196,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="QR">SuiteSparseQR_C_factorization</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns TRUE (1) if successful, FALSE (0) otherwise</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_numeric", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SuiteSparseQR_C_numeric
         (
             /* inputs: */
@@ -232,7 +213,7 @@ namespace CSparse.Interop.SPQR
         /// <param name="QR">SuiteSparseQR_C_factorization</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns TRUE (1) if OK, FALSE (0) otherwise</returns>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_free", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_free", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SuiteSparseQR_C_free
         (
             ref IntPtr QR,
@@ -253,7 +234,7 @@ namespace CSparse.Interop.SPQR
         /// system SPQR_RTX_EQUALS_B   (2): X = R'\B        B is n-by-k and X is m-by-k
         /// system SPQR_RTX_EQUALS_ETB (3): X = R'\(E'*B)   as above, E is a permutation
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_solve", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SuiteSparseQR_C_solve
         (
             int system,
@@ -277,7 +258,7 @@ namespace CSparse.Interop.SPQR
         /// method SPQR_XQT (2): Y = X*Q'
         /// method SPQR_XQ  (3): Y = X*Q
         /// </remarks>
-        [DllImport(DLL, EntryPoint = "SuiteSparseQR_C_qmult", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_qmult", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SuiteSparseQR_C_qmult /* returns Y, or NULL on failure */
         (
             /* inputs: */

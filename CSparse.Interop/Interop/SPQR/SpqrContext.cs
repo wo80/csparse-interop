@@ -33,8 +33,8 @@ namespace CSparse.Interop.SPQR
 
             common = new CholmodCommon();
             common.Initialize();
-
-            NativeMethods.cholmod_l_start(ref common);
+            
+            Cholmod.NativeMethods.cholmod_start(ref common);
         }
 
         ~SpqrContext()
@@ -160,8 +160,8 @@ namespace CSparse.Interop.SPQR
 
                 CopyDense(X, result);
 
-                NativeMethods.cholmod_l_free_dense(ref Yp, ref common);
-                NativeMethods.cholmod_l_free_dense(ref Xp, ref common);
+                Cholmod.NativeMethods.cholmod_free_dense(ref Yp, ref common);
+                Cholmod.NativeMethods.cholmod_free_dense(ref Xp, ref common);
                 
                 return 1;
             }
@@ -215,7 +215,7 @@ namespace CSparse.Interop.SPQR
             {
                 NativeMethods.SuiteSparseQR_C_free(ref qr, ref common);
 
-                NativeMethods.cholmod_l_finish(ref common);
+                Cholmod.NativeMethods.cholmod_finish(ref common);
 
                 qr = IntPtr.Zero;
             }
