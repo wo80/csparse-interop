@@ -25,3 +25,7 @@ View [test results](https://github.com/wo80/csparse-interop/wiki/Test-Results) i
 * [vs-arpack](https://github.com/wo80/vs-arpack/) - Visual Studio solution to build ARPACK.
 
 Pre-compiled binaries for windows users can be found [here](http://wo80.bplaced.net/math/packages.html).
+
+## Dependencies
+
+MKL and CUDA solvers depend on the corresponding runtime to be present. Read more about those [dependencies](https://github.com/wo80/csparse-interop/wiki/Dependencies) in the wiki.
