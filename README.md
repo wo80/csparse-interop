@@ -1,4 +1,4 @@
-# CSparse.Interop - C# bindings for sparse matrix solvers
+# CSparse.Interop
 
 This project contains bindings for some popular solvers of sparse linear systems. It is supposed to be an extension to [CSparse.NET](https://github.com/wo80/CSparse.NET).
 
@@ -6,15 +6,20 @@ This project contains bindings for some popular solvers of sparse linear systems
 
 | Name      | Type |          | Version | Test (x86)  | Test (x64) |
 |----------:|-----:|---------:|:-------:|:-----------:|:----------:|
-| CHOLMOD | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.2.0 | OK | OK |
-| UMFPACK | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.2.0 | OK | OK |
-| SPQR    | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.2.0 | OK | -  |
+| CHOLMOD | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
+| UMFPACK | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
+| SPQR    | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
 | SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | OK | OK |
 | PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2018.1 | OK | OK |
 | FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2018.1 | OK | OK |
+| ARPACK  | Eigenvalues   | [arpack-ng](https://github.com/opencollab/arpack-ng) | 3.6.2 | OK | OK |
 
-## Todo
+View [test results](https://github.com/wo80/csparse-interop/wiki/Test-Results) in the wiki.
 
-1. Testing (both x86 and x64)
-   * SuiteSparse has to be tested in x64 mode (sparse matrix storage might expect 8 byte integers, which is not compatible with CSparse.NET). See Cholmod/NativeMethods.cs for usage of conditional compilation symbol **X64**.
-2. Documentation
+## Related projects
+
+* [vs-suitesparse](https://github.com/wo80/vs-suitesparse/) - Visual Studio solution to build SuiteSparse.
+* [vs-superlu](https://github.com/wo80/vs-superlu/) - Visual Studio solution to build SuperLU.
+* [vs-arpack](https://github.com/wo80/vs-arpack/) - Visual Studio solution to build ARPACK.
+
+Pre-compiled binaries for windows users can be found [here](http://wo80.bplaced.net/math/packages.html).
