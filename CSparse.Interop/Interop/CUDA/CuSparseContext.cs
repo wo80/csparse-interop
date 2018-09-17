@@ -36,9 +36,8 @@ namespace CSparse.Interop.CUDA
         /// <param name="stream">The <see cref="CudaStream"/>.</param>
         /// <param name="A">The sparse matrix.</param>
         /// <param name="type">The matrix type.</param>
-        /// <param name="transpose">A value indicating, whether the matrix transpose should be stored.</param>
-        public CuSparseContext(CudaStream stream, CompressedColumnStorage<T> A,
-            MatrixType type = MatrixType.General, bool transpose = false)
+        /// <param name="transpose">A value indicating, whether the storage should be transposed.</param>
+        public CuSparseContext(CudaStream stream, CompressedColumnStorage<T> A, MatrixType type, bool transpose)
         {
             Check(NativeMethods.cusparseCreate(ref _p));
             Check(NativeMethods.cusparseSetStream(_p, stream.Pointer));
@@ -59,30 +58,16 @@ namespace CSparse.Interop.CUDA
 
             try
             {
-                var h_ap = InteropHelper.Pin(A.ColumnPointers, handles);
-                var h_ai = InteropHelper.Pin(A.RowIndices, handles);
-                var h_ax = InteropHelper.Pin(A.Values, handles);
+                // Convert storage to CSR format.
+                var C = transpose ? A.Transpose(true) : A;
 
-                if (transpose)
-                {
-                    int columns = A.ColumnCount;
+                var h_ap = InteropHelper.Pin(C.ColumnPointers, handles);
+                var h_ai = InteropHelper.Pin(C.RowIndices, handles);
+                var h_ax = InteropHelper.Pin(C.Values, handles);
 
-                    // TODO: need a reliable way to test for complex type.
-                    if (sizeT == 16)
-                    {
-                        NativeMethods.cusparseZcsr2csc(_p, rows, columns, nnz, h_ax, h_ap, h_ai, d_ax, d_ap, d_ai, 1, IndexBase.Zero);
-                    }
-                    else
-                    {
-                        NativeMethods.cusparseDcsr2csc(_p, rows, columns, nnz, h_ax, h_ap, h_ai, d_ax, d_ap, d_ai, 1, IndexBase.Zero);
-                    }
-                }
-                else
-                {
-                    Cuda.CopyToDevice(d_ap, h_ap, sizeof(int) * (rows + 1));
-                    Cuda.CopyToDevice(d_ai, h_ai, sizeof(int) * nnz);
-                    Cuda.CopyToDevice(d_ax, h_ax, sizeT * nnz);
-                }
+                Cuda.CopyToDevice(d_ap, h_ap, sizeof(int) * (rows + 1));
+                Cuda.CopyToDevice(d_ai, h_ai, sizeof(int) * nnz);
+                Cuda.CopyToDevice(d_ax, h_ax, sizeT * nnz);
             }
             finally
             {

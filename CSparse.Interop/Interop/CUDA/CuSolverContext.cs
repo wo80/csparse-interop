@@ -29,6 +29,7 @@ namespace CSparse.Interop.CUDA
         protected IntPtr d_x;
         protected IntPtr d_b;
 
+        protected bool transpose;
         protected int sizeT;
 
         // The lifetime of the stream is controlled by the calling code!
@@ -44,7 +45,15 @@ namespace CSparse.Interop.CUDA
         /// </summary>
         /// <param name="stream">The <see cref="CudaStream"/>.</param>
         /// <param name="A">The sparse matrix.</param>
-        public CuSolverContext(CudaStream stream, CompressedColumnStorage<T> A)
+        /// <param name="transpose">A value indicating, whether the storage should be transposed.</param>
+        /// <remarks>
+        /// Matrix transposition is done on a storage level, meaning, for complex matrices, values will not be
+        /// conjugated. This is necessary, because CUDA expects CSR storage, while CSparse uses CSC storage.
+        /// 
+        /// This value of <paramref name="transpose"/> should be true for all matrix types, except real
+        /// valued, symmetric matrices.
+        /// </remarks>
+        public CuSolverContext(CudaStream stream, CompressedColumnStorage<T> A, bool transpose)
         {
             Check(NativeMethods.cusolverSpCreate(ref _p));
             Check(NativeMethods.cusolverSpSetStream(_p, stream.Pointer));
@@ -53,6 +62,7 @@ namespace CSparse.Interop.CUDA
 
             this.stream = stream;
             this.matrix = A;
+            this.transpose = transpose;
         }
 
         ~CuSolverContext()
@@ -113,7 +123,7 @@ namespace CSparse.Interop.CUDA
             Cuda.Malloc(ref d_x, sizeT * columns);
             Cuda.Malloc(ref d_b, sizeT * rows);
 
-            using (var cusparse = new CuSparseContext<T>(stream, matrix))
+            using (var cusparse = new CuSparseContext<T>(stream, matrix, MatrixType.General, transpose))
             {
                 PrepareFactorize();
 

@@ -1,13 +1,14 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Complex.Factorization
 {
     using CSparse.Interop.CUDA;
     using CSparse.Storage;
     using System;
+    using System.Numerics;
 
     // Based on low level interface example cuSolverSp_LowlevelQR
 
-    public class CudaQR : CuSolverContext<double>
+    public class CudaQR : CuSolverContext<Complex>
     {
         private IntPtr _info;
 
@@ -18,7 +19,7 @@ namespace CSparse.Double.Factorization
         /// </summary>
         /// <param name="stream">The <see cref="CudaStream"/>.</param>
         /// <param name="A">The sparse matrix.</param>
-        public CudaQR(CudaStream stream, CompressedColumnStorage<double> A)
+        public CudaQR(CudaStream stream, CompressedColumnStorage<Complex> A)
             : this(stream, A, true)
         {
         }
@@ -29,7 +30,7 @@ namespace CSparse.Double.Factorization
         /// <param name="stream">The <see cref="CudaStream"/>.</param>
         /// <param name="A">The sparse matrix.</param>
         /// <param name="transpose">A value indicating, whether the storage should be transposed.</param>
-        public CudaQR(CudaStream stream, CompressedColumnStorage<double> A, bool transpose)
+        public CudaQR(CudaStream stream, CompressedColumnStorage<Complex> A, bool transpose)
             : base(stream, A, transpose)
         {
         }
@@ -41,7 +42,7 @@ namespace CSparse.Double.Factorization
 
         protected override SolverStatus Solve(int rows, int columns)
         {
-            return NativeMethods.cusolverSpDcsrqrSolve(_p, rows, columns, d_b, d_x, _info, _buffer);
+            return NativeMethods.cusolverSpZcsrqrSolve(_p, rows, columns, d_b, d_x, _info, _buffer);
         }
 
         public override bool Singular(double tol)
@@ -49,12 +50,12 @@ namespace CSparse.Double.Factorization
             int singularity = 0;
 
             // Check if the matrix is singular.
-            Check(NativeMethods.cusolverSpDcsrqrZeroPivot(_p, _info, tol, ref singularity));
+            Check(NativeMethods.cusolverSpZcsrqrZeroPivot(_p, _info, tol, ref singularity));
 
             return singularity >= 0;
         }
 
-        protected override void Factorize(int rows, int columns, int nnz, CuSparseContext<double> A)
+        protected override void Factorize(int rows, int columns, int nnz, CuSparseContext<Complex> A)
         {
             var ap = A.ColumnPointers;
             var ai = A.RowIndices;
@@ -68,15 +69,15 @@ namespace CSparse.Double.Factorization
             int size_internal = 0, size_qr = 0;
 
             // Workspace for qr(A).
-            Check(NativeMethods.cusolverSpDcsrqrBufferInfo(_p, rows, columns, nnz, desc, ax, ap, ai, _info,
+            Check(NativeMethods.cusolverSpZcsrqrBufferInfo(_p, rows, columns, nnz, desc, ax, ap, ai, _info,
                 ref size_internal, ref size_qr));
 
             Cuda.Malloc(ref _buffer, sizeof(char) * size_qr);
 
-            Check(NativeMethods.cusolverSpDcsrqrSetup(_p, rows, columns, nnz, desc, ax, ap, ai, 0.0, _info));
+            Check(NativeMethods.cusolverSpZcsrqrSetup(_p, rows, columns, nnz, desc, ax, ap, ai, 0.0, _info));
 
             // Compute A = Q*R.
-            Check(NativeMethods.cusolverSpDcsrqrFactor(_p, rows, columns, nnz, IntPtr.Zero, IntPtr.Zero, _info, _buffer));
+            Check(NativeMethods.cusolverSpZcsrqrFactor(_p, rows, columns, nnz, IntPtr.Zero, IntPtr.Zero, _info, _buffer));
         }
 
         protected override void PrepareFactorize()

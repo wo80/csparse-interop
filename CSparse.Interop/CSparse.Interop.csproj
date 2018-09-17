@@ -76,6 +76,8 @@
   <ItemGroup>
     <Compile Include="Complex\Factorization\Cholmod.cs" />
     <Compile Include="Complex\Factorization\CholmodHelper.cs" />
+    <Compile Include="Complex\Factorization\CudaCholesky.cs" />
+    <Compile Include="Complex\Factorization\CudaQR.cs" />
     <Compile Include="Complex\Factorization\Pardiso.cs" />
     <Compile Include="Complex\Factorization\SPQR.cs" />
     <Compile Include="Complex\Factorization\SuperLU.cs" />
