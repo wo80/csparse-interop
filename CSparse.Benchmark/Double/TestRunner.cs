@@ -24,6 +24,7 @@ namespace CSparse.Double
             new TestSuperLU().Run(A, B);
             new TestPardiso().Run(A, B);
             
+            new TestArpack().Run();
             new TestFeast().Run();
 
             Console.WriteLine();
