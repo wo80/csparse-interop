@@ -2,6 +2,7 @@
 namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
+    using CSparse.Interop.Feast;
     using System;
     using System.Diagnostics;
     using System.Numerics;
@@ -27,7 +28,7 @@ namespace CSparse.Complex.Tests
             int N = A.RowCount;
 
             var solver = new Feast(A);
-
+            
             //solver.Options.PrintStatus = true;
 
             // The current version of MKL (2018.1) uses FEAST 2.0. One of the difficulties is
@@ -64,7 +65,7 @@ namespace CSparse.Complex.Tests
                     Display.Warning("status = " + result.Status);
                 }
 
-                //PrintResiduals(A, (FeastResult)result);
+                //PrintResiduals(A, result);
             }
             catch (DllNotFoundException)
             {
@@ -76,7 +77,7 @@ namespace CSparse.Complex.Tests
             }
         }
 
-        private static void PrintResiduals(SparseMatrix A, FeastResult result)
+        private static void PrintResiduals(SparseMatrix A, FeastResult<Complex> result)
         {
             int N = A.RowCount;
 

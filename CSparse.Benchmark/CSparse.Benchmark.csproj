@@ -88,6 +88,7 @@
     <Compile Include="Complex\Generate.cs" />
     <Compile Include="Complex\Tests\Test.cs" />
     <Compile Include="Complex\Tests\TestCholmod.cs" />
+    <Compile Include="Complex\Tests\TestCuda.cs" />
     <Compile Include="Complex\Tests\TestFeast.cs" />
     <Compile Include="Complex\Tests\TestSparseCholesky.cs" />
     <Compile Include="Complex\Tests\TestSparseLU.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="Double\Tests\TestSuperLU.cs" />
     <Compile Include="Double\Tests\TestPardiso.cs" />
     <Compile Include="Double\Tests\TestUmfpack.cs" />
-    <Compile Include="Double\TestCuda.cs" />
+    <Compile Include="Double\Tests\TestCuda.cs" />
     <Compile Include="Double\TestRunner.cs" />
     <Compile Include="Double\Util.cs" />
     <Compile Include="Program.cs" />

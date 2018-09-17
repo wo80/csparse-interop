@@ -1,12 +1,13 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Complex.Tests
 {
-    using CSparse.Double.Factorization;
+    using CSparse.Complex.Factorization;
     using CSparse.Factorization;
     using CSparse.Interop.CUDA;
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Numerics;
 
     static class TestCuda
     {
@@ -16,11 +17,11 @@ namespace CSparse.Double
         {
             try
             {
-                Console.WriteLine("Running CUDA tests (Double) ... [N = {0}]", size);
+                Console.WriteLine("Running CUDA tests (Complex) ... [N = {0}]", size);
                 Console.WriteLine();
 
                 var A = Generate.Random(size, size, density);
-                var B = Generate.RandomSymmetric(size, density, true);
+                var B = Generate.RandomHermitian(size, density, true);
 
                 // Initialize CUDA device.
                 Cuda.Initialize();
@@ -54,6 +55,9 @@ namespace CSparse.Double
 
         private static void RunCudaTest(SparseMatrix A, SparseMatrix B)
         {
+            // NOTE: for Hermitian matrices, the storage has to be transposed, which is
+            //       done by the solver (unless 3rd argument transpose = false).
+
             using (var stream = new CudaStream())
             using (var solver = new CudaCholesky(stream, B))
             {
@@ -61,9 +65,9 @@ namespace CSparse.Double
 
                 ReportGpuTime(solver.FactorizationTime);
             }
-
+            
             using (var stream = new CudaStream())
-            using (var solver = new CudaQR(stream, A.Transpose())) // Transpose, since cusolver expects CSR storage.
+            using (var solver = new CudaQR(stream, A))
             {
                 TestRandom(solver, A, "CUDA QR");
 
@@ -79,21 +83,21 @@ namespace CSparse.Double
             }
         }
 
-        private static void TestRandom(IDisposableSolver<double> solver, SparseMatrix matrix, string name)
+        private static void TestRandom(IDisposableSolver<Complex> solver, SparseMatrix matrix, string name)
         {
             Console.Write("Testing {0} ... ", name);
 
             RunTest(solver, (SparseMatrix)matrix.Clone(), false);
         }
 
-        private static void TestRandomSymmetric(IDisposableSolver<double> solver, SparseMatrix matrix, string name)
+        private static void TestRandomSymmetric(IDisposableSolver<Complex> solver, SparseMatrix matrix, string name)
         {
             Console.Write("Testing {0} (symmetric) ... ", name);
 
             RunTest(solver, (SparseMatrix)matrix.Clone(), true);
         }
 
-        private static void RunTest(IDisposableSolver<double> solver, SparseMatrix A, bool symmetric)
+        private static void RunTest(IDisposableSolver<Complex> solver, SparseMatrix A, bool symmetric)
         {
             int n = A.RowCount;
 

@@ -2,6 +2,7 @@
 namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
+    using CSparse.Interop.Feast;
     using System;
     using System.Diagnostics;
 
@@ -63,7 +64,7 @@ namespace CSparse.Double.Tests
                     Display.Warning("status = " + result.Status);
                 }
 
-                //PrintResiduals(A, (FeastResult)result);
+                //PrintResiduals(A, result);
             }
             catch (DllNotFoundException)
             {
@@ -75,7 +76,7 @@ namespace CSparse.Double.Tests
             }
         }
 
-        private static void PrintResiduals(SparseMatrix A, FeastResult result)
+        private static void PrintResiduals(SparseMatrix A, FeastResult<double> result)
         {
             int N = A.RowCount;
 

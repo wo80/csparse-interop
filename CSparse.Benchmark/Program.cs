@@ -20,7 +20,8 @@ namespace ConsoleApp
             {
                 int size = GetSize(args);
 
-                CSparse.Double.TestCuda.Run(size);
+                CSparse.Double.Tests.TestCuda.Run(size);
+                CSparse.Complex.Tests.TestCuda.Run(size);
             }
             else
             {
