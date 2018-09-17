@@ -66,8 +66,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSparse, Version=3.2.0.25282, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSparse.3.2.0\lib\net40\CSparse.dll</HintPath>
+    <Reference Include="CSparse, Version=3.2.1.20877, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSparse.3.2.1\lib\net40\CSparse.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
