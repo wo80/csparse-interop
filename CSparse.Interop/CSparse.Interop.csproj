@@ -82,6 +82,8 @@
     <Compile Include="Complex\Factorization\SPQR.cs" />
     <Compile Include="Complex\Factorization\SuperLU.cs" />
     <Compile Include="Complex\Factorization\Umfpack.cs" />
+    <Compile Include="Complex\Solver\Arpack.cs" />
+    <Compile Include="Complex\Solver\ArpackResult.cs" />
     <Compile Include="Complex\Solver\Feast.cs" />
     <Compile Include="Complex\Solver\FeastResult.cs" />
     <Compile Include="Double\Factorization\CholmodHelper.cs" />
@@ -92,9 +94,17 @@
     <Compile Include="Double\Factorization\SPQR.cs" />
     <Compile Include="Double\Factorization\SuperLU.cs" />
     <Compile Include="Double\Factorization\Umfpack.cs" />
+    <Compile Include="Double\Solver\Arpack.cs" />
+    <Compile Include="Double\Solver\ArpackResult.cs" />
     <Compile Include="Double\Solver\Feast.cs" />
     <Compile Include="Double\Solver\FeastResult.cs" />
     <Compile Include="Factorization\IDisposableSolver.cs" />
+    <Compile Include="Interop\ARPACK\ArpackContext.cs" />
+    <Compile Include="Interop\ARPACK\ArpackException.cs" />
+    <Compile Include="Interop\ARPACK\ArpackResult.cs" />
+    <Compile Include="Interop\ARPACK\Job.cs" />
+    <Compile Include="Interop\ARPACK\NativeMethods.cs" />
+    <Compile Include="Interop\ARPACK\ShiftMode.cs" />
     <Compile Include="Interop\Cholmod\CholmodCommon.cs" />
     <Compile Include="Interop\Cholmod\CholmodContext.cs" />
     <Compile Include="Interop\Cholmod\CholmodDense.cs" />
@@ -147,7 +157,6 @@
     <Compile Include="Interop\Umfpack\UmfpackSolve.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
