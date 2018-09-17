@@ -4,6 +4,8 @@ namespace CSparse.Interop.Feast
     using CSparse.Storage;
     using System;
 
+    // TODO: no need for IDisposable at the moment.
+
     /// <summary>
     /// FEAST eigenvalue solver (MKL supports real symmetric or complex Hermetian matrices only).
     /// </summary>
@@ -25,7 +27,7 @@ namespace CSparse.Interop.Feast
         {
             if (A.RowCount != A.ColumnCount)
             {
-                throw new ArgumentException(); // Properties.Resources.ArgumentMatrixSquare
+                throw new ArgumentException("Matrix must be square.", "A");
             }
             
             this.A = A;
@@ -43,12 +45,12 @@ namespace CSparse.Interop.Feast
         {
             if (B.RowCount != B.ColumnCount)
             {
-                throw new ArgumentException(); // Properties.Resources.ArgumentMatrixSquare
+                throw new ArgumentException("Matrix must be square.", "B");
             }
 
             if (A.RowCount != B.RowCount)
             {
-                throw new ArgumentException(); // Properties.Resources.ArgumentMatrixSameRowDimension
+                throw new ArgumentException("Matrix must be of same dimension as A.", "B");
             }
 
             this.B = B;

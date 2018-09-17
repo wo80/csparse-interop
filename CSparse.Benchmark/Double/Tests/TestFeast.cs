@@ -49,22 +49,27 @@ namespace CSparse.Double.Tests
                 {
                     Display.Warning("relative error too large");
                 }
-                else if (result.Status == 0)
-                {
-                    Display.Ok("OK");
-                }
                 else if (result.Status == 3)
                 {
                     // If the subspace guess is too small, status will be 3 and either
                     // the dimension must be increased or the search interval reduced.
                     Display.Warning("subspace size too small");
                 }
+                else if (result.Status == 0)
+                {
+                    if (CheckResiduals(A, result, false))
+                    {
+                        Display.Ok("OK");
+                    }
+                    else
+                    {
+                        Display.Warning("residual error too large");
+                    }
+                }
                 else
                 {
                     Display.Warning("status = " + result.Status);
                 }
-
-                //PrintResiduals(A, result);
             }
             catch (DllNotFoundException)
             {
@@ -76,7 +81,7 @@ namespace CSparse.Double.Tests
             }
         }
 
-        private static void PrintResiduals(SparseMatrix A, FeastResult<double> result)
+        private static bool CheckResiduals(SparseMatrix A, FeastResult<double> result, bool print)
         {
             int N = A.RowCount;
 
@@ -85,11 +90,16 @@ namespace CSparse.Double.Tests
             var v = result.EigenValues;
             var X = result.EigenVectors;
 
-            Console.WriteLine();
-            Console.WriteLine("       Lambda         Residual");
+            if (print)
+            {
+                Console.WriteLine();
+                Console.WriteLine("       Lambda         Residual");
+            }
 
             var x = new double[N];
             var y = new double[N];
+
+            bool ok = true;
 
             for (int i = 0; i < m; i++)
             {
@@ -102,8 +112,20 @@ namespace CSparse.Double.Tests
                 // y = A*x - lambda*x
                 A.Multiply(1.0, x, -lambda, y);
 
-                Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, Vector.Norm(y));
+                double r = Vector.Norm(y);
+
+                if (r > ERROR_THRESHOLD)
+                {
+                    ok = false;
+                }
+
+                if (print)
+                {
+                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
+                }
             }
+
+            return ok;
         }
     }
 }
