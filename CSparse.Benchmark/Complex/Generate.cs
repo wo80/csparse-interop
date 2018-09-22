@@ -41,7 +41,7 @@ namespace CSparse.Complex
             for (int i = 0; i < rows; i++)
             {
                 // Ensure non-zero diagonal.
-                C.At(i, i, Complex.One);
+                C.At(i, i, random.NextDouble() - 0.5);
 
                 for (int j = 0; j < nz; j++)
                 {
@@ -87,12 +87,12 @@ namespace CSparse.Complex
         /// <returns>Random sparse matrix.</returns>
         public static SparseMatrix RandomHermitian(int size, double density, bool definite, Random random)
         {
-            // Number of non-zeros per row.
+            // Total number of non-zeros.
             int nz = (int)Math.Max(size * size * density, 1d);
 
             var C = new CoordinateStorage<Complex>(size, size, nz);
 
-            int m = (nz - size) / 2;
+            int m = nz / 2;
 
             var norm = new double[size];
 
@@ -101,16 +101,26 @@ namespace CSparse.Complex
                 int i = (int)Math.Min(random.NextDouble() * size, size - 1);
                 int j = (int)Math.Min(random.NextDouble() * size, size - 1);
 
-                // Fill lower part.
-                if (i > j)
+                if (i == j)
                 {
-                    var value = new Complex(random.NextDouble(), random.NextDouble());
-
-                    norm[i] += Complex.Abs(value);
-                    norm[j] += Complex.Abs(value);
-
-                    C.At(i, j, value);
+                    // Skip diagonal.
+                    continue;
                 }
+
+                // Fill only lower part.
+                if (i < j)
+                {
+                    int temp = i;
+                    i = j;
+                    j = temp;
+                }
+
+                var value = new Complex(random.NextDouble(), random.NextDouble());
+
+                norm[i] += Complex.Abs(value);
+                norm[j] += Complex.Abs(value);
+
+                C.At(i, j, value);
             }
 
             // Fill diagonal.
