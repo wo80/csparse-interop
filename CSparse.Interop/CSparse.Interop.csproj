@@ -96,6 +96,8 @@
     <Compile Include="Double\Factorization\Umfpack.cs" />
     <Compile Include="Double\Solver\Arpack.cs" />
     <Compile Include="Double\Solver\ArpackResult.cs" />
+    <Compile Include="Double\Solver\ExtendedEigensolver.cs" />
+    <Compile Include="Double\Solver\ExtendedEigensolverResult.cs" />
     <Compile Include="Double\Solver\Feast.cs" />
     <Compile Include="Double\Solver\FeastResult.cs" />
     <Compile Include="Factorization\IDisposableSolver.cs" />
@@ -130,6 +132,11 @@
     <Compile Include="Interop\Feast\FeastOptions.cs" />
     <Compile Include="Interop\Feast\FeastResult.cs" />
     <Compile Include="Interop\Feast\NativeMethods.cs" />
+    <Compile Include="Interop\MKL\ExtendedEigensolverContext.cs" />
+    <Compile Include="Interop\MKL\ExtendedEigensolverResult.cs" />
+    <Compile Include="Interop\MKL\Helper.cs" />
+    <Compile Include="Interop\MKL\NativeMethods.cs" />
+    <Compile Include="Interop\MKL\Types.cs" />
     <Compile Include="Interop\Pardiso\Constants.cs" />
     <Compile Include="Interop\Pardiso\NativeMethods.cs" />
     <Compile Include="Interop\Pardiso\PardisoContext.cs" />
