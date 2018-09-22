@@ -10,7 +10,7 @@ namespace CSparse.Double.Tests
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
-        public void Run()
+        public void Run(int size)
         {
             Console.Write("Testing FEAST ... ");
 
@@ -22,7 +22,9 @@ namespace CSparse.Double.Tests
             // Exact eigenvalues.
             var z = new double[m0];
 
-            var A = (SparseMatrix)Generate.Laplacian(50, 50, z);
+            size = (int)Math.Sqrt(size) + 1;
+
+            var A = (SparseMatrix)Generate.Laplacian(size, size, z);
 
             int N = A.RowCount;
 

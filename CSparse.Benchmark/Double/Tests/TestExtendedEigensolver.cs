@@ -2,63 +2,58 @@
 namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
-    using CSparse.Interop.ARPACK;
+    using CSparse.Interop.MKL;
     using System;
     using System.Diagnostics;
 
-    class TestArpack
+    class TestExtendedEigensolver
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
         public void Run(int size)
         {
-            Console.Write("Testing ARPACK ... ");
+            Console.Write("Testing MKL Extended Eigensolver ... ");
 
             var timer = new Stopwatch();
 
-            // Number of eigenvalues to compute.
-            int k = 5;
+            // Initial subspace dimension.
+            int k0 = 5;
 
             // Exact eigenvalues.
-            var z = new double[k];
+            var z = new double[k0];
 
             size = (int)Math.Sqrt(size) + 1;
 
             var A = (SparseMatrix)Generate.Laplacian(size, size, z);
-            var U = (SparseMatrix)A.Clone();
 
-            // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            U.Keep((i, j, aij) => i <= j);
-            
-            var solver = new Arpack(U, true)
-            {
-                Tolerance = 1e-6,
-                ComputeEigenVectors = true
-            };
+            int N = A.RowCount;
+
+            var solver = new ExtendedEigensolver(A);
             
             try
             {
                 timer.Start();
 
-                var result = solver.SolveStandard(k, 0.0);
-                //var result = solver.SolveStandard(k, Job.SmallestMagnitude);
-
-                //var result = solver.SolveStandard(k, 8.0);
-                //var result = solver.SolveStandard(k, Job.LargestMagnitude);
+                var result = solver.SolveStandard(k0, Job.Smallest);
 
                 timer.Stop();
 
                 Display.Time(timer.ElapsedTicks);
-                
-                result.EnsureSuccess();
 
-                if (CheckResiduals(A, result, false))
+                if (result.Status == SparseStatus.Success)
                 {
-                    Display.Ok("OK");
+                    if (CheckResiduals(A, result, false))
+                    {
+                        Display.Ok("OK");
+                    }
+                    else
+                    {
+                        Display.Warning("residual error too large");
+                    }
                 }
                 else
                 {
-                    Display.Warning("residual error too large");
+                    Display.Warning("status = " + result.Status);
                 }
             }
             catch (DllNotFoundException)
@@ -71,7 +66,7 @@ namespace CSparse.Double.Tests
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, ArpackResult<double> result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult<double> result, bool print)
         {
             int N = A.RowCount;
 

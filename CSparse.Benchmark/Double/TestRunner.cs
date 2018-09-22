@@ -6,7 +6,7 @@ namespace CSparse.Double
 
     public static class TestRunner
     {
-        public static void Run(int size, double density = 0.05)
+        public static void Run(int size, double density)
         {
             var A = Generate.Random(size, size, density);
             var B = Generate.RandomSymmetric(size, density, true);
@@ -23,9 +23,14 @@ namespace CSparse.Double
             new TestSPQR().Run(A, B);
             new TestSuperLU().Run(A, B);
             new TestPardiso().Run(A, B);
-            
-            new TestArpack().Run();
-            new TestFeast().Run();
+
+            Console.WriteLine();
+            Console.WriteLine("Running eigensolver tests (Double) ... [N = {0}]", size);
+            Console.WriteLine();
+
+            new TestArpack().Run(size);
+            new TestFeast().Run(size);
+            new TestExtendedEigensolver().Run(size);
 
             Console.WriteLine();
         }

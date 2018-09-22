@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace ConsoleApp
@@ -8,20 +9,25 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            // Default matrix size.
+            int size = 1000;
+
+            // Default density (non-zeros = size x size x density).
+            double density = 0.01;
 
             if (args.Length == 0 || args[0] == "--test")
             {
-                int size = GetSize(args);
+                GetSize(args, ref size, ref density);
 
-                CSparse.Double.TestRunner.Run(size);
-                CSparse.Complex.TestRunner.Run(size);
+                CSparse.Double.TestRunner.Run(size, density);
+                CSparse.Complex.TestRunner.Run(size, density);
             }
             else if (args[0] == "--cuda")
             {
-                int size = GetSize(args);
+                GetSize(args, ref size, ref density);
 
-                CSparse.Double.Tests.TestCuda.Run(size);
-                CSparse.Complex.Tests.TestCuda.Run(size);
+                CSparse.Double.Tests.TestCuda.Run(size, density);
+                CSparse.Complex.Tests.TestCuda.Run(size, density);
             }
             else
             {
@@ -33,10 +39,8 @@ namespace ConsoleApp
             Console.WriteLine("Done.");
         }
 
-        private static int GetSize(string[] args)
+        private static void GetSize(string[] args, ref int size, ref double density)
         {
-            int size = 1000;
-
             if (args.Length > 1)
             {
                 int.TryParse(args[1], out size);
@@ -49,7 +53,17 @@ namespace ConsoleApp
                 size = 1000;
             }
 
-            return size;
+            if (args.Length > 2)
+            {
+                double.TryParse(args[2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out density);
+            }
+
+            if (density < 1e-6 || density > 0.1)
+            {
+                Console.WriteLine("Parameter 'density' out of range: reset to default (0.01)");
+
+                density = 0.01;
+            }
         }
 
         private static Dictionary<string, string> GetCommandLine(string[] args)
