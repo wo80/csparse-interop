@@ -59,7 +59,7 @@ namespace CSparse.Interop.Pardiso
         }
         
         /// <summary>
-        /// Factorizes the matrix associated to this UMFPACK instance.
+        /// Factorizes the matrix associated to this PARDISO instance.
         /// </summary>
         public void Factorize()
         {

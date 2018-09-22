@@ -110,6 +110,7 @@
     <Compile Include="Double\Tests\TestArpack.cs" />
     <Compile Include="Double\Tests\TestCholmod.cs" />
     <Compile Include="Double\Tests\Test.cs" />
+    <Compile Include="Double\Tests\TestExtendedEigensolver.cs" />
     <Compile Include="Double\Tests\TestFeast.cs" />
     <Compile Include="Double\Tests\TestSparseCholesky.cs" />
     <Compile Include="Double\Tests\TestSparseQR.cs" />

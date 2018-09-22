@@ -128,7 +128,7 @@ namespace CSparse.Interop.Pardiso
         }
 
         /// <summary>
-        /// Input arrays must be presented in single precision.
+        /// One- or zero-based indexing of columns and rows.
         /// </summary>
         public bool ZeroBasedIndexing
         {
