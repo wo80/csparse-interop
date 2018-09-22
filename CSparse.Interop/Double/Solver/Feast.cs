@@ -113,6 +113,9 @@ namespace CSparse.Double.Solver
 
             try
             {
+                Increment(A);
+                Increment(B);
+
                 var a = InteropHelper.Pin(A.Values, h);
                 var ia = InteropHelper.Pin(A.ColumnPointers, h);
                 var ja = InteropHelper.Pin(A.RowIndices, h);
@@ -126,6 +129,9 @@ namespace CSparse.Double.Solver
                 var pr = InteropHelper.Pin(R, h);
 
                 NativeMethods.dfeast_scsrgv(ref uplo, ref n, a, ia, ja, b, ib, jb, fpm, out epsout, out loop, ref emin, ref emax, ref m0, pe, px, out m, pr, out info);
+
+                Decrement(A);
+                Decrement(B);
             }
             finally
             {

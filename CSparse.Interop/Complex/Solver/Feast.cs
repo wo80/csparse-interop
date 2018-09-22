@@ -114,6 +114,9 @@ namespace CSparse.Complex.Solver
 
             try
             {
+                Increment(A);
+                Increment(B);
+
                 var a = InteropHelper.Pin(A.Values, h);
                 var ia = InteropHelper.Pin(A.ColumnPointers, h);
                 var ja = InteropHelper.Pin(A.RowIndices, h);
@@ -125,6 +128,9 @@ namespace CSparse.Complex.Solver
                 var pe = InteropHelper.Pin(E, h);
                 var px = InteropHelper.Pin(X, h);
                 var pr = InteropHelper.Pin(R, h);
+
+                Decrement(A);
+                Decrement(B);
 
                 NativeMethods.zfeast_hcsrgv(ref uplo, ref n, a, ia, ja, b, ib, jb, fpm, out epsout, out loop, ref emin, ref emax, ref m0, pe, px, out m, pr, out info);
             }
