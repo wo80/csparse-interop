@@ -12,6 +12,7 @@ This project contains bindings for some popular solvers of sparse linear systems
 | SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | OK | OK |
 | PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2018.1 | OK | OK |
 | FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2018.1 | OK | OK |
+| Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2019.0 | OK | OK |
 | ARPACK  | Eigenvalues   | [arpack-ng](https://github.com/opencollab/arpack-ng) | 3.6.2 | OK | OK |
 | CUDA QR       | Direct solver | [CUSOLVER](https://developer.nvidia.com/cusolver) | 9.2 | - | Buggy |
 | CUDA Cholesky | Direct solver | [CUSOLVER](https://developer.nvidia.com/cusolver) | 9.2 | - | Buggy |
