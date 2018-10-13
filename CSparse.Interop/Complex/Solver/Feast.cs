@@ -129,17 +129,17 @@ namespace CSparse.Complex.Solver
                 var px = InteropHelper.Pin(X, h);
                 var pr = InteropHelper.Pin(R, h);
 
+                NativeMethods.zfeast_hcsrgv(ref uplo, ref n, a, ia, ja, b, ib, jb, fpm, out epsout, out loop, ref emin, ref emax, ref m0, pe, px, out m, pr, out info);
+
                 Decrement(A);
                 Decrement(B);
 
-                NativeMethods.zfeast_hcsrgv(ref uplo, ref n, a, ia, ja, b, ib, jb, fpm, out epsout, out loop, ref emin, ref emax, ref m0, pe, px, out m, pr, out info);
+                return new FeastResult(info, m0, n, loop, epsout, m, E, subspace, R);
             }
             finally
             {
                 InteropHelper.Free(h);
             }
-
-            return new FeastResult(info, m0, n, loop, epsout, m, E, subspace, R);
         }
     }
 }

@@ -132,13 +132,13 @@ namespace CSparse.Double.Solver
 
                 Decrement(A);
                 Decrement(B);
+
+                return new FeastResult(info, m0, n, loop, epsout, m, E, subspace, R);
             }
             finally
             {
                 InteropHelper.Free(h);
             }
-
-            return new FeastResult(info, m0, n, loop, epsout, m, E, subspace, R);
         }
     }
 }
