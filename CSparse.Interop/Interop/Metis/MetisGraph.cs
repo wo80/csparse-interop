@@ -25,9 +25,9 @@ namespace CSparse.Interop.Metis
     /// xadj is used to point to where it begins and where it ends.
     /// 
     /// The weights of the vertices (if any) are stored in an additional array called vwgt. If ncon
-    /// is the number of weights associated with each vertex, the array vwgt contains n * ncon
+    /// is the number of weights associated with each vertex, the array vwgt contains n * ncon
     /// elements (recall that n is the number of vertices). The weights of the ith vertex are
-    /// stored in ncon consecutive entries starting at location vwgt[i * ncon]. Note that if each
+    /// stored in ncon consecutive entries starting at location vwgt[i * ncon]. Note that if each
     /// vertex has only a single weight, then vwgt will contain n elements, and vwgt[i] will store
     /// the weight of the ith vertex. The vertex-weights must be integers greater or equal to zero.
     /// If all the vertices of the graph have the same weight (i.e., the graph is unweighted), then

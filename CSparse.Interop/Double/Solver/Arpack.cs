@@ -44,7 +44,7 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
 
-            var result = new ArpackResult(k, size, ComputeEigenVectors);
+            var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
 
@@ -83,7 +83,7 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
 
-            var result = new ArpackResult(k, size, ComputeEigenVectors);
+            var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
 
@@ -122,7 +122,7 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
             
-            var result = new ArpackResult(k, size, ComputeEigenVectors);
+            var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
 
@@ -175,7 +175,7 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for symmetric eigenvalue problem.", "job");
             }
 
-            var result = new ArpackResult(k, size, ComputeEigenVectors);
+            var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
 
@@ -233,7 +233,7 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for non-symmetric eigenvalue problem.", "job");
             }
 
-            var result = new ArpackResult(k, size, ComputeEigenVectors);
+            var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
 

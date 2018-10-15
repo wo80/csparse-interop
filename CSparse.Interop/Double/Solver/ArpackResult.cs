@@ -5,11 +5,20 @@ namespace CSparse.Double.Solver
     using System;
     using System.Numerics;
 
+    /// <inheritdoc />
     public class ArpackResult : ArpackResult<double>
     {
-        public ArpackResult(int k, int size, bool computeEigenVectors)
-            : base(k, size, computeEigenVectors)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArpackResult"/> class.
+        /// </summary>
+        /// <param name="k">The number of eigenvalues to compute.</param>
+        /// <param name="size">The problem size.</param>
+        /// <param name="computeEigenVectors">A value, indicating whether eigenvectors are requested.</param>
+        /// <param name="symmetric">A value, indicating whether problem is symmetric.</param>
+        public ArpackResult(int k, int size, bool computeEigenVectors, bool symmetric)
+            : base(k, size)
         {
+            CreateWorkspace(computeEigenVectors, symmetric);
         }
         
         /// <summary>
@@ -20,26 +29,11 @@ namespace CSparse.Double.Solver
             Array.Copy((double[])eigvalr, 0, target, 0, count);
         }
 
-        protected override void CreateWorkspace(bool computeEigenVectors)
-        {
-            int k = this.Count;
-            
-            // For symmetric problems, eigvali isn't used. We
-            // initialize it anyway.
-
-            eigvalr = new double[k];
-            eigvali = new double[k];
-
-            if (computeEigenVectors)
-            {
-                eigvec = new DenseMatrix(size, k);
-            }
-        }
-
+        /// <inheritdoc />
         protected override Complex[] CreateEigenvaluesArray()
         {
             int k = this.Count;
-
+            
             var result = new Complex[k];
 
             var rp = (double[])eigvalr;
@@ -51,6 +45,33 @@ namespace CSparse.Double.Solver
             }
 
             return result;
+        }
+
+        private void CreateWorkspace(bool computeEigenVectors, bool symmetric)
+        {
+            int n = this.size;
+            int k = this.Count;
+
+            // For complex eigenvalues of non-symmetric problems, the complex conjugate will also be
+            // an eigenvalue. ARPACK will always compute both eigenvalues. This means that though k
+            // eigenvalues might be requested, k+1 eigenvalues will be computed. We have to allocate
+            // enough memory to handle this case.
+
+            int s = symmetric ? k : k + 1;
+
+            // For symmetric problems, eigvali isn't used. We initialize it anyway.
+
+            eigvalr = new double[s];
+            eigvali = new double[s];
+
+            if (computeEigenVectors)
+            {
+                // The DenseMatrix ctor allows passing an array with dimensions > n * k. This way
+                // the n-by-k eigenvector matrix can also be used for non-symmetric problems.
+                eigvec = new DenseMatrix(n, k, new double[n * s]);
+
+                // HACK: this only works because the array values are stored in column major order.
+            }
         }
     }
 }
