@@ -102,7 +102,16 @@ namespace CSparse.Interop.ARPACK
 
             e.eigvalr = InteropHelper.Pin(eigvalr, handles);
             e.eigvali = InteropHelper.Pin(eigvali, handles);
-            e.eigvec = InteropHelper.Pin(((DenseColumnMajorStorage<T>)eigvec).Values, handles);
+
+            if (eigvec == null)
+            {
+                e.eigvec = IntPtr.Zero;
+            }
+            else
+            {
+                e.eigvec = InteropHelper.Pin(((DenseColumnMajorStorage<T>)eigvec).Values, handles);
+            }
+
             e.info = 0;
 
             return e;
