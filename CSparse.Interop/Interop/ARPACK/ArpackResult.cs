@@ -17,7 +17,7 @@ namespace CSparse.Interop.ARPACK
         protected Matrix<T> eigvec;
 
         // The following objects are either float[] or double[] arrays. They are
-        // initialized in the overriden CreateWorkspace method.
+        // initialized in the derived class.
 
         protected object eigvalr;
         protected object eigvali;
@@ -27,7 +27,7 @@ namespace CSparse.Interop.ARPACK
         /// <summary>
         /// Initializes a new instance of the <see cref="ArpackResult{T}"/> class.
         /// </summary>
-        /// <param name="k">The number of eigenvalues to compute.</param>
+        /// <param name="k">The number of eigenvalues requested.</param>
         /// <param name="size">The problem size.</param>
         public ArpackResult(int k, int size)
         {

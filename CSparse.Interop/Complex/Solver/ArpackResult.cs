@@ -10,7 +10,7 @@ namespace CSparse.Complex.Solver
         /// <summary>
         /// Initializes a new instance of the <see cref="ArpackResult"/> class.
         /// </summary>
-        /// <param name="k">The number of eigenvalues to compute.</param>
+        /// <param name="k">The number of eigenvalues requested.</param>
         /// <param name="size">The problem size.</param>
         /// <param name="computeEigenVectors">A value, indicating whether eigenvectors are requested.</param>
         public ArpackResult(int k, int size, bool computeEigenVectors)

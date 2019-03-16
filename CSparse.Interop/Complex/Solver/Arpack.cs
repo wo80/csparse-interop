@@ -10,20 +10,41 @@ namespace CSparse.Complex.Solver
 
     public sealed class Arpack : ArpackContext<Complex>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Complex matrix.</param>
         public Arpack(SparseMatrix A)
             : this(A, false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Complex matrix.</param>
+        /// <param name="symmetric">Set to true, if the matrix A is Hermitian.</param>
         public Arpack(SparseMatrix A, bool symmetric)
             : base(A, symmetric)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the generalized eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Complex matrix.</param>
+        /// <param name="B">Complex matrix for generalized problem.</param>
         public Arpack(SparseMatrix A, SparseMatrix B)
             : this(A, B, false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the generalized eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Complex matrix.</param>
+        /// <param name="B">Complex matrix for generalized problem.</param>
+        /// <param name="symmetric">Set to true, if the matrix A is Hermitian and B is Hermitian positive definite.</param>
         public Arpack(SparseMatrix A, SparseMatrix B, bool symmetric)
             : base(A, B, symmetric)
         {

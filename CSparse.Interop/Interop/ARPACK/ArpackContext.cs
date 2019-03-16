@@ -37,7 +37,7 @@ namespace CSparse.Interop.ARPACK
         public int Iterations { get; set; }
 
         /// <summary>
-        /// Gets or sets the residual tolerance.
+        /// Gets or sets the residual tolerance (if &lt;= 0, ARPACK will use machine epsilon).
         /// </summary>
         public double Tolerance { get; set; }
 
@@ -60,8 +60,7 @@ namespace CSparse.Interop.ARPACK
             this.A = A;
 
             this.symmetric = symmetric;
-
-            Tolerance = 1e-5;
+            
             Iterations = 1000;
         }
 
@@ -135,7 +134,7 @@ namespace CSparse.Interop.ARPACK
 
             return a;
         }
-
+        
         protected StringBuilder ToStringBuilder(string job)
         {
             return new StringBuilder(job);

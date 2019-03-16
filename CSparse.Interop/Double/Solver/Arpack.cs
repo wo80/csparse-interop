@@ -10,20 +10,41 @@ namespace CSparse.Double.Solver
 
     public sealed class Arpack : ArpackContext<double>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Real matrix.</param>
         public Arpack(SparseMatrix A)
             : this(A, false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Real matrix.</param>
+        /// <param name="symmetric">Set to true, if the matrix A is symmetric.</param>
         public Arpack(SparseMatrix A, bool symmetric)
             : base(A, symmetric)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the generalized eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Real matrix.</param>
+        /// <param name="B">Real matrix for generalized problem.</param>
         public Arpack(SparseMatrix A, SparseMatrix B)
             : this(A, B, false)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Arpack"/> class for the generalized eigenvalue problem.
+        /// </summary>
+        /// <param name="A">Real matrix.</param>
+        /// <param name="B">Real matrix for generalized problem.</param>
+        /// <param name="symmetric">Set to true, if the matrix A is symmetric and B is symmetric positive definite.</param>
         public Arpack(SparseMatrix A, SparseMatrix B, bool symmetric)
             : base(A, B, symmetric)
         {
