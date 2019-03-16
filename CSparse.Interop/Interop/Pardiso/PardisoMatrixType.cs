@@ -1,6 +1,9 @@
 ﻿
 namespace CSparse.Interop.Pardiso
 {
+    /// <summary>
+    /// PARDISO matrix type.
+    /// </summary>
     public class PardisoMatrixType
     {
         /// <summary>

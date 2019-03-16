@@ -9,6 +9,13 @@ namespace CSparse.Interop.Pardiso
     using System.Linq;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    /// PARDISO context wrapping native factorization.
+    /// </summary>
+    /// <remarks>
+    /// For symmetric (or Hermitian) problems, PARDISO expects the upper part of the matrix in CSR format.
+    /// Since CSparse uses CSC format, make sure to pass in the lower part of the matrix.
+    /// </remarks>
     public abstract class PardisoContext<T> : IDisposableSolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
@@ -39,18 +46,25 @@ namespace CSparse.Interop.Pardiso
         /// </summary>
         public PardisoOptions Options { get { return options; } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PardisoContext{T}"/> class.
+        /// </summary>
+        /// <param name="matrix">The matrix to factorize.</param>
+        /// <param name="mtype">The matrix type (see constants in <see cref="PardisoMatrixType"/>)</param>
         public PardisoContext(CompressedColumnStorage<T> matrix, int mtype)
         {
             this.matrix = matrix;
             this.mtype = mtype;
 
-            this.pt = new IntPtr[64];
-            this.options = new PardisoOptions();
+            pt = new IntPtr[64];
+            options = new PardisoOptions();
 
             // User supplied permutation - not used.
-            this.perm = null;
+            perm = null;
 
             DoInitialize();
+
+            options.SetDefault();
         }
         
         ~PardisoContext()
@@ -104,6 +118,12 @@ namespace CSparse.Interop.Pardiso
             Solve(Constants.Transposed, input, result);
         }
 
+        /// <summary>
+        /// Solves a system of linear equations for multiple right-hand sides, AX = B.
+        /// </summary>
+        /// <param name="sys">The system to solve.</param>
+        /// <param name="input">Right hand side matrix B.</param>
+        /// <param name="result">Solution matrix X.</param>
         protected void Solve(int sys, DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {
             if (!factorized)
@@ -119,6 +139,12 @@ namespace CSparse.Interop.Pardiso
             }
         }
 
+        /// <summary>
+        /// Solves a system of linear equations, Ax = b.
+        /// </summary>
+        /// <param name="sys">The system to solve.</param>
+        /// <param name="input">Right hand side vector b.</param>
+        /// <param name="result">Solution vector x.</param>
         protected abstract void Solve(int sys, T[] input, T[] result);
         
         /// <summary>

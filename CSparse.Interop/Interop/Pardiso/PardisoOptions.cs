@@ -1,6 +1,9 @@
 ﻿
 namespace CSparse.Interop.Pardiso
 {
+    /// <summary>
+    /// PARDISO options.
+    /// </summary>
     public class PardisoOptions
     {
         private const int ARRAY_SIZE = 64;
@@ -207,12 +210,17 @@ namespace CSparse.Interop.Pardiso
         // [62] output Size of the minimum OOC memory for numerical factorization and solution.
         // [63] (reserved)
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PardisoOptions"/> class.
+        /// </summary>
         public PardisoOptions()
         {
-            SetDefaultOptions();
         }
 
-        private void SetDefaultOptions()
+        /// <summary>
+        /// Set default options (zero-based indexing, re-ordering using nested dissection, 2 steps of iterative refinement).
+        /// </summary>
+        public void SetDefault()
         {
             iparm = new int[ARRAY_SIZE];
 
