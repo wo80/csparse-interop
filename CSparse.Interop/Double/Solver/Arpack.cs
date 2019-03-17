@@ -6,7 +6,6 @@ namespace CSparse.Double.Solver
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using System;
-    using System.Numerics;
 
     public sealed class Arpack : ArpackContext<double>
     {
@@ -189,12 +188,12 @@ namespace CSparse.Double.Solver
         /// </summary>
         public ArpackResult<double> SolveGeneralized(int k, double sigma, ShiftMode mode, string job = Job.LargestMagnitude)
         {
-            if (!symmetric)
+            if (!symmetric && !(mode == ShiftMode.None || mode == ShiftMode.Regular))
             {
                 throw new InvalidOperationException("This mode is only available for symmetric eigenvalue problems.");
             }
 
-            if (!Job.ValidateSymmetric(job))
+            if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for symmetric eigenvalue problem.", "job");
             }
@@ -241,12 +240,16 @@ namespace CSparse.Double.Solver
             return result;
         }
 
-        // TODO: make complex shift mode public
-
         /// <summary>
         /// Special case solving the standard real generalized eigenvalue problem with complex shift.
         /// </summary>
-        private ArpackResult<double> SolveGeneralized(int k, Complex sigma, char part, string job = Job.LargestMagnitude)
+        /// <param name="k">The number of eigenvalues to compute.</param>
+        /// <param name="sigma_r">The real part of the complex shift.</param>
+        /// <param name="sigma_i">The imaginary part of the complex shift.</param>
+        /// <param name="part">Part to apply ('R' for real, 'I' for imaginary).</param>
+        /// <param name="job">The part of the spectrum to compute.</param>
+        /// <returns>The number of converged eigenvalues.</returns>
+        public ArpackResult<double> SolveGeneralized(int k, double sigma_r, double sigma_i, char part, string job = Job.LargestMagnitude)
         {
             if (symmetric)
             {
@@ -256,6 +259,13 @@ namespace CSparse.Double.Solver
             if (!Job.ValidateGeneral(job))
             {
                 throw new ArgumentException("Invalid job for non-symmetric eigenvalue problem.", "job");
+            }
+
+            part = char.ToUpperInvariant(part);
+
+            if (part != 'R' && part != 'I')
+            {
+                throw new ArgumentException("Invalid part specified for complex shift.", "part");
             }
 
             var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
@@ -270,7 +280,7 @@ namespace CSparse.Double.Solver
 
             conv = NativeMethods.ar_di_ng_shift_cx(ToStringBuilder(job),
                 k, ArnoldiCount, Iterations, Tolerance,
-                part, sigma.Real, sigma.Imaginary, ref a, ref b, ref e);
+                part, sigma_r, sigma_i, ref a, ref b, ref e);
 
 
             result.IterationsTaken = e.iterations;
