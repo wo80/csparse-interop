@@ -126,7 +126,8 @@ namespace CSparse.Interop.ARPACK
         {
             ar_spmat a = default(ar_spmat);
 
-            a.n = size;
+            a.m = matrix.RowCount;
+            a.n = matrix.ColumnCount;
             a.p = InteropHelper.Pin(matrix.ColumnPointers, handles);
             a.i = InteropHelper.Pin(matrix.RowIndices, handles);
             a.x = InteropHelper.Pin(matrix.Values, handles);

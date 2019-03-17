@@ -12,7 +12,11 @@
     internal struct ar_spmat
     {
         /// <summary>
-        /// number of rows/columns
+        /// number of rows
+        /// </summary>
+        public int m;
+        /// <summary>
+        /// number of columns
         /// </summary>
         public int n;
         /// <summary>
@@ -158,6 +162,16 @@
         public static extern int ar_di_ng_shift_cx(StringBuilder which, int k, int ncv, int maxit, double tol, char part, double sigma_r, double sigma_i,
             ref ar_spmat A, ref ar_spmat B, ref ar_result eigs);
 
+        [DllImport(ARPACK_DLL, EntryPoint = "ar_di_svd", CallingConvention = CallingConvention.Cdecl)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern int ar_di_svd(StringBuilder which, int k, int ncv, int maxit, double tol,
+            ref ar_spmat A, ref ar_result result);
+
+        [DllImport(ARPACK_DLL, EntryPoint = "ar_di_svd_trunc", CallingConvention = CallingConvention.Cdecl)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern int ar_di_svd_trunc(StringBuilder which, int k, int ncv, int maxit, double tol,
+            ref ar_spmat A, ref ar_result result);
+
         #endregion
 
         #region Complex32
@@ -187,7 +201,7 @@
         #endregion
 
         #region Complex
-		
+
         [DllImport(ARPACK_DLL, EntryPoint = "ar_zi_ns", CallingConvention = CallingConvention.Cdecl)]
         [SuppressUnmanagedCodeSecurity]
         public static extern int ar_zi_ns(StringBuilder which, int k, int ncv, int maxit, double tol,
