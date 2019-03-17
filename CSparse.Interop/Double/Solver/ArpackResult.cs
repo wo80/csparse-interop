@@ -2,12 +2,15 @@
 namespace CSparse.Double.Solver
 {
     using CSparse.Interop.ARPACK;
+    using CSparse.Storage;
     using System;
     using System.Numerics;
 
     /// <inheritdoc />
     public class ArpackResult : ArpackResult<double>
     {
+        private bool symmetric;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ArpackResult"/> class.
         /// </summary>
@@ -18,22 +21,47 @@ namespace CSparse.Double.Solver
         public ArpackResult(int k, int size, bool computeEigenVectors, bool symmetric)
             : base(k, size)
         {
+            this.symmetric = symmetric;
+
             CreateWorkspace(computeEigenVectors, symmetric);
-        }
-        
-        /// <summary>
-        /// Copies the real part of the eigenvalues to specified target array.
-        /// </summary>
-        public void GetEigenvalues(double[] target, int count)
-        {
-            Array.Copy((double[])eigvalr, 0, target, 0, count);
         }
 
         /// <inheritdoc />
-        protected override Complex[] CreateEigenvaluesArray()
+        public override double[] EigenValuesReal()
+        {
+            return (double[])eigvalr;
+        }
+
+        /// <inheritdoc />
+        public override DenseColumnMajorStorage<double> EigenVectorsReal()
         {
             int k = this.Count;
-            
+
+            if (symmetric)
+            {
+                return new DenseMatrix(size, k, (double[])eigvec);
+            }
+
+            var result = new DenseMatrix(size, k);
+
+            var e = this.CreateEigenVectorsMatrix();
+
+            for (int j = 0; j < k; j++)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    result.At(i, j, e.At(i, j).Real);
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        protected override Complex[] CreateEigenValuesArray()
+        {
+            int k = this.Count;
+
             var result = new Complex[k];
 
             var rp = (double[])eigvalr;
@@ -42,6 +70,68 @@ namespace CSparse.Double.Solver
             for (int i = 0; i < k; i++)
             {
                 result[i] = new Complex(rp[i], ip[i]);
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        protected override DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix()
+        {
+            // Number of requested eigenvalues.
+            int k = this.Count;
+
+            // Matrix with k columns of complex eigenvectors.
+            var result = new CSparse.Complex.DenseMatrix(size, k);
+
+            var values = result.Values;
+
+            // Raw eigenvector storage.
+            var rp = (double[])eigvec;
+
+            if (symmetric)
+            {
+                for (int i = 0; i < k; i++)
+                {
+                    int column = i * size;
+
+                    for (int j = 0; j < size; j++)
+                    {
+                        values[column + j] = rp[column + j];
+                    }
+                }
+
+                return result;
+            }
+
+            // Imaginary part of eigenvalues.
+            var eim = (double[])eigvali;
+
+            for (int i = 0; i < k; i++)
+            {
+                int current = i * size; // Current column offset.
+
+                if (eim[i] == 0.0)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        values[current + j] = rp[current + j];
+                    }
+                }
+                else
+                {
+                    int next = (i + 1) * size; // Next column.
+
+                    for (int j = 0; j < size; j++)
+                    {
+                        var a = new Complex(rp[current + j], rp[next + j]);
+
+                        values[current + j] = a;
+                        values[next + j] = Complex.Conjugate(a);
+                    }
+
+                    i++;
+                }
             }
 
             return result;
@@ -66,9 +156,10 @@ namespace CSparse.Double.Solver
 
             if (computeEigenVectors)
             {
-                // The DenseMatrix ctor allows passing an array with dimensions > n * k. This way
-                // the n-by-k eigenvector matrix can also be used for non-symmetric problems.
-                eigvec = new DenseMatrix(n, k, new double[n * s]);
+                // For complex eigenvalues of non-symmetric problems, the eigenvector of the
+                // conjugate eigenvalue will not be computed explicitly. The real and imaginary
+                // parts of the eigenvectors are stored in consecutive columns.
+                eigvec = new double[n * s];
 
                 // HACK: this only works because the array values are stored in column major order.
             }

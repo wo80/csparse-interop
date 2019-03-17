@@ -2,6 +2,7 @@
 namespace CSparse.Complex.Solver
 {
     using CSparse.Interop.ARPACK;
+    using CSparse.Storage;
     using System.Numerics;
 
     /// <inheritdoc />
@@ -20,22 +21,54 @@ namespace CSparse.Complex.Solver
         }
 
         /// <inheritdoc />
-        protected override Complex[] CreateEigenvaluesArray()
+        public override double[] EigenValuesReal()
         {
             int k = this.Count;
 
-            var result = new Complex[k];
+            var result = new double[k];
 
-            var rp = (double[])eigvalr;
+            var e = this.CreateEigenValuesArray();
 
             for (int i = 0; i < k; i++)
             {
-                result[i] = new Complex(rp[2 * i], rp[2 * i + 1]);
+                result[i] = e[i].Real;
             }
 
             return result;
         }
-        
+
+        /// <inheritdoc />
+        public override DenseColumnMajorStorage<double> EigenVectorsReal()
+        {
+            int k = this.Count;
+
+            var result = new Double.DenseMatrix(size, k);
+
+            var e = this.CreateEigenVectorsMatrix();
+
+            for (int i = 0; i < k; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    result.At(i, j, e.At(i, j).Real);
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        protected override Complex[] CreateEigenValuesArray()
+        {
+            return (Complex[])eigvalr;
+        }
+
+        /// <inheritdoc />
+        protected override DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix()
+        {
+            return new DenseMatrix(size, this.Count, (Complex[])eigvec);
+        }
+
         private void CreateWorkspace(bool computeEigenVectors)
         {
             int k = this.Count;
@@ -43,11 +76,11 @@ namespace CSparse.Complex.Solver
             // For complex matrices all eigenvalues are stored in
             // eigvalr with interleaved real and imaginary part.
             
-            eigvalr = new double[2 * k];
+            eigvalr = new Complex[k];
 
             if (computeEigenVectors)
             {
-                eigvec = new DenseMatrix(size, k);
+                eigvec = new Complex[k * size];
             }
         }
     }

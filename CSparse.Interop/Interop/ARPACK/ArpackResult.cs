@@ -14,11 +14,12 @@ namespace CSparse.Interop.ARPACK
     public abstract class ArpackResult<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        protected Matrix<T> eigvec;
+        // The following objects are actually double[] arrays, which are initialized in the derived classes.
+        // See implementation of abstract methods CreateEigenValuesArray() and CreateEigenVectorsMatrix().
+        //
+        // If anyone needs single precision, those could also be float[] arrays.
 
-        // The following objects are either float[] or double[] arrays. They are
-        // initialized in the derived class.
-
+        protected object eigvec;
         protected object eigvalr;
         protected object eigvali;
 
@@ -64,14 +65,28 @@ namespace CSparse.Interop.ARPACK
         /// <summary>
         /// Gets the dense matrix of eigenvectors stored in column major order.
         /// </summary>
-        public Matrix<T> EigenVectors
+        /// <remarks>
+        /// For real symmetric matrices, eigenvectors will be real. Use EigenVectorsReal().
+        /// </remarks>
+        public Matrix<Complex> EigenVectors
         {
-            get { return eigvec; }
+            get
+            {
+                if (eigvec == null)
+                {
+                    return null;
+                }
+
+                return CreateEigenVectorsMatrix();
+            }
         }
 
         /// <summary>
         /// Gets the eigenvalues.
         /// </summary>
+        /// <remarks>
+        /// For real symmetric matrices, eigenvalues will be real. Use EigenValuesReal().
+        /// </remarks>
         public Complex[] EigenValues
         {
             get
@@ -81,7 +96,7 @@ namespace CSparse.Interop.ARPACK
                     return null;
                 }
 
-                return CreateEigenvaluesArray();
+                return CreateEigenValuesArray();
             }
         }
 
@@ -97,9 +112,24 @@ namespace CSparse.Interop.ARPACK
         }
         
         /// <summary>
-        /// Creates the array with eigenvalues.
+        /// Gets the real part of the eigenvalues.
         /// </summary>
-        protected abstract Complex[] CreateEigenvaluesArray();
+        public abstract double[] EigenValuesReal();
+
+        /// <summary>
+        /// Gets the real part of the eigenvectors.
+        /// </summary>
+        public abstract DenseColumnMajorStorage<double> EigenVectorsReal();
+
+        /// <summary>
+        /// Creates the array of eigenvalues.
+        /// </summary>
+        protected abstract Complex[] CreateEigenValuesArray();
+
+        /// <summary>
+        /// Creates the matrix of eigenvectors.
+        /// </summary>
+        protected abstract DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix();
 
         internal ar_result GetEigenvalueStorage(List<GCHandle> handles)
         {
@@ -108,14 +138,7 @@ namespace CSparse.Interop.ARPACK
             e.eigvalr = InteropHelper.Pin(eigvalr, handles);
             e.eigvali = InteropHelper.Pin(eigvali, handles);
 
-            if (eigvec == null)
-            {
-                e.eigvec = IntPtr.Zero;
-            }
-            else
-            {
-                e.eigvec = InteropHelper.Pin(((DenseColumnMajorStorage<T>)eigvec).Values, handles);
-            }
+            e.eigvec = InteropHelper.Pin(eigvec, handles);
 
             e.info = 0;
 
