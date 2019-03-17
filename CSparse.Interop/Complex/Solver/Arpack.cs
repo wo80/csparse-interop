@@ -76,6 +76,7 @@ namespace CSparse.Complex.Solver
                     Iterations, Tolerance, ref a, ref e);
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -105,6 +106,7 @@ namespace CSparse.Complex.Solver
                     Tolerance, sigma, ref a, ref e);
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -135,6 +137,7 @@ namespace CSparse.Complex.Solver
                     Iterations, Tolerance, ref a, ref b, ref e);
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -165,6 +168,7 @@ namespace CSparse.Complex.Solver
                     Tolerance, sigma, ref a, ref b, ref e);
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 

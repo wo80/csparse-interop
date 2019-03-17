@@ -86,6 +86,7 @@ namespace CSparse.Double.Solver
             }
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -125,6 +126,7 @@ namespace CSparse.Double.Solver
             }
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -165,6 +167,7 @@ namespace CSparse.Double.Solver
             }
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -229,6 +232,7 @@ namespace CSparse.Double.Solver
             }
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 
@@ -270,6 +274,7 @@ namespace CSparse.Double.Solver
 
 
             result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
             result.ConvergedEigenvalues = conv;
             result.ErrorCode = e.info;
 

@@ -39,6 +39,7 @@
         public IntPtr eigvali;
         public IntPtr eigvec;
         public int iterations;
+        public int ncv;
         public int info;
     }
 

@@ -52,6 +52,11 @@ namespace CSparse.Interop.ARPACK
         public int IterationsTaken { get; internal set; }
 
         /// <summary>
+        /// Gets the number of Arnoldi vectors computed.
+        /// </summary>
+        public int ArnoldiCount { get; internal set; }
+
+        /// <summary>
         /// Gets the error code returned by ARPACK (0 = all fine).
         /// </summary>
         public int ErrorCode { get; internal set; }
