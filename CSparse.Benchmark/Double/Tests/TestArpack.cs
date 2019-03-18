@@ -28,7 +28,7 @@ namespace CSparse.Double.Tests
             var U = (SparseMatrix)A.Clone();
 
             // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            U.Keep((i, j, aij) => i <= j);
+            U.Keep((i, j, _) => i <= j);
             
             var solver = new Arpack(U, true)
             {
@@ -77,8 +77,8 @@ namespace CSparse.Double.Tests
 
             var m = result.ConvergedEigenvalues;
 
-            var v = result.EigenValues;
-            var X = result.EigenVectors;
+            var v = result.EigenValuesReal();
+            var X = result.EigenVectorsReal();
 
             if (print)
             {
@@ -93,7 +93,7 @@ namespace CSparse.Double.Tests
 
             for (int i = 0; i < m; i++)
             {
-                var lambda = v[i].Real;
+                var lambda = v[i];
 
                 X.Column(i, x);
 

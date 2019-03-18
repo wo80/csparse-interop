@@ -11,7 +11,7 @@ namespace CSparse.Complex.Solver
     public class Feast : FeastContext<Complex>
     {
         /// <summary>
-        /// Initializes a new instance of the Feast class.
+        /// Initializes a new instance of the <see cref="Feast"/> class for the standard Hermitian eigenvalue problem.
         /// </summary>
         /// <param name="A">Complex Hermitian matrix.</param>
         public Feast(SparseMatrix A)
@@ -20,7 +20,7 @@ namespace CSparse.Complex.Solver
         }
 
         /// <summary>
-        /// Initializes a new instance of the Feast class.
+        /// Initializes a new instance of the <see cref="Feast"/> class for the generalized Hermitian eigenvalue problem.
         /// </summary>
         /// <param name="A">Complex Hermitian matrix.</param>
         /// <param name="B">Complex Hermitian positive definite matrix for generalized problem.</param>

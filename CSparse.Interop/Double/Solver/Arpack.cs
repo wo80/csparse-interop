@@ -59,6 +59,11 @@ namespace CSparse.Double.Solver
         /// <returns>The number of converged eigenvalues.</returns>
         public override ArpackResult<double> SolveStandard(int k, string job)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -99,6 +104,11 @@ namespace CSparse.Double.Solver
         /// </summary>
         public override ArpackResult<double> SolveStandard(int k, double sigma, string job = Job.LargestMagnitude)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -139,6 +149,11 @@ namespace CSparse.Double.Solver
         /// </summary>
         public override ArpackResult<double> SolveGeneralized(int k, string job)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -191,6 +206,11 @@ namespace CSparse.Double.Solver
             if (!symmetric && !(mode == ShiftMode.None || mode == ShiftMode.Regular))
             {
                 throw new InvalidOperationException("This mode is only available for symmetric eigenvalue problems.");
+            }
+
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
             }
 
             if (!Job.Validate(symmetric, job))
@@ -256,6 +276,11 @@ namespace CSparse.Double.Solver
                 throw new InvalidOperationException("Complex shift doesn't apply to real symmetric eigenvalue problems.");
             }
 
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.ValidateGeneral(job))
             {
                 throw new ArgumentException("Invalid job for non-symmetric eigenvalue problem.", "job");
@@ -282,6 +307,74 @@ namespace CSparse.Double.Solver
                 k, ArnoldiCount, Iterations, Tolerance,
                 part, sigma_r, sigma_i, ref a, ref b, ref e);
 
+
+            result.IterationsTaken = e.iterations;
+            result.ArnoldiCount = e.ncv;
+            result.ConvergedEigenvalues = conv;
+            result.ErrorCode = e.info;
+
+            InteropHelper.Free(handles);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Compute singular values and the partial singular value decomposition.
+        /// </summary>
+        /// <param name="k">The number of singular values to compute.</param>
+        /// <param name="job">The part of the spectrum to compute.</param>
+        /// <returns>The number of converged singular values.</returns>
+        public ArpackResult<double> SingularValues(int k, string job = Job.LargestMagnitude)
+        {
+            return SingularValues(k, false, job);
+        }
+
+        /// <summary>
+        /// Compute singular values and the partial singular value decomposition.
+        /// </summary>
+        /// <param name="k">The number of singular values to compute.</param>
+        /// <param name="normal">Use normal equation to compute (squared) singular values.</param>
+        /// <param name="job">The part of the spectrum to compute.</param>
+        /// <returns>The number of converged singular values.</returns>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        public ArpackResult<double> SingularValues(int k, bool normal, string job = Job.LargestMagnitude)
+        {
+            if (!Job.ValidateSymmetric(job))
+            {
+                throw new ArgumentException("Invalid job for singular value decomposition.", "job");
+            }
+
+            int m = A.RowCount;
+            int n = A.ColumnCount;
+
+            if (normal && m < n)
+            {
+                throw new InvalidOperationException("Number of columns must not be smaller than number of rows (use transposed matrix).");
+            }
+
+            int size = normal ? n : m + n;
+            
+            var result = new ArpackResult(k, size, ComputeEigenVectors, true);
+
+            var handles = new List<GCHandle>();
+
+            var a = GetMatrix(A, handles);
+            var e = result.GetEigenvalueStorage(handles);
+
+            int conv = 0;
+
+            if (normal)
+            {
+                conv = NativeMethods.ar_di_svd_nrm(ToStringBuilder(job),
+                    k, ArnoldiCount, Iterations, Tolerance, ref a, ref e);
+            }
+            else
+            {
+                conv = NativeMethods.ar_di_svd(ToStringBuilder(job),
+                    k, ArnoldiCount, Iterations, Tolerance, ref a, ref e);
+            }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;

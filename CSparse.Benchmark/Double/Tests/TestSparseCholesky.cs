@@ -3,6 +3,7 @@ namespace CSparse.Double.Tests
 {
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
+    using CSparse.Interop.Pardiso;
 
     class TestSparseCholesky : Test
     {

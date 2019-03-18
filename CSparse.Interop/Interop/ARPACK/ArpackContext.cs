@@ -51,7 +51,7 @@ namespace CSparse.Interop.ARPACK
         /// </summary>
         public ArpackContext(CompressedColumnStorage<T> A, bool symmetric)
         {
-            if (A.RowCount != A.ColumnCount)
+            if (symmetric && !CheckSquare(A))
             {
                 throw new ArgumentException("Matrix must be square.", "A");
             }
@@ -70,7 +70,7 @@ namespace CSparse.Interop.ARPACK
         public ArpackContext(CompressedColumnStorage<T> A, CompressedColumnStorage<T> B, bool symmetric)
             : this(A, symmetric)
         {
-            if (B.RowCount != B.ColumnCount)
+            if (!CheckSquare(B))
             {
                 throw new ArgumentException("Matrix must be square.", "B");
             }
@@ -82,7 +82,10 @@ namespace CSparse.Interop.ARPACK
 
             if (!symmetric)
             {
-                //throw new ArgumentException(Properties.Resources.ArgumentMatrixSymmetric);
+                if (!CheckSquare(A))
+                {
+                    throw new ArgumentException("Matrix must be square.", "A");
+                }
             }
 
             this.B = B;
@@ -135,7 +138,12 @@ namespace CSparse.Interop.ARPACK
 
             return a;
         }
-        
+
+        internal bool CheckSquare(CompressedColumnStorage<T> matrix)
+        {
+            return matrix.RowCount == matrix.ColumnCount;
+        }
+
         protected StringBuilder ToStringBuilder(string job)
         {
             return new StringBuilder(job);
