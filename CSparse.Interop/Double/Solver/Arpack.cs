@@ -337,7 +337,23 @@ namespace CSparse.Double.Solver
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged singular values.</returns>
         /// <remarks>
+        /// If <paramref name="normal"/> is true, the normal equation <c>(A'*A)*v = sigma*v</c>
+        /// is considered, where A is an m-by-n real matrix. This formulation is appropriate
+        /// when m >= n. The roles of A and A' must be reversed in the case that m &lt; n.
         /// 
+        /// The eigenvalues returned are the squared singular values of A. If requested, the
+        /// returned eigenvectors correspond to the right singular vectors, if <c>A = U*S*V'</c>.
+        /// The left singular vectors can be computed from the equation <c>A*v - sigma*u</c>.
+        /// 
+        /// If <paramref name="normal"/> is false, the symmetric system <c>[0  A; A' 0]</c> is
+        /// considered (size m + n), where A is an m-by-n real matrix.
+        /// 
+        /// This problem can be used to obtain the decomposition <c>A = U*S*V'</c>. The positive
+        /// eigenvalues of this problem are the singular values of A (the eigenvalues come in
+        /// pairs, the negative eigenvalues have the same magnitude of the positive ones and
+        /// can be discarded). The columns of U can be extracted from the first m components
+        /// of the eigenvectors y, while the columns of V can be extracted from the remaining
+        /// n components.
         /// </remarks>
         public ArpackResult<double> SingularValues(int k, bool normal, string job = Job.LargestMagnitude)
         {

@@ -60,6 +60,11 @@ namespace CSparse.Complex.Solver
         /// <returns>The number of converged eigenvalues.</returns>
         public override ArpackResult<Complex> SolveStandard(int k, string job)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -90,6 +95,11 @@ namespace CSparse.Complex.Solver
         /// </summary>
         public override ArpackResult<Complex> SolveStandard(int k, Complex sigma, string job = Job.LargestMagnitude)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -120,6 +130,11 @@ namespace CSparse.Complex.Solver
         /// </summary>
         public override ArpackResult<Complex> SolveGeneralized(int k, string job)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
@@ -151,6 +166,11 @@ namespace CSparse.Complex.Solver
         /// </summary>
         public override ArpackResult<Complex> SolveGeneralized(int k, Complex sigma, string job = Job.LargestMagnitude)
         {
+            if (!CheckSquare(A))
+            {
+                throw new InvalidOperationException("Cannot solve eigenvalue problem with non-square matrix.");
+            }
+
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");

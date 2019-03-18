@@ -16,20 +16,20 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>..\bin\any\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Debug\CSparse.Interop.xml</DocumentationFile>
+    <DocumentationFile>..\bin\any\Debug\CSparse.Interop.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
+    <OutputPath>..\bin\any\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Release\CSparse.Interop.xml</DocumentationFile>
+    <DocumentationFile>..\bin\any\Release\CSparse.Interop.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -72,8 +72,8 @@
     <DocumentationFile>..\bin\x86\Release\CSparse.Interop.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSparse, Version=3.2.2.38595, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSparse.3.2.2\lib\net40\CSparse.dll</HintPath>
+    <Reference Include="CSparse, Version=3.2.3.19889, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSparse.3.2.3\lib\net40\CSparse.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
