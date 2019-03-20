@@ -3,6 +3,7 @@
     using CSparse.Double;
     using CSparse.Double.Solver;
     using CSparse.Interop.ARPACK;
+    using CSparse.Solvers;
     using System;
     using System.Numerics;
 
@@ -69,7 +70,7 @@
             var prob = new Arpack(A, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = prob.SolveStandard(2, "SM");
+            var result = prob.SolveStandard(2, Spectrum.SmallestMagnitude);
 
             // Printing solution.
             Solution.Symmetric(A, (ArpackResult)result, false);
@@ -132,7 +133,7 @@
             var prob = new Arpack(A, B, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = prob.SolveGeneralized(4, "LM");
+            var result = prob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.Symmetric(A, B, (ArpackResult)result, ShiftMode.None);
@@ -262,7 +263,7 @@
             var prob = new Arpack(A) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = prob.SolveStandard(4, "LM");
+            var result = prob.SolveStandard(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.General(A, (ArpackResult)result, false);
@@ -291,7 +292,7 @@
             var prob = new Arpack(A) { ComputeEigenVectors = true, ArnoldiCount = 30 };
 
             // Finding eigenvalues and eigenvectors.
-            var result = prob.SolveStandard(4, 0.0, "LM");
+            var result = prob.SolveStandard(4, 0.0, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.General(A, (ArpackResult)result, true);
@@ -324,7 +325,7 @@
             var prob = new Arpack(A, B) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = prob.SolveGeneralized(4, "LM");
+            var result = prob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.General(A, B, (ArpackResult)result, false);
@@ -429,7 +430,7 @@
             var prob = new Arpack(A) { ArnoldiCount = 20 };
 
             // Finding eigenvalues.
-            var result = prob.SingularValues(6, true, "BE");
+            var result = prob.SingularValues(6, true, Spectrum.BothEnds);
             
             Solution.Condition(A, (ArpackResult)result);
         }
@@ -468,7 +469,7 @@
             var prob = new Arpack(A) { ArnoldiCount = 20, ComputeEigenVectors = true };
 
             // Finding eigenvalues.
-            var result = prob.SingularValues(5, false, "LA");
+            var result = prob.SingularValues(5, false, Spectrum.LargestAlgebraic);
 
             // Printing the solution.
             Solution.SVD(A, (ArpackResult)result);
@@ -496,7 +497,7 @@
                 }
 
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluSymStdEig");
@@ -572,7 +573,7 @@
                 }
 
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluSymGenEig");
@@ -672,7 +673,7 @@
                 }
 
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluNonSymStdEig");
@@ -744,7 +745,7 @@
                 }
 
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluNonSymGenEig");
@@ -826,7 +827,7 @@
 
                 int m = A.RowCount;
                 int n = A.ColumnCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ SVD");
@@ -870,7 +871,7 @@
 
                 int m = A.RowCount;
                 int n = A.ColumnCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ SVD");

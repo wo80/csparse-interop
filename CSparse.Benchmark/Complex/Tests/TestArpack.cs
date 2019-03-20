@@ -3,6 +3,7 @@ namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
     using CSparse.Interop.ARPACK;
+    using CSparse.Solvers;
     using System;
     using System.Diagnostics;
     using System.Numerics;
@@ -40,10 +41,10 @@ namespace CSparse.Complex.Tests
                 timer.Start();
 
                 var result = solver.SolveStandard(k, 0.0);
-                //var result = solver.SolveStandard(k, Job.SmallestMagnitude);
+                //var result = solver.SolveStandard(k, Spectrum.SmallestMagnitude);
 
                 //var result = solver.SolveStandard(k, 8.0);
-                //var result = solver.SolveStandard(k, Job.LargestMagnitude);
+                //var result = solver.SolveStandard(k, Spectrum.LargestMagnitude);
 
                 timer.Stop();
 
@@ -70,11 +71,11 @@ namespace CSparse.Complex.Tests
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, ArpackResult<Complex> result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool print)
         {
             int N = A.RowCount;
 
-            var m = result.ConvergedEigenvalues;
+            var m = result.ConvergedEigenValues;
 
             var v = result.EigenValues;
             var X = result.EigenVectors;

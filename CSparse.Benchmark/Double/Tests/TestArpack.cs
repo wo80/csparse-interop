@@ -3,6 +3,7 @@ namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
     using CSparse.Interop.ARPACK;
+    using CSparse.Solvers;
     using System;
     using System.Diagnostics;
 
@@ -24,13 +25,16 @@ namespace CSparse.Double.Tests
 
             size = (int)Math.Sqrt(size) + 1;
 
-            var A = (SparseMatrix)Generate.Laplacian(size, size, z);
-            var U = (SparseMatrix)A.Clone();
+            var A = CSparse.Double.Examples.Generate.SymmetricMatrixC(size);
+            var B = CSparse.Double.Examples.Generate.SymmetricMatrixD(size);
+            //var A = (SparseMatrix)Generate.Laplacian(size, size, z);
+            //var U = (SparseMatrix)A.Clone();
 
             // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            U.Keep((i, j, _) => i <= j);
+            //U.Keep((i, j, _) => i <= j);
             
-            var solver = new Arpack(U, true)
+            //var solver = new Arpack(U, true)
+            var solver = new Arpack(A, B, true)
             {
                 Tolerance = 1e-6,
                 ComputeEigenVectors = true
@@ -40,11 +44,12 @@ namespace CSparse.Double.Tests
             {
                 timer.Start();
 
-                var result = solver.SolveStandard(k, 0.0);
-                //var result = solver.SolveStandard(k, Job.SmallestMagnitude);
+                //var result = solver.SolveStandard(k, 0.0);
+                //var result = solver.SolveStandard(k, Spectrum.SmallestMagnitude);
 
                 //var result = solver.SolveStandard(k, 8.0);
-                //var result = solver.SolveStandard(k, Job.LargestMagnitude);
+                //var result = solver.SolveStandard(k, Spectrum.LargestMagnitude);
+                var result = solver.SolveGeneralized(k, Spectrum.LargestMagnitude);
 
                 timer.Stop();
 
@@ -52,7 +57,7 @@ namespace CSparse.Double.Tests
                 
                 result.EnsureSuccess();
 
-                if (CheckResiduals(A, result, false))
+                if (CheckResiduals(A.Expand(), B.Expand(), result, true))
                 {
                     Display.Ok("OK");
                 }
@@ -71,51 +76,20 @@ namespace CSparse.Double.Tests
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, ArpackResult<double> result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool print)
         {
-            int N = A.RowCount;
+            var evals = result.EigenValuesReal();
+            var evecs = result.EigenVectorsReal();
+            
+            return Helper.Residuals(A, result.ConvergedEigenValues, evals, evecs, print);
+        }
 
-            var m = result.ConvergedEigenvalues;
+        private static bool CheckResiduals(SparseMatrix A, SparseMatrix B, IEigenSolverResult result, bool print)
+        {
+            var evals = result.EigenValuesReal();
+            var evecs = result.EigenVectorsReal();
 
-            var v = result.EigenValuesReal();
-            var X = result.EigenVectorsReal();
-
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
-            var x = new double[N];
-            var y = new double[N];
-
-            bool ok = true;
-
-            for (int i = 0; i < m; i++)
-            {
-                var lambda = v[i];
-
-                X.Column(i, x);
-
-                Vector.Copy(x, y);
-
-                // y = A*x - lambda*x
-                A.Multiply(1.0, x, -lambda, y);
-
-                double r = Vector.Norm(y);
-
-                if (r > ERROR_THRESHOLD)
-                {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
-                }
-            }
-
-            return ok;
+            return Helper.Residuals(A, B, result.ConvergedEigenValues, evals, evecs, print);
         }
     }
 }

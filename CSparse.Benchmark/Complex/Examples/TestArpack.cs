@@ -2,6 +2,7 @@
 {
     using CSparse.Complex;
     using CSparse.Complex.Solver;
+    using CSparse.Solvers;
     using System;
     using System.Numerics;
 
@@ -43,7 +44,7 @@
             var dprob = new Arpack(A) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = dprob.SolveStandard(2, "LM");
+            var result = dprob.SolveStandard(2, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.Print(A, (ArpackResult)result, false);
@@ -111,7 +112,7 @@
             var dprob = new Arpack(A, B) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
-            var result = dprob.SolveGeneralized(4, "LM");
+            var result = dprob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
             Solution.Print(A, B, (ArpackResult)result, false);
@@ -163,7 +164,7 @@
             public static void Print(SparseMatrix A, ArpackResult result, bool shift)
             {
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluCompStdEig");
@@ -231,7 +232,7 @@
             public static void Print(SparseMatrix A, SparseMatrix B, ArpackResult result, bool shift)
             {
                 int n = A.RowCount;
-                int nconv = result.ConvergedEigenvalues;
+                int nconv = result.ConvergedEigenValues;
 
                 Console.WriteLine();
                 Console.WriteLine("Testing ARPACK++ class ARluCompGenEig");

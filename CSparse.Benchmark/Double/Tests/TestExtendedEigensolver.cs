@@ -34,7 +34,7 @@ namespace CSparse.Double.Tests
             {
                 timer.Start();
 
-                var result = solver.SolveStandard(k0, Job.Smallest);
+                var result = solver.SolveStandard(k0, Job.Largest);
 
                 timer.Stop();
 
@@ -68,49 +68,10 @@ namespace CSparse.Double.Tests
 
         private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult<double> result, bool print)
         {
-            int N = A.RowCount;
+            var evals = result.EigenValuesReal;
+            var evecs = result.EigenVectors;
 
-            var m = result.ConvergedEigenvalues;
-
-            var v = result.EigenValues;
-            var X = result.EigenVectors;
-
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
-            var x = new double[N];
-            var y = new double[N];
-
-            bool ok = true;
-
-            for (int i = 0; i < m; i++)
-            {
-                var lambda = v[i].Real;
-
-                X.Column(i, x);
-
-                Vector.Copy(x, y);
-
-                // y = A*x - lambda*x
-                A.Multiply(1.0, x, -lambda, y);
-
-                double r = Vector.Norm(y);
-
-                if (r > ERROR_THRESHOLD)
-                {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
-                }
-            }
-
-            return ok;
+            return Helper.Residuals(A, result.ConvergedEigenvalues, evals, evecs, print);
         }
     }
 }
