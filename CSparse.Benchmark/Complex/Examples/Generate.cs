@@ -8,13 +8,6 @@
     /// </summary>
     static class Generate
     {
-        // Defining constants.
-
-        static readonly Complex HALF = new Complex(0.5, 0.0);
-        static readonly Complex ONE = new Complex(1.0, 0.0);
-        static readonly Complex TWO = new Complex(2.0, 0.0);
-        static readonly Complex FOUR = new Complex(4.0, 0.0);
-        
         /// <summary>
         /// Function template for the nx*nx by nx*nx block tridiagonal matrix
         ///
@@ -40,12 +33,12 @@
 
             Complex rho = new Complex(1.0e2, 0.0);
 
-            h = ONE / (nx + 1);
+            h = 1.0 / (nx + 1);
             h2 = h * h;
-            f = -(ONE / h2);
-            dd = FOUR / h2;
-            dl = f - HALF * rho / h;
-            du = f + HALF * rho / h;
+            f = -(1.0 / h2);
+            dd = 4.0 / h2;
+            dl = f - 0.5 * rho / h;
+            du = f + 0.5 * rho / h;
 
             // Defining the number of nonzero matrix elements.
 
@@ -117,12 +110,12 @@
         {
             Complex dd, dl, du, s, h, h2;
             
-            h = ONE / (n + 1);
+            h = 1.0 / (n + 1);
             h2 = h * h;
-            s = rho / TWO;
-            dd = TWO / h2;
-            dl = -(ONE / h2) - s / h;
-            du = -(ONE / h2) + s / h;
+            s = rho / 2.0;
+            dd = 2.0 / h2;
+            dl = -(1.0 / h2) - s / h;
+            du = -(1.0 / h2) + s / h;
 
             // Defining the number of nonzero matrix elements.
 
@@ -175,11 +168,11 @@
         {
             Complex dd, dl, du, s, h;
 
-            h = ONE / (n + 1);
-            s = rho / TWO;
-            dd = TWO / h;
-            dl = -(ONE / h) - s;
-            du = -(ONE / h) + s;
+            h = 1.0 / (n + 1);
+            s = rho / 2.0;
+            dd = 2.0 / h;
+            dl = -(1.0 / h) - s;
+            du = -(1.0 / h) + s;
 
             // Defining the number of nonzero matrix elements.
 
@@ -232,9 +225,9 @@
         {
             Complex h, dd, ds;
 
-            h = ONE / (n + 1);
-            dd = FOUR * h;
-            ds = ONE * h;
+            h = 1.0 / (n + 1);
+            dd = 4.0 * h;
+            ds = 1.0 * h;
 
             // Defining the number of nonzero matrix elements.
 

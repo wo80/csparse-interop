@@ -101,7 +101,7 @@
     <Compile Include="Complex\TestRunner.cs" />
     <Compile Include="Complex\Tests\TestPardiso.cs" />
     <Compile Include="Complex\Tests\TestUmfpack.cs" />
-    <Compile Include="Complex\Util.cs" />
+    <Compile Include="Complex\Helper.cs" />
     <Compile Include="Display.cs" />
     <Compile Include="Double\BenchmarkRunner.cs" />
     <Compile Include="Double\Benchmarks\BenchmarkPardiso.cs" />
@@ -111,8 +111,8 @@
     <Compile Include="Double\Examples\TestArpack.cs" />
     <Compile Include="Double\Examples\Generate.cs" />
     <Compile Include="Double\Generate.cs" />
+    <Compile Include="Double\Helper.cs" />
     <Compile Include="Double\SparseMatrixExtensions.cs" />
-    <Compile Include="Double\Tests\Helper.cs" />
     <Compile Include="Double\Tests\TestArpack.cs" />
     <Compile Include="Double\Tests\TestCholmod.cs" />
     <Compile Include="Double\Tests\Test.cs" />
@@ -127,7 +127,6 @@
     <Compile Include="Double\Tests\TestUmfpack.cs" />
     <Compile Include="Double\Tests\TestCuda.cs" />
     <Compile Include="Double\TestRunner.cs" />
-    <Compile Include="Double\Util.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

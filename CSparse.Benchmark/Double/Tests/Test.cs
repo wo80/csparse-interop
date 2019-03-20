@@ -71,7 +71,7 @@ namespace CSparse.Double.Tests
 
                 Display.Time(timer.ElapsedTicks);
 
-                double error = Util.ComputeError(x, s);
+                double error = Helper.ComputeError(x, s);
 
                 if (double.IsNaN(error))
                 {
@@ -148,7 +148,7 @@ namespace CSparse.Double.Tests
                     X.Column(i, x);
                     S.Column(i, s);
 
-                    error += Util.ComputeError(x, s);
+                    error += Helper.ComputeError(x, s);
                 }
 
                 if (error / count > ERROR_THRESHOLD)

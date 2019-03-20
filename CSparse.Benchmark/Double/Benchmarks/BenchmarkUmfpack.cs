@@ -33,12 +33,12 @@ namespace CSparse.Double.Benchmarks
 
         protected override double ComputeError(double[] actual, double[] expected)
         {
-            return Util.ComputeError(actual, expected);
+            return Helper.ComputeError(actual, expected);
         }
 
         private double ComputeResidual(CompressedColumnStorage<double> A, double[] x, double[] b)
         {
-            return Util.ComputeResidual(A, x, b);
+            return Helper.ComputeResidual(A, x, b);
         }
     }
 }

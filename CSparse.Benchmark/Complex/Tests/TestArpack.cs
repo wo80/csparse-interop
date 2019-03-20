@@ -2,11 +2,9 @@
 namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
-    using CSparse.Interop.ARPACK;
     using CSparse.Solvers;
     using System;
     using System.Diagnostics;
-    using System.Numerics;
 
     class TestArpack
     {
@@ -52,7 +50,7 @@ namespace CSparse.Complex.Tests
 
                 result.EnsureSuccess();
                 
-                if (CheckResiduals(A, result, false))
+                if (Helper.CheckResiduals(A, result, false))
                 {
                     Display.Ok("OK");
                 }
@@ -69,53 +67,6 @@ namespace CSparse.Complex.Tests
             {
                 Display.Error(e.Message);
             }
-        }
-
-        private static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool print)
-        {
-            int N = A.RowCount;
-
-            var m = result.ConvergedEigenValues;
-
-            var v = result.EigenValues;
-            var X = result.EigenVectors;
-
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
-            var x = new Complex[N];
-            var y = new Complex[N];
-
-            bool ok = true;
-
-            for (int i = 0; i < m; i++)
-            {
-                var lambda = v[i].Real;
-
-                X.Column(i, x);
-
-                Vector.Copy(x, y);
-
-                // y = A*x - lambda*x
-                A.Multiply(1.0, x, -lambda, y);
-
-                double r = Vector.Norm(y);
-
-                if (r > ERROR_THRESHOLD)
-                {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
-                }
-            }
-
-            return ok;
         }
     }
 }

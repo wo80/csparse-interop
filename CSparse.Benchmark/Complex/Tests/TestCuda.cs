@@ -13,7 +13,7 @@ namespace CSparse.Complex.Tests
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
-        public static void Run(int size, double density = 0.05)
+        public static void Run(int size, double density)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace CSparse.Complex.Tests
 
                 Display.Time(timer.ElapsedTicks);
 
-                double error = Util.ComputeError(x, s);
+                double error = Helper.ComputeError(x, s);
 
                 if (double.IsNaN(error))
                 {

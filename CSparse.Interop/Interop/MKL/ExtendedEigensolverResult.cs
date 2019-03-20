@@ -5,13 +5,13 @@ namespace CSparse.Interop.MKL
     using System;
     using System.Numerics;
 
-    public class ExtendedEigensolverResult<T>
+    public abstract class ExtendedEigensolverResult<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         protected int size;
 
         /// <summary>
-        /// Initializes a new instance of the Result class.
+        /// Initializes a new instance of the <see cref="ExtendedEigensolverResult{T}"/> class.
         /// </summary>
         /// <param name="info">The status returned by Intel's extended eigensolver.</param>
         /// <param name="size">The matrix size.</param>
@@ -20,17 +20,13 @@ namespace CSparse.Interop.MKL
         /// <param name="x">Matrix with k0 columns containing the orthonormal eigenvectors corresponding to the
         /// computed eigenvalues e, with the i-th column of x holding the eigenvector associated with e[i].</param>
         /// <param name="r">Array of length k0 containing the relative residual vector (in the first k components).</param>
-        public ExtendedEigensolverResult(SparseStatus info, int size, int k, double[] e, DenseColumnMajorStorage<T> x, double[] r)
+        public ExtendedEigensolverResult(SparseStatus info, int size, int k, double[] e, Matrix<T> x, double[] r)
         {
             this.size = size;
 
             Status = info;
 
             ConvergedEigenvalues = k;
-
-            EigenValues = CreateEigenValues(e, k);
-            EigenVectors = x;
-
             Residuals = r;
         }
 
@@ -47,7 +43,7 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// Gets the dense matrix of eigenvectors stored in column major order.
         /// </summary>
-        public DenseColumnMajorStorage<T> EigenVectors { get; protected set; }
+        public Matrix<Complex> EigenVectors { get; protected set; }
 
         /// <summary>
         /// Gets the eigenvalues.
@@ -58,6 +54,16 @@ namespace CSparse.Interop.MKL
         /// Gets the residuals vector.
         /// </summary>
         public double[] Residuals { get; protected set; }
+
+        /// <summary>
+        /// Gets the real part of the eigenvalues.
+        /// </summary>
+        public abstract double[] EigenValuesReal();
+        
+        /// <summary>
+        /// Gets the real part of the eigenvectors.
+        /// </summary>
+        public abstract Matrix<double> EigenVectorsReal();
 
         protected virtual Complex[] CreateEigenValues(double[] x, int length)
         {

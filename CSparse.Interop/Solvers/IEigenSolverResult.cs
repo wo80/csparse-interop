@@ -34,7 +34,7 @@ namespace CSparse.Solvers
         int ErrorCode { get; }
 
         /// <summary>
-        /// Throws an exception, if eigensolver failed to solve the problem.
+        /// Throws an exception, if the eigensolver failed to solve the problem.
         /// </summary>
         void EnsureSuccess();
 

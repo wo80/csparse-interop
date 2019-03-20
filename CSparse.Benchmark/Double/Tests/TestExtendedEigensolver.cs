@@ -2,7 +2,6 @@
 namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
-    using CSparse.Interop.MKL;
     using System;
     using System.Diagnostics;
 
@@ -34,13 +33,13 @@ namespace CSparse.Double.Tests
             {
                 timer.Start();
 
-                var result = solver.SolveStandard(k0, Job.Largest);
+                var result = (ExtendedEigensolverResult)solver.SolveStandard(k0, Interop.MKL.Job.Largest);
 
                 timer.Stop();
 
                 Display.Time(timer.ElapsedTicks);
 
-                if (result.Status == SparseStatus.Success)
+                if (result.Status == Interop.MKL.SparseStatus.Success)
                 {
                     if (CheckResiduals(A, result, false))
                     {
@@ -66,12 +65,12 @@ namespace CSparse.Double.Tests
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult<double> result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult result, bool print)
         {
-            var evals = result.EigenValuesReal;
-            var evecs = result.EigenVectors;
+            var evals = result.EigenValuesReal();
+            var evecs = result.EigenVectorsReal();
 
-            return Helper.Residuals(A, result.ConvergedEigenvalues, evals, evecs, print);
+            return Helper.CheckResiduals(A, result.ConvergedEigenvalues, evals, evecs, print);
         }
     }
 }
