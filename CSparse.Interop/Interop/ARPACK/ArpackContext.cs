@@ -2,6 +2,7 @@
 namespace CSparse.Interop.ARPACK
 {
     using CSparse.Interop.Common;
+    using CSparse.Solvers;
     using CSparse.Storage;
     using System;
     using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace CSparse.Interop.ARPACK
     /// <summary>
     /// ARPACK eigenvalue solver.
     /// </summary>
-    public abstract class ArpackContext<T>
+    public abstract class ArpackContext<T> : IEigenSolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
         // Sparse matrix (column compressed storage).
@@ -25,7 +26,7 @@ namespace CSparse.Interop.ARPACK
         protected bool symmetric;
 
         protected int size;
-        
+
         /// <summary>
         /// Gets or sets the number of Arnoldi vectors used in each iteration.
         /// </summary>
@@ -60,7 +61,7 @@ namespace CSparse.Interop.ARPACK
             this.A = A;
 
             this.symmetric = symmetric;
-            
+
             Iterations = 1000;
         }
 
@@ -90,14 +91,14 @@ namespace CSparse.Interop.ARPACK
 
             this.B = B;
         }
-        
+
         /// <summary>
         /// Solve the standard eigenvalue problem.
         /// </summary>
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public abstract ArpackResult<T> SolveStandard(int k, string job);
+        public abstract IEigenSolverResult SolveStandard(int k, Spectrum job);
 
         /// <summary>
         /// Solve the standard eigenvalue problem in shift-invert mode.
@@ -106,7 +107,7 @@ namespace CSparse.Interop.ARPACK
         /// <param name="sigma">The shift value.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public abstract ArpackResult<T> SolveStandard(int k, T sigma, string job = Job.LargestMagnitude);
+        public abstract IEigenSolverResult SolveStandard(int k, T sigma, Spectrum job = Spectrum.LargestMagnitude);
 
         /// <summary>
         /// Solve the generalized eigenvalue problem.
@@ -114,7 +115,7 @@ namespace CSparse.Interop.ARPACK
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public abstract ArpackResult<T> SolveGeneralized(int k, string job);
+        public abstract IEigenSolverResult SolveGeneralized(int k, Spectrum job);
 
         /// <summary>
         /// Solve the generalized eigenvalue problem in shift-invert mode.
@@ -123,7 +124,7 @@ namespace CSparse.Interop.ARPACK
         /// <param name="sigma">The shift value.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public abstract ArpackResult<T> SolveGeneralized(int k, T sigma, string job = Job.LargestMagnitude);
+        public abstract IEigenSolverResult SolveGeneralized(int k, T sigma, Spectrum job = Spectrum.LargestMagnitude);
 
         internal ar_spmat GetMatrix(CompressedColumnStorage<T> matrix, List<GCHandle> handles)
         {
@@ -144,9 +145,33 @@ namespace CSparse.Interop.ARPACK
             return matrix.RowCount == matrix.ColumnCount;
         }
 
-        protected StringBuilder ToStringBuilder(string job)
+        internal StringBuilder GetJob(Spectrum job)
         {
-            return new StringBuilder(job);
+            switch (job)
+            {
+                case Spectrum.LargestAlgebraic:
+                    return new StringBuilder("LA");
+                case Spectrum.LargestMagnitude:
+                    return new StringBuilder("LM");
+                case Spectrum.LargestRealPart:
+                    return new StringBuilder("LR");
+                case Spectrum.LargestImaginaryPart:
+                    return new StringBuilder("LI");
+                case Spectrum.SmallestAlgebraic:
+                    return new StringBuilder("SA");
+                case Spectrum.SmallestMagnitude:
+                    return new StringBuilder("SM");
+                case Spectrum.SmallestRealPart:
+                    return new StringBuilder("SR");
+                case Spectrum.SmallestImaginaryPart:
+                    return new StringBuilder("SI");
+                case Spectrum.BothEnds:
+                    return new StringBuilder("BE");
+                default:
+                    break;
+            }
+
+            throw new ArgumentException("", nameof(job));
         }
     }
 }

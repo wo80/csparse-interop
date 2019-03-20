@@ -110,7 +110,6 @@
     <Compile Include="Interop\ARPACK\ArpackContext.cs" />
     <Compile Include="Interop\ARPACK\ArpackException.cs" />
     <Compile Include="Interop\ARPACK\ArpackResult.cs" />
-    <Compile Include="Interop\ARPACK\Job.cs" />
     <Compile Include="Interop\ARPACK\NativeMethods.cs" />
     <Compile Include="Interop\ARPACK\ShiftMode.cs" />
     <Compile Include="Interop\Cholmod\CholmodCommon.cs" />

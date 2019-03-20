@@ -1,11 +1,12 @@
 ﻿
 namespace CSparse.Double.Solver
 {
-    using CSparse.Interop.Common;
     using CSparse.Interop.ARPACK;
+    using CSparse.Interop.Common;
+    using CSparse.Solvers;
+    using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-    using System;
 
     public sealed class Arpack : ArpackContext<double>
     {
@@ -57,7 +58,7 @@ namespace CSparse.Double.Solver
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public override ArpackResult<double> SolveStandard(int k, string job)
+        public override IEigenSolverResult SolveStandard(int k, Spectrum job)
         {
             if (!CheckSquare(A))
             {
@@ -80,18 +81,18 @@ namespace CSparse.Double.Solver
 
             if (symmetric)
             {
-                conv = NativeMethods.ar_di_ss(ToStringBuilder(job), k, ArnoldiCount,
+                conv = NativeMethods.ar_di_ss(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref e);
             }
             else
             {
-                conv = NativeMethods.ar_di_ns(ToStringBuilder(job), k, ArnoldiCount,
+                conv = NativeMethods.ar_di_ns(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref e);
             }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -102,7 +103,7 @@ namespace CSparse.Double.Solver
         /// <summary>
         /// Solve the standard eigenvalue problem in shift-invert mode.
         /// </summary>
-        public override ArpackResult<double> SolveStandard(int k, double sigma, string job = Job.LargestMagnitude)
+        public override IEigenSolverResult SolveStandard(int k, double sigma, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (!CheckSquare(A))
             {
@@ -125,18 +126,18 @@ namespace CSparse.Double.Solver
 
             if (symmetric)
             {
-                conv = NativeMethods.ar_di_ss_shift(ToStringBuilder(job), k, ArnoldiCount, Iterations,
+                conv = NativeMethods.ar_di_ss_shift(GetJob(job), k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref e);
             }
             else
             {
-                conv = NativeMethods.ar_di_ns_shift(ToStringBuilder(job), k, ArnoldiCount, Iterations,
+                conv = NativeMethods.ar_di_ns_shift(GetJob(job), k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref e);
             }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -147,7 +148,7 @@ namespace CSparse.Double.Solver
         /// <summary>
         /// Solve the generalized eigenvalue problem.
         /// </summary>
-        public override ArpackResult<double> SolveGeneralized(int k, string job)
+        public override IEigenSolverResult SolveGeneralized(int k, Spectrum job)
         {
             if (!CheckSquare(A))
             {
@@ -158,7 +159,7 @@ namespace CSparse.Double.Solver
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
-            
+
             var result = new ArpackResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
@@ -171,18 +172,18 @@ namespace CSparse.Double.Solver
 
             if (symmetric)
             {
-                conv = NativeMethods.ar_di_sg(ToStringBuilder(job), k, ArnoldiCount,
+                conv = NativeMethods.ar_di_sg(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref b, ref e);
             }
             else
             {
-                conv = NativeMethods.ar_di_ng(ToStringBuilder(job), k, ArnoldiCount,
+                conv = NativeMethods.ar_di_ng(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref b, ref e);
             }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -193,7 +194,7 @@ namespace CSparse.Double.Solver
         /// <summary>
         /// Solve the generalized eigenvalue problem in user-defined shift-invert mode.
         /// </summary>
-        public override ArpackResult<double> SolveGeneralized(int k, double sigma, string job = Job.LargestMagnitude)
+        public override IEigenSolverResult SolveGeneralized(int k, double sigma, Spectrum job = Spectrum.LargestMagnitude)
         {
             return SolveGeneralized(k, sigma, ShiftMode.Regular, job);
         }
@@ -201,7 +202,7 @@ namespace CSparse.Double.Solver
         /// <summary>
         /// Solve the generalized eigenvalue problem in user-defined shift-invert mode.
         /// </summary>
-        public ArpackResult<double> SolveGeneralized(int k, double sigma, ShiftMode mode, string job = Job.LargestMagnitude)
+        public IEigenSolverResult SolveGeneralized(int k, double sigma, ShiftMode mode, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (!symmetric && !(mode == ShiftMode.None || mode == ShiftMode.Regular))
             {
@@ -241,18 +242,18 @@ namespace CSparse.Double.Solver
                     m = 'C';
                 }
 
-                conv = NativeMethods.ar_di_sg_shift(ToStringBuilder(job), m, k, ArnoldiCount, Iterations,
+                conv = NativeMethods.ar_di_sg_shift(GetJob(job), m, k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref b, ref e);
             }
             else
             {
-                conv = NativeMethods.ar_di_ng_shift(ToStringBuilder(job), k, ArnoldiCount, Iterations,
+                conv = NativeMethods.ar_di_ng_shift(GetJob(job), k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref b, ref e);
             }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -269,7 +270,7 @@ namespace CSparse.Double.Solver
         /// <param name="part">Part to apply ('R' for real, 'I' for imaginary).</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public ArpackResult<double> SolveGeneralized(int k, double sigma_r, double sigma_i, char part, string job = Job.LargestMagnitude)
+        public IEigenSolverResult SolveGeneralized(int k, double sigma_r, double sigma_i, char part, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (symmetric)
             {
@@ -303,14 +304,14 @@ namespace CSparse.Double.Solver
 
             int conv = 0;
 
-            conv = NativeMethods.ar_di_ng_shift_cx(ToStringBuilder(job),
+            conv = NativeMethods.ar_di_ng_shift_cx(GetJob(job),
                 k, ArnoldiCount, Iterations, Tolerance,
                 part, sigma_r, sigma_i, ref a, ref b, ref e);
 
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -324,7 +325,7 @@ namespace CSparse.Double.Solver
         /// <param name="k">The number of singular values to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged singular values.</returns>
-        public ArpackResult<double> SingularValues(int k, string job = Job.LargestMagnitude)
+        public IEigenSolverResult SingularValues(int k, Spectrum job = Spectrum.LargestMagnitude)
         {
             return SingularValues(k, false, job);
         }
@@ -343,7 +344,7 @@ namespace CSparse.Double.Solver
         /// 
         /// The eigenvalues returned are the squared singular values of A. If requested, the
         /// returned eigenvectors correspond to the right singular vectors, if <c>A = U*S*V'</c>.
-        /// The left singular vectors can be computed from the equation <c>A*v - sigma*u</c>.
+        /// The left singular vectors can be computed from the equation <c>A*v - sigma*u = 0</c>.
         /// 
         /// If <paramref name="normal"/> is false, the symmetric system <c>[0  A; A' 0]</c> is
         /// considered (size m + n), where A is an m-by-n real matrix.
@@ -355,7 +356,7 @@ namespace CSparse.Double.Solver
         /// of the eigenvectors y, while the columns of V can be extracted from the remaining
         /// n components.
         /// </remarks>
-        public ArpackResult<double> SingularValues(int k, bool normal, string job = Job.LargestMagnitude)
+        public IEigenSolverResult SingularValues(int k, bool normal, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (!Job.ValidateSymmetric(job))
             {
@@ -371,7 +372,7 @@ namespace CSparse.Double.Solver
             }
 
             int size = normal ? n : m + n;
-            
+
             var result = new ArpackResult(k, size, ComputeEigenVectors, true);
 
             var handles = new List<GCHandle>();
@@ -383,18 +384,18 @@ namespace CSparse.Double.Solver
 
             if (normal)
             {
-                conv = NativeMethods.ar_di_svd_nrm(ToStringBuilder(job),
+                conv = NativeMethods.ar_di_svd_nrm(GetJob(job),
                     k, ArnoldiCount, Iterations, Tolerance, ref a, ref e);
             }
             else
             {
-                conv = NativeMethods.ar_di_svd(ToStringBuilder(job),
+                conv = NativeMethods.ar_di_svd(GetJob(job),
                     k, ArnoldiCount, Iterations, Tolerance, ref a, ref e);
             }
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);

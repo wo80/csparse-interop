@@ -38,7 +38,7 @@ namespace CSparse.Complex.Solver
         }
 
         /// <inheritdoc />
-        public override DenseColumnMajorStorage<double> EigenVectorsReal()
+        public override Matrix<double> EigenVectorsReal()
         {
             int k = this.Count;
 
@@ -64,7 +64,7 @@ namespace CSparse.Complex.Solver
         }
 
         /// <inheritdoc />
-        protected override DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix()
+        protected override Matrix<Complex> CreateEigenVectorsMatrix()
         {
             return new DenseMatrix(size, this.Count, (Complex[])eigvec);
         }
@@ -75,7 +75,7 @@ namespace CSparse.Complex.Solver
 
             // For complex matrices all eigenvalues are stored in
             // eigvalr with interleaved real and imaginary part.
-            
+
             eigvalr = new Complex[k];
 
             if (computeEigenVectors)

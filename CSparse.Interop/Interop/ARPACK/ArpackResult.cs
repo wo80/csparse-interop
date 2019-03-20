@@ -2,6 +2,7 @@
 namespace CSparse.Interop.ARPACK
 {
     using CSparse.Interop.Common;
+    using CSparse.Solvers;
     using CSparse.Storage;
     using System;
     using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace CSparse.Interop.ARPACK
     /// <summary>
     /// ARPACK result.
     /// </summary>
-    public abstract class ArpackResult<T>
+    public abstract class ArpackResult<T> : IEigenSolverResult
         where T : struct, IEquatable<T>, IFormattable
     {
         // The following objects are actually double[] arrays, which are initialized in the derived classes.
@@ -45,7 +46,7 @@ namespace CSparse.Interop.ARPACK
         /// <summary>
         /// Gets the number of converged eigenvalues.
         /// </summary>
-        public int ConvergedEigenvalues { get; internal set; }
+        public int ConvergedEigenValues { get; internal set; }
 
         /// <summary>
         /// Gets the number of iteration taken.
@@ -110,7 +111,7 @@ namespace CSparse.Interop.ARPACK
                 throw new ArpackException(ErrorCode);
             }
         }
-        
+
         /// <summary>
         /// Gets the real part of the eigenvalues.
         /// </summary>
@@ -119,7 +120,7 @@ namespace CSparse.Interop.ARPACK
         /// <summary>
         /// Gets the real part of the eigenvectors.
         /// </summary>
-        public abstract DenseColumnMajorStorage<double> EigenVectorsReal();
+        public abstract Matrix<double> EigenVectorsReal();
 
         /// <summary>
         /// Creates the array of eigenvalues.
@@ -129,7 +130,7 @@ namespace CSparse.Interop.ARPACK
         /// <summary>
         /// Creates the matrix of eigenvectors.
         /// </summary>
-        protected abstract DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix();
+        protected abstract Matrix<Complex> CreateEigenVectorsMatrix();
 
         internal ar_result GetEigenvalueStorage(List<GCHandle> handles)
         {

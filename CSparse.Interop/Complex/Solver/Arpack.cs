@@ -1,12 +1,13 @@
 ﻿
 namespace CSparse.Complex.Solver
 {
-    using CSparse.Interop.Common;
     using CSparse.Interop.ARPACK;
-    using System.Collections.Generic;
-    using System.Runtime.InteropServices;
-    using System.Numerics;
+    using CSparse.Interop.Common;
+    using CSparse.Solvers;
     using System;
+    using System.Collections.Generic;
+    using System.Numerics;
+    using System.Runtime.InteropServices;
 
     public sealed class Arpack : ArpackContext<Complex>
     {
@@ -49,7 +50,7 @@ namespace CSparse.Complex.Solver
             : base(A, B, symmetric)
         {
         }
-        
+
         #region Overriden methods
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace CSparse.Complex.Solver
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
         /// <returns>The number of converged eigenvalues.</returns>
-        public override ArpackResult<Complex> SolveStandard(int k, string job)
+        public override IEigenSolverResult SolveStandard(int k, Spectrum job)
         {
             if (!CheckSquare(A))
             {
@@ -77,23 +78,23 @@ namespace CSparse.Complex.Solver
             var a = GetMatrix(A, handles);
             var e = result.GetEigenvalueStorage(handles);
 
-            int conv = NativeMethods.ar_zi_ns(ToStringBuilder(job), k, ArnoldiCount,
+            int conv = NativeMethods.ar_zi_ns(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref e);
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
 
             return result;
         }
-        
+
         /// <summary>
         /// Solve the standard eigenvalue problem in shift-invert mode.
         /// </summary>
-        public override ArpackResult<Complex> SolveStandard(int k, Complex sigma, string job = Job.LargestMagnitude)
+        public override IEigenSolverResult SolveStandard(int k, Complex sigma, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (!CheckSquare(A))
             {
@@ -112,12 +113,12 @@ namespace CSparse.Complex.Solver
             var a = GetMatrix(A, handles);
             var e = result.GetEigenvalueStorage(handles);
 
-            int conv = NativeMethods.ar_zi_ns_shift(ToStringBuilder(job), k, ArnoldiCount, Iterations,
+            int conv = NativeMethods.ar_zi_ns_shift(GetJob(job), k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref e);
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -128,7 +129,7 @@ namespace CSparse.Complex.Solver
         /// <summary>
         /// Solve the generalized eigenvalue problem.
         /// </summary>
-        public override ArpackResult<Complex> SolveGeneralized(int k, string job)
+        public override IEigenSolverResult SolveGeneralized(int k, Spectrum job)
         {
             if (!CheckSquare(A))
             {
@@ -148,12 +149,12 @@ namespace CSparse.Complex.Solver
             var b = GetMatrix(B, handles);
             var e = result.GetEigenvalueStorage(handles);
 
-            int conv = NativeMethods.ar_zi_ng(ToStringBuilder(job), k, ArnoldiCount,
+            int conv = NativeMethods.ar_zi_ng(GetJob(job), k, ArnoldiCount,
                     Iterations, Tolerance, ref a, ref b, ref e);
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);
@@ -164,7 +165,7 @@ namespace CSparse.Complex.Solver
         /// <summary>
         /// Solve the generalized eigenvalue problem in user-defined shift-invert mode.
         /// </summary>
-        public override ArpackResult<Complex> SolveGeneralized(int k, Complex sigma, string job = Job.LargestMagnitude)
+        public override IEigenSolverResult SolveGeneralized(int k, Complex sigma, Spectrum job = Spectrum.LargestMagnitude)
         {
             if (!CheckSquare(A))
             {
@@ -184,12 +185,12 @@ namespace CSparse.Complex.Solver
             var b = GetMatrix(B, handles);
             var e = result.GetEigenvalueStorage(handles);
 
-            int conv = NativeMethods.ar_zi_ng_shift(ToStringBuilder(job), k, ArnoldiCount, Iterations,
+            int conv = NativeMethods.ar_zi_ng_shift(GetJob(job), k, ArnoldiCount, Iterations,
                     Tolerance, sigma, ref a, ref b, ref e);
 
             result.IterationsTaken = e.iterations;
             result.ArnoldiCount = e.ncv;
-            result.ConvergedEigenvalues = conv;
+            result.ConvergedEigenValues = conv;
             result.ErrorCode = e.info;
 
             InteropHelper.Free(handles);

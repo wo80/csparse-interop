@@ -33,7 +33,7 @@ namespace CSparse.Double.Solver
         }
 
         /// <inheritdoc />
-        public override DenseColumnMajorStorage<double> EigenVectorsReal()
+        public override Matrix<double> EigenVectorsReal()
         {
             int k = this.Count;
 
@@ -76,7 +76,7 @@ namespace CSparse.Double.Solver
         }
 
         /// <inheritdoc />
-        protected override DenseColumnMajorStorage<Complex> CreateEigenVectorsMatrix()
+        protected override Matrix<Complex> CreateEigenVectorsMatrix()
         {
             // Number of requested eigenvalues.
             int k = this.Count;
