@@ -2,7 +2,6 @@
 namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
-    using CSparse.Solvers;
     using System;
     using System.Diagnostics;
 
@@ -14,8 +13,6 @@ namespace CSparse.Double.Tests
         {
             Console.Write("Testing ARPACK ... ");
 
-            var timer = new Stopwatch();
-
             // Number of eigenvalues to compute.
             int k = 5;
 
@@ -23,50 +20,51 @@ namespace CSparse.Double.Tests
             var z = new double[k];
 
             size = (int)Math.Sqrt(size) + 1;
-            
+
             var A = (SparseMatrix)Generate.Laplacian(size, size, z);
 
-            // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            var U = A.ToUpper();
-            
-            var solver = new Arpack(U, true)
-            {
-                Tolerance = 1e-6,
-                ComputeEigenVectors = true
-            };
-            
             try
             {
-                timer.Start();
-
-                var result = solver.SolveStandard(k, 0.0);
-                //var result = solver.SolveStandard(k, Spectrum.SmallestMagnitude);
-
-                //var result = solver.SolveStandard(k, 8.0);
-                //var result = solver.SolveStandard(k, Spectrum.LargestMagnitude);
-
-                timer.Stop();
-
-                Display.Time(timer.ElapsedTicks);
-                
-                result.EnsureSuccess();
-
-                if (Helper.CheckResiduals(A, result, true))
-                {
-                    Display.Ok("OK");
-                }
-                else
-                {
-                    Display.Warning("residual error too large");
-                }
-            }
-            catch (DllNotFoundException)
-            {
-                throw;
+                Run(A, k, true);
             }
             catch (Exception e)
             {
                 Display.Error(e.Message);
+            }
+        }
+
+        public void Run(SparseMatrix A, int m, bool symmetric)
+        {
+            // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
+            var U = A.ToUpper();
+
+            var solver = new Arpack(U, symmetric)
+            {
+                Tolerance = 1e-6,
+                ComputeEigenVectors = true
+            };
+
+            var timer = Stopwatch.StartNew();
+
+            var result = solver.SolveStandard(m, 0.0);
+            //var result = solver.SolveStandard(m, Spectrum.SmallestMagnitude);
+
+            //var result = solver.SolveStandard(m, 8.0);
+            //var result = solver.SolveStandard(m, Spectrum.LargestMagnitude);
+
+            timer.Stop();
+
+            Display.Time(timer.ElapsedTicks);
+
+            result.EnsureSuccess();
+
+            if (Helper.CheckResiduals(A, result, symmetric, true))
+            {
+                Display.Ok("OK");
+            }
+            else
+            {
+                Display.Warning("residual error too large");
             }
         }
     }

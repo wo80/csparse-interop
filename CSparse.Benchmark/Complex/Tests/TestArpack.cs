@@ -2,7 +2,6 @@
 namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
-    using CSparse.Solvers;
     using System;
     using System.Diagnostics;
 
@@ -14,8 +13,6 @@ namespace CSparse.Complex.Tests
         {
             Console.Write("Testing ARPACK ... ");
 
-            var timer = new Stopwatch();
-
             // Number of eigenvalues to compute.
             int k = 5;
 
@@ -26,46 +23,45 @@ namespace CSparse.Complex.Tests
 
             var A = (SparseMatrix)Generate.Laplacian(size, size, z);
 
-            int N = A.RowCount;
+            try
+            {
+                Run(A, k, true);
+            }
+            catch (Exception e)
+            {
+                Display.Error(e.Message);
+            }
+        }
 
-            var solver = new Arpack(A, true)
+        public void Run(SparseMatrix A, int m, bool symmetric)
+        {
+            var solver = new Arpack(A, symmetric)
             {
                 Tolerance = 1e-6,
                 ComputeEigenVectors = true
             };
 
-            try
+            var timer = Stopwatch.StartNew();
+            
+            var result = solver.SolveStandard(m, 0.0);
+            //var result = solver.SolveStandard(m, Spectrum.SmallestMagnitude);
+
+            //var result = solver.SolveStandard(m, 8.0);
+            //var result = solver.SolveStandard(m, Spectrum.LargestMagnitude);
+
+            timer.Stop();
+
+            Display.Time(timer.ElapsedTicks);
+
+            result.EnsureSuccess();
+
+            if (Helper.CheckResiduals(A, result, false))
             {
-                timer.Start();
-
-                var result = solver.SolveStandard(k, 0.0);
-                //var result = solver.SolveStandard(k, Spectrum.SmallestMagnitude);
-
-                //var result = solver.SolveStandard(k, 8.0);
-                //var result = solver.SolveStandard(k, Spectrum.LargestMagnitude);
-
-                timer.Stop();
-
-                Display.Time(timer.ElapsedTicks);
-
-                result.EnsureSuccess();
-                
-                if (Helper.CheckResiduals(A, result, false))
-                {
-                    Display.Ok("OK");
-                }
-                else
-                {
-                    Display.Warning("residual error too large");
-                }
+                Display.Ok("OK");
             }
-            catch (DllNotFoundException)
+            else
             {
-                throw;
-            }
-            catch (Exception e)
-            {
-                Display.Error(e.Message);
+                Display.Warning("residual error too large");
             }
         }
     }

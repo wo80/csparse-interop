@@ -50,7 +50,7 @@ namespace CSparse.Interop.CUDA
         /// Matrix transposition is done on a storage level, meaning, for complex matrices, values will not be
         /// conjugated. This is necessary, because CUDA expects CSR storage, while CSparse uses CSC storage.
         /// 
-        /// This value of <paramref name="transpose"/> should be true for all matrix types, except real
+        /// The value of <paramref name="transpose"/> should be true for all matrix types, except real
         /// valued, symmetric matrices.
         /// </remarks>
         public CuSolverContext(CudaStream stream, CompressedColumnStorage<T> A, bool transpose)
@@ -122,6 +122,8 @@ namespace CSparse.Interop.CUDA
 
             Cuda.Malloc(ref d_x, sizeT * columns);
             Cuda.Malloc(ref d_b, sizeT * rows);
+
+            // TODO: can the original matrix really be disposed after factorization?
 
             using (var cusparse = new CuSparseContext<T>(stream, matrix, MatrixType.General, transpose))
             {

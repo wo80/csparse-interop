@@ -13,8 +13,6 @@ namespace CSparse.Double.Tests
         {
             Console.Write("Testing MKL Extended Eigensolver ... ");
 
-            var timer = new Stopwatch();
-
             // Initial subspace dimension.
             int k0 = 5;
 
@@ -25,43 +23,42 @@ namespace CSparse.Double.Tests
 
             var A = (SparseMatrix)Generate.Laplacian(size, size, z);
 
-            int N = A.RowCount;
-
-            var solver = new ExtendedEigensolver(A);
-            
             try
             {
-                timer.Start();
-
-                var result = (ExtendedEigensolverResult)solver.SolveStandard(k0, Interop.MKL.Job.Largest);
-
-                timer.Stop();
-
-                Display.Time(timer.ElapsedTicks);
-
-                if (result.Status == Interop.MKL.SparseStatus.Success)
-                {
-                    if (CheckResiduals(A, result, false))
-                    {
-                        Display.Ok("OK");
-                    }
-                    else
-                    {
-                        Display.Warning("residual error too large");
-                    }
-                }
-                else
-                {
-                    Display.Warning("status = " + result.Status);
-                }
-            }
-            catch (DllNotFoundException)
-            {
-                throw;
+                Run(A, k0, true);
             }
             catch (Exception e)
             {
                 Display.Error(e.Message);
+            }
+        }
+
+        public void Run(SparseMatrix A, int m, bool symmetric)
+        {
+            var solver = new ExtendedEigensolver(A);
+
+            var timer = Stopwatch.StartNew();
+            
+            var result = (ExtendedEigensolverResult)solver.SolveStandard(m, Interop.MKL.Job.Largest);
+
+            timer.Stop();
+
+            Display.Time(timer.ElapsedTicks);
+
+            if (result.Status == Interop.MKL.SparseStatus.Success)
+            {
+                if (CheckResiduals(A, result, false))
+                {
+                    Display.Ok("OK");
+                }
+                else
+                {
+                    Display.Warning("residual error too large");
+                }
+            }
+            else
+            {
+                Display.Warning("status = " + result.Status);
             }
         }
 

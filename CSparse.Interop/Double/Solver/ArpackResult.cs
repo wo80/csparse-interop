@@ -107,6 +107,8 @@ namespace CSparse.Double.Solver
             // Imaginary part of eigenvalues.
             var eim = (double[])eigvali;
 
+            int length = values.Length;
+
             for (int i = 0; i < k; i++)
             {
                 int current = i * size; // Current column offset.
@@ -127,7 +129,13 @@ namespace CSparse.Double.Solver
                         var a = new Complex(rp[current + j], rp[next + j]);
 
                         values[current + j] = a;
-                        values[next + j] = Complex.Conjugate(a);
+
+                        // Check if next column is available (alternatively, allocate space for
+                        // one additional column, see CreateWorkspace() method below).
+                        if (next < length)
+                        {
+                            values[next + j] = Complex.Conjugate(a);
+                        }
                     }
 
                     i++;

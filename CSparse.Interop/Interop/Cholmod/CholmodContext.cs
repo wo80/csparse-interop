@@ -42,7 +42,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the CholmodContext class.
+        /// Initializes a new instance of the <see cref="CholmodContext{T}"/> class.
         /// </summary>
         /// <param name="matrix">The sparse matrix to factorize.</param>
         public CholmodContext(CompressedColumnStorage<T> matrix)

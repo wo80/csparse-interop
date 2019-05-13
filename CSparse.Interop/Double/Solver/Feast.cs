@@ -10,7 +10,7 @@ namespace CSparse.Double.Solver
     public class Feast : FeastContext<double>
     {
         /// <summary>
-        /// Initializes a new instance of the Feast class.
+        /// Initializes a new instance of the <see cref="Feast"/> class.
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
         public Feast(SparseMatrix A)
@@ -19,7 +19,7 @@ namespace CSparse.Double.Solver
         }
 
         /// <summary>
-        /// Initializes a new instance of the Feast class.
+        /// Initializes a new instance of the <see cref="Feast"/> class.
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
         /// <param name="B">Real symmetric positive definite matrix for generalized problem.</param>

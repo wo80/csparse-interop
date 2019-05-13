@@ -476,7 +476,7 @@
         /// <remarks>
         /// MODULE examples\matrices\nonsym\LNMatrxB.h
         /// </remarks>
-        public static SparseMatrix BlockTridMatrix(int nx)
+        public static SparseMatrix BlockTridMatrix(int nx, double rho = 0.0)
         {
             // Defining internal variables.
 
@@ -486,14 +486,12 @@
 
             // Defining constants.
 
-            const double rho = 0.0;
-
             h = 1.0 / (nx + 1);
             h2 = h * h;
             dd = 4.0 / h2;
             df = -1.0 / h2;
-            dl = df - 5.0e-1 * rho / h;
-            du = df + 5.0e-1 * rho / h;
+            dl = df - 0.5 * rho / h;
+            du = df + 0.5 * rho / h;
 
             // Defining the number of columns and nonzero elements of matrix.
 

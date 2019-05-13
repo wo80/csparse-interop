@@ -15,8 +15,6 @@ namespace CSparse.Complex.Tests
         {
             Console.Write("Testing FEAST ... ");
 
-            var timer = new Stopwatch();
-
             // Initial subspace dimension.
             int m0 = 25;
 
@@ -27,10 +25,20 @@ namespace CSparse.Complex.Tests
 
             var A = (SparseMatrix)Generate.Laplacian(size, size, z);
 
-            int N = A.RowCount;
+            try
+            {
+                Run(A, m0, true);
+            }
+            catch (Exception e)
+            {
+                Display.Error(e.Message);
+            }
+        }
 
+        public void Run(SparseMatrix A, int m, bool symmetric)
+        {
             var solver = new Feast(A);
-            
+
             //solver.Options.PrintStatus = true;
 
             // The current version of MKL (2018.1) uses FEAST 2.0. One of the difficulties is
@@ -38,49 +46,38 @@ namespace CSparse.Complex.Tests
             // of the requested interval can be computed (the latest version of  FEAST offers
             // a method to estimate the number of eigenvalues inside of the search interval).
 
-            try
+            var timer = Stopwatch.StartNew();
+
+            var result = solver.SolveStandard(m, 0.0, 0.1); // interval [0.0, 0.2] would fail
+
+            timer.Stop();
+
+            Display.Time(timer.ElapsedTicks);
+
+            if (result.RelativeTraceError > ERROR_THRESHOLD)
             {
-                timer.Start();
-
-                var result = solver.SolveStandard(m0, 0.0, 0.1); // interval [0.0, 0.2] would fail
-
-                timer.Stop();
-
-                Display.Time(timer.ElapsedTicks);
-
-                if (result.RelativeTraceError > ERROR_THRESHOLD)
+                Display.Warning("relative error too large");
+            }
+            else if (result.Status == 3)
+            {
+                // If the subspace guess is too small, status will be 3 and either
+                // the dimension must be increased or the search interval reduced.
+                Display.Warning("subspace size too small");
+            }
+            else if (result.Status == 0)
+            {
+                if (CheckResiduals(A, result, false))
                 {
-                    Display.Warning("relative error too large");
-                }
-                else if (result.Status == 3)
-                {
-                    // If the subspace guess is too small, status will be 3 and either
-                    // the dimension must be increased or the search interval reduced.
-                    Display.Warning("subspace size too small");
-                }
-                else if (result.Status == 0)
-                {
-                    if (CheckResiduals(A, result, false))
-                    {
-                        Display.Ok("OK");
-                    }
-                    else
-                    {
-                        Display.Warning("residual error too large");
-                    }
+                    Display.Ok("OK");
                 }
                 else
                 {
-                    Display.Warning("status = " + result.Status);
+                    Display.Warning("residual error too large");
                 }
             }
-            catch (DllNotFoundException)
+            else
             {
-                throw;
-            }
-            catch (Exception e)
-            {
-                Display.Error(e.Message);
+                Display.Warning("status = " + result.Status);
             }
         }
 
