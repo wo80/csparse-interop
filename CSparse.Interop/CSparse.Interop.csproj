@@ -19,6 +19,10 @@
     <RootNamespace>CSparse</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Platform)' != 'x86'">
+    <DefineConstants>X64</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="CSparse" Version="3.4.5" />
   </ItemGroup>

@@ -62,9 +62,9 @@ namespace CSparse.Interop.Pardiso
             // User supplied permutation - not used.
             perm = null;
 
-            DoInitialize();
-
             options.SetDefault();
+
+            DoInitialize();
         }
         
         ~PardisoContext()

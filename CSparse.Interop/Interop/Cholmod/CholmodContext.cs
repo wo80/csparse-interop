@@ -111,7 +111,7 @@
 
             if (NativeMethods.cholmod_check_sparse(ref A, ref common) != Constants.TRUE)
             {
-                return -1000;
+                return common.status = Constants.CHOLMOD_INVALID;
             }
 
             Lp = NativeMethods.cholmod_analyze(ref A, ref common);

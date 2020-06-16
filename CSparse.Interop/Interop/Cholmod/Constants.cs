@@ -259,6 +259,8 @@
         public const int CHOLMOD_OK = 0;			/* success */
         public const int TRUE = 1;
 
+        public const int CHOLMOD_INVALID = -4;
+
         /* ordering method (also used for L->ordering) */
         public const int CHOLMOD_NATURAL = 0;	/* use natural ordering */
         public const int CHOLMOD_GIVEN = 1;		/* use given permutation */
