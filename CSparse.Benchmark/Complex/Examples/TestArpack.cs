@@ -4,7 +4,8 @@
     using CSparse.Complex.Solver;
     using CSparse.Solvers;
     using System;
-    using System.Numerics;
+
+    using Complex = System.Numerics.Complex;
 
     /// <summary>
     /// Examples taken from ARPACK++.

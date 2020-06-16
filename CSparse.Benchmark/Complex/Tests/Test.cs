@@ -4,7 +4,8 @@ namespace CSparse.Complex.Tests
     using CSparse.Factorization;
     using System;
     using System.Diagnostics;
-    using System.Numerics;
+
+    using Complex = System.Numerics.Complex;
 
     abstract class Test
     {

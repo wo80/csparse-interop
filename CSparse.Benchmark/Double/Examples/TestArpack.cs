@@ -5,9 +5,9 @@
     using CSparse.Interop.ARPACK;
     using CSparse.Solvers;
     using System;
-    using System.Numerics;
 
     using CVector = CSparse.Complex.Vector;
+    using Complex = System.Numerics.Complex;
 
     /// <summary>
     /// Examples taken from ARPACK++.

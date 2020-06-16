@@ -5,7 +5,8 @@ namespace CSparse.Complex.Tests
     using CSparse.Interop.Feast;
     using System;
     using System.Diagnostics;
-    using System.Numerics;
+
+    using Complex = System.Numerics.Complex;
 
     class TestFeast
     {

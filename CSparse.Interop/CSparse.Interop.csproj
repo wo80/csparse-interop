@@ -1,192 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5235AD90-5E2C-4467-B497-875A79F57F4E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSparse</RootNamespace>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>CSparse.Interop</PackageId>
+    <Summary>Interop extensions for CSparse.NET</Summary>
+    <Description>Dense LU, Cholesky and QR decomposition of real and complex linear systems.</Description>
+    <Product>CSparse.Interop</Product>
+    <Company />
+    <Copyright>Copyright Christian Woltering © 2012-2020</Copyright>
+    <Authors>Christian Woltering</Authors>
+    <AssemblyVersion>3.4.5.0</AssemblyVersion>
+    <FileVersion>3.4.5.0</FileVersion>
+    <PackageTags>math sparse matrix lu cholesky qr decomposition factorization </PackageTags>
+    <Version>3.4.5</Version>
     <AssemblyName>CSparse.Interop</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <RootNamespace>CSparse</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\any\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\any\Debug\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\any\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\any\Release\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;X64</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\bin\x64\Debug\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;X64</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\bin\x64\Release\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\bin\x86\Debug\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>..\bin\x86\Release\CSparse.Interop.xml</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CSparse, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSparse.3.3.0\lib\net45\CSparse.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
+    <PackageReference Include="CSparse" Version="3.4.5" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Complex\Factorization\Cholmod.cs" />
-    <Compile Include="Complex\Factorization\CholmodHelper.cs" />
-    <Compile Include="Complex\Factorization\CudaCholesky.cs" />
-    <Compile Include="Complex\Factorization\CudaQR.cs" />
-    <Compile Include="Complex\Factorization\Pardiso.cs" />
-    <Compile Include="Complex\Factorization\SPQR.cs" />
-    <Compile Include="Complex\Factorization\SuperLU.cs" />
-    <Compile Include="Complex\Factorization\Umfpack.cs" />
-    <Compile Include="Complex\Solver\Arpack.cs" />
-    <Compile Include="Complex\Solver\ArpackResult.cs" />
-    <Compile Include="Complex\Solver\Feast.cs" />
-    <Compile Include="Complex\Solver\FeastResult.cs" />
-    <Compile Include="Double\Factorization\CholmodHelper.cs" />
-    <Compile Include="Double\Factorization\Cholmod.cs" />
-    <Compile Include="Double\Factorization\CudaCholesky.cs" />
-    <Compile Include="Double\Factorization\CudaQR.cs" />
-    <Compile Include="Double\Factorization\Pardiso.cs" />
-    <Compile Include="Double\Factorization\SPQR.cs" />
-    <Compile Include="Double\Factorization\SuperLU.cs" />
-    <Compile Include="Double\Factorization\Umfpack.cs" />
-    <Compile Include="Double\Solver\Arpack.cs" />
-    <Compile Include="Double\Solver\ArpackResult.cs" />
-    <Compile Include="Double\Solver\ExtendedEigensolver.cs" />
-    <Compile Include="Double\Solver\ExtendedEigensolverResult.cs" />
-    <Compile Include="Double\Solver\Feast.cs" />
-    <Compile Include="Double\Solver\FeastResult.cs" />
-    <Compile Include="Factorization\IDisposableSolver.cs" />
-    <Compile Include="Interop\ARPACK\ArpackContext.cs" />
-    <Compile Include="Interop\ARPACK\ArpackException.cs" />
-    <Compile Include="Interop\ARPACK\ArpackResult.cs" />
-    <Compile Include="Interop\ARPACK\NativeMethods.cs" />
-    <Compile Include="Interop\ARPACK\ShiftMode.cs" />
-    <Compile Include="Interop\Cholmod\CholmodCommon.cs" />
-    <Compile Include="Interop\Cholmod\CholmodContext.cs" />
-    <Compile Include="Interop\Cholmod\CholmodDense.cs" />
-    <Compile Include="Interop\Cholmod\CholmodException.cs" />
-    <Compile Include="Interop\Cholmod\CholmodFactor.cs" />
-    <Compile Include="Interop\Cholmod\CholmodSparse.cs" />
-    <Compile Include="Interop\Cholmod\CholmodTriplet.cs" />
-    <Compile Include="Interop\Cholmod\Constants.cs" />
-    <Compile Include="Interop\Cholmod\NativeMethods.cs" />
-    <Compile Include="Interop\Common\InteropHelper.cs" />
-    <Compile Include="Interop\CUDA\Cuda.cs" />
-    <Compile Include="Interop\CUDA\CudaDevice.cs" />
-    <Compile Include="Interop\CUDA\CudaException.cs" />
-    <Compile Include="Interop\CUDA\CudaStream.cs" />
-    <Compile Include="Interop\CUDA\NativeMethods.cs" />
-    <Compile Include="Interop\CUDA\CuSolverContext.cs" />
-    <Compile Include="Interop\CUDA\CuSolverException.cs" />
-    <Compile Include="Interop\CUDA\CuSparseContext.cs" />
-    <Compile Include="Interop\CUDA\CuSparseException.cs" />
-    <Compile Include="Interop\CUDA\Types.cs" />
-    <Compile Include="Interop\Feast\FeastContext.cs" />
-    <Compile Include="Interop\Feast\FeastException.cs" />
-    <Compile Include="Interop\Feast\FeastOptions.cs" />
-    <Compile Include="Interop\Feast\FeastResult.cs" />
-    <Compile Include="Interop\Feast\NativeMethods.cs" />
-    <Compile Include="Interop\Metis\Helper.cs" />
-    <Compile Include="Interop\Metis\MetisGraph.cs" />
-    <Compile Include="Interop\Metis\MetisMesh.cs" />
-    <Compile Include="Interop\Metis\MetisOptions.cs" />
-    <Compile Include="Interop\Metis\NativeMethods.cs" />
-    <Compile Include="Interop\MKL\ExtendedEigensolverContext.cs" />
-    <Compile Include="Interop\MKL\ExtendedEigensolverResult.cs" />
-    <Compile Include="Interop\MKL\Helper.cs" />
-    <Compile Include="Interop\MKL\NativeMethods.cs" />
-    <Compile Include="Interop\MKL\Types.cs" />
-    <Compile Include="Interop\Pardiso\Constants.cs" />
-    <Compile Include="Interop\Pardiso\NativeMethods.cs" />
-    <Compile Include="Interop\Pardiso\PardisoContext.cs" />
-    <Compile Include="Interop\Pardiso\PardisoException.cs" />
-    <Compile Include="Interop\Pardiso\PardisoMatrixType.cs" />
-    <Compile Include="Interop\Pardiso\PardisoOptions.cs" />
-    <Compile Include="Interop\Pardiso\PardisoOrdering.cs" />
-    <Compile Include="Interop\SPQR\Constants.cs" />
-    <Compile Include="Interop\SPQR\NativeMethods.cs" />
-    <Compile Include="Interop\SPQR\SpqrContext.cs" />
-    <Compile Include="Interop\SPQR\SpqrOrdering.cs" />
-    <Compile Include="Interop\SuperLU\Constants.cs" />
-    <Compile Include="Interop\SuperLU\NativeMethods.cs" />
-    <Compile Include="Interop\SuperLU\OrderingMethod.cs" />
-    <Compile Include="Interop\SuperLU\SuperLUContext.cs" />
-    <Compile Include="Interop\SuperLU\SuperLUException.cs" />
-    <Compile Include="Interop\SuperLU\SuperLUOptions.cs" />
-    <Compile Include="Interop\SuperLU\SuperMatrix.cs" />
-    <Compile Include="Interop\Umfpack\Constants.cs" />
-    <Compile Include="Interop\Umfpack\NativeMethods.cs" />
-    <Compile Include="Interop\Umfpack\UmfpackContext.cs" />
-    <Compile Include="Interop\Umfpack\UmfpackControl.cs" />
-    <Compile Include="Interop\Umfpack\UmfpackException.cs" />
-    <Compile Include="Interop\Umfpack\UmfpackInfo.cs" />
-    <Compile Include="Interop\Umfpack\UmfpackSolve.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Solvers\Job.cs" />
-    <Compile Include="Solvers\IEigenSolver.cs" />
-    <Compile Include="Solvers\IEigenSolverResult.cs" />
-    <Compile Include="Solvers\Spectrum.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

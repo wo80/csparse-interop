@@ -7,7 +7,8 @@ namespace CSparse.Complex.Tests
     using System;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Numerics;
+
+    using Complex = System.Numerics.Complex;
 
     static class TestCuda
     {
