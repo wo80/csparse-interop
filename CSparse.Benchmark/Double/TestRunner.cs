@@ -29,6 +29,7 @@ namespace CSparse.Double
             Console.WriteLine();
 
             new TestArpack().Run(size);
+            new TestSpectra().Run(size);
             new TestFeast().Run(size);
             new TestExtendedEigensolver().Run(size);
 

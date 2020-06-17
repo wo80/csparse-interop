@@ -5,11 +5,11 @@ namespace CSparse.Double.Tests
     using System;
     using System.Diagnostics;
 
-    class TestArpack
+    class TestSpectra
     {
         public void Run(int size)
         {
-            Console.Write("Testing ARPACK ... ");
+            Console.Write("Testing Spectra ... ");
 
             // Number of eigenvalues to compute.
             int k = 5;
@@ -33,13 +33,11 @@ namespace CSparse.Double.Tests
 
         public void Run(SparseMatrix A, int m, bool symmetric)
         {
-            // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            var U = A.ToUpper();
-
-            var solver = new Arpack(U, symmetric)
+            var solver = new Spectra(A, symmetric)
             {
                 Tolerance = 1e-6,
-                ComputeEigenVectors = true
+                ComputeEigenVectors = true,
+                ArnoldiCount = m * 3
             };
 
             var timer = Stopwatch.StartNew();
