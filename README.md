@@ -6,14 +6,15 @@ This project contains bindings for some popular solvers of sparse linear systems
 
 | Name      | Type |          | Version | Test (x86)  | Test (x64) |
 |----------:|-----:|---------:|:-------:|:-----------:|:----------:|
-| CHOLMOD | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
-| UMFPACK | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
-| SPQR    | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.3.0 | OK | OK |
-| SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | OK | OK |
-| PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2018.1 | OK | OK |
-| FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2018.1 | OK | OK |
-| Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2019.0 | OK | OK |
-| ARPACK  | Eigenvalues   | [arpack-ng](https://github.com/opencollab/arpack-ng) | 3.7.0 | OK | OK |
+| CHOLMOD | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
+| UMFPACK | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
+| SPQR    | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
+| SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | - | OK |
+| PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2020.1 | - | OK |
+| FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2020.1 | - | OK |
+| Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2020.0 | - | OK |
+| ARPACK  | Eigenvalues   | [arpack-ng](https://github.com/opencollab/arpack-ng) | 3.7.0 | - | OK |
+| Spectra  | Eigenvalues   | [Spectra](https://github.com/yixuan/spectra) | 1.y.z | - | OK |
 | CUDA QR       | Direct solver | [CUSOLVER](https://developer.nvidia.com/cusolver) | 9.2 | - | Buggy |
 | CUDA Cholesky | Direct solver | [CUSOLVER](https://developer.nvidia.com/cusolver) | 9.2 | - | Buggy |
 
