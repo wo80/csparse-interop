@@ -67,6 +67,11 @@ namespace CSparse.Double.Solver
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
 
+            if (ArnoldiCount < k)
+            {
+                ArnoldiCount = Math.Min(3 * k, A.RowCount);
+            }
+
             var result = new SpectraResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
@@ -104,6 +109,11 @@ namespace CSparse.Double.Solver
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
+            }
+
+            if (ArnoldiCount < k)
+            {
+                ArnoldiCount = Math.Min(3 * k, A.RowCount);
             }
 
             var result = new SpectraResult(k, size, ComputeEigenVectors, symmetric);
@@ -144,7 +154,12 @@ namespace CSparse.Double.Solver
             {
                 throw new ArgumentException("Invalid job for given eigenvalue problem.", "job");
             }
-            
+
+            if (ArnoldiCount < k)
+            {
+                ArnoldiCount = Math.Min(3 * k, A.RowCount);
+            }
+
             var result = new SpectraResult(k, size, ComputeEigenVectors, symmetric);
 
             var handles = new List<GCHandle>();
@@ -197,6 +212,11 @@ namespace CSparse.Double.Solver
             if (!Job.Validate(symmetric, job))
             {
                 throw new ArgumentException("Invalid job for symmetric eigenvalue problem.", "job");
+            }
+
+            if (ArnoldiCount < k)
+            {
+                ArnoldiCount = Math.Min(3 * k, A.RowCount);
             }
 
             var result = new SpectraResult(k, size, ComputeEigenVectors, symmetric);
