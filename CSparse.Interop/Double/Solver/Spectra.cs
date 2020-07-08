@@ -8,6 +8,8 @@ namespace CSparse.Double.Solver
     using System;
     using CSparse.Solvers;
 
+    using ShiftMode = CSparse.Interop.ARPACK.ShiftMode;
+
     public sealed class Spectra : SpectraContext<double>
     {
         /// <summary>
@@ -174,9 +176,67 @@ namespace CSparse.Double.Solver
             return result;
         }
 
+        /// <summary>
+        /// Solve the generalized eigenvalue problem in user-defined shift-invert mode.
+        /// </summary>
         public override IEigenSolverResult SolveGeneralized(int k, double sigma, Spectrum job = Spectrum.LargestMagnitude)
         {
-            throw new NotImplementedException();
+            return SolveGeneralized(k, sigma, ShiftMode.Regular, job);
+        }
+
+        /// <summary>
+        /// Solve the generalized eigenvalue problem in user-defined shift-invert mode.
+        /// </summary>
+        public IEigenSolverResult SolveGeneralized(int k, double sigma, ShiftMode mode, Spectrum job = Spectrum.LargestMagnitude)
+        {
+            if (!symmetric && !(mode == ShiftMode.None || mode == ShiftMode.Regular))
+            {
+                throw new InvalidOperationException("This mode is only available for symmetric eigenvalue problems.");
+            }
+
+            if (!Job.Validate(symmetric, job))
+            {
+                throw new ArgumentException("Invalid job for symmetric eigenvalue problem.", "job");
+            }
+
+            var result = new SpectraResult(k, size, ComputeEigenVectors, symmetric);
+
+            var handles = new List<GCHandle>();
+
+            var a = GetMatrix(A, handles);
+            var b = GetMatrix(B, handles);
+            var e = result.GetEigenvalueStorage(handles);
+
+            int conv = 0;
+
+            if (symmetric)
+            {
+                char m = 'S';
+
+                if (mode == ShiftMode.Buckling)
+                {
+                    m = 'B';
+                }
+                else if (mode == ShiftMode.Cayley)
+                {
+                    m = 'C';
+                }
+
+                conv = NativeMethods.spectra_di_sg_shift(GetJob(job), m, k, ArnoldiCount, Iterations,
+                    Tolerance, sigma, ref a, ref b, ref e);
+            }
+            else
+            {
+                throw new NotImplementedException("Shift-invert mode only available for symmetric problems.");
+            }
+
+            result.IterationsTaken = e.iterations;
+            result.ConvergedEigenValues = conv;
+            result.ErrorCode = e.info;
+
+            InteropHelper.Free(handles);
+
+            return result;
         }
 
         #endregion

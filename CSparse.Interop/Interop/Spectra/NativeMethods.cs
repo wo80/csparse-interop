@@ -89,6 +89,11 @@
         public static extern int spectra_di_sg(int which, int k, int ncv, int maxit, double tol,
             ref spectra_spmat A, ref spectra_spmat B, ref spectra_result eigs);
 
+        [DllImport(SPECTRA_DLL, EntryPoint = "spectra_di_sg_shift", CallingConvention = CallingConvention.Cdecl)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern int spectra_di_sg_shift(int which, char mode, int k, int ncv, int maxit, double tol, double sigma,
+            ref spectra_spmat A, ref spectra_spmat B, ref spectra_result eigs);
+
         #endregion
 
         #region Complex32
@@ -96,7 +101,7 @@
         #endregion
 
         #region Complex
-		
+
         #endregion
     }
 }
