@@ -12,7 +12,7 @@ This project contains bindings for some popular solvers of sparse linear systems
 | SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | - | OK |
 | PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2020.1 | - | OK |
 | FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2020.1 | - | OK |
-| Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2020.0 | - | OK |
+| Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2020.1 | - | OK |
 | ARPACK  | Eigenvalues   | [arpack-ng](https://github.com/opencollab/arpack-ng) | 3.7.0 | - | OK |
 | Spectra  | Eigenvalues   | [Spectra](https://github.com/yixuan/spectra) | 1.y.z | - | OK |
 | CUDA QR       | Direct solver | [CUSOLVER](https://developer.nvidia.com/cusolver) | 9.2 | - | Buggy |
@@ -25,6 +25,7 @@ View [test results](https://github.com/wo80/csparse-interop/wiki/Test-Results) i
 * [vs-suitesparse](https://github.com/wo80/vs-suitesparse/) - Visual Studio solution to build SuiteSparse.
 * [vs-superlu](https://github.com/wo80/vs-superlu/) - Visual Studio solution to build SuperLU.
 * [vs-arpack](https://github.com/wo80/vs-arpack/) - Visual Studio solution to build ARPACK.
+* [vs-spectra](https://github.com/wo80/vs-spectra/) - Visual Studio solution to build Spectra.
 
 Pre-compiled binaries for windows users can be found [here](http://wo80.bplaced.net/math/packages.html).
 
