@@ -67,7 +67,7 @@ namespace CSparse.Double.Tests
             var evals = result.EigenValuesReal();
             var evecs = result.EigenVectorsReal();
 
-            return Helper.CheckResiduals(A, result.ConvergedEigenvalues, evals, evecs, print);
+            return Helper.CheckResiduals(A, result.ConvergedEigenValues, evals, evecs, print);
         }
     }
 }

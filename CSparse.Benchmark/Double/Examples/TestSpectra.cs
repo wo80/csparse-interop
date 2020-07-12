@@ -6,8 +6,6 @@
     using CSparse.Solvers;
     using System;
 
-    using ShiftMode = CSparse.Interop.ARPACK.ShiftMode;
-
     using CVector = CSparse.Complex.Vector;
     using Complex = System.Numerics.Complex;
 
@@ -19,7 +17,7 @@
         public static void Run()
         {
             Symmetric();
-            //General();
+            General();
         }
 
         public static void Symmetric()
@@ -36,9 +34,9 @@
         {
             LNSymReg();
             LNSymShf();
-            LNSymGRe();
-            LNSymGSh();
-            LNSymGSC();
+            //LNSymGRe();
+            //LNSymGSh();
+            //LNSymGSC();
         }
 
         #region Symmetric

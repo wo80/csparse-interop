@@ -33,6 +33,9 @@ namespace CSparse.Interop.MKL
 
         protected readonly int[] pm;
 
+        // TODO: implement MKL extended eigensolver symmetric mode.
+        protected bool symmetric;
+
         #region Options
 
         // See https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-input-parameters-for-extremal-eigenvalue-problem
@@ -88,7 +91,7 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// Gets or sets a value indicating whether eigenvectors should be computed (Krylov-Schur only).
         /// </summary>
-        public bool ComputeEigenvectors
+        public bool ComputeEigenVectors
         {
             get { return pm[6] == 1; }
             set { pm[6] = value ? 1 : 0; }
@@ -117,7 +120,7 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// Initialize the standard eigenvalue problem.
         /// </summary>
-        protected ExtendedEigensolverContext(CompressedColumnStorage<T> A)
+        protected ExtendedEigensolverContext(CompressedColumnStorage<T> A, bool symmetric)
         {
             if (A.RowCount != A.ColumnCount)
             {
@@ -134,8 +137,8 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// Initialize the generalized eigenvalue problem.
         /// </summary>
-        protected ExtendedEigensolverContext(CompressedColumnStorage<T> A, CompressedColumnStorage<T> B)
-            : this(A)
+        protected ExtendedEigensolverContext(CompressedColumnStorage<T> A, CompressedColumnStorage<T> B, bool symmetric)
+            : this(A, symmetric)
         {
             if (B.RowCount != B.ColumnCount)
             {
@@ -168,7 +171,7 @@ namespace CSparse.Interop.MKL
         /// </summary>
         /// <param name="k0">The initial guess for subspace dimension.</param>
         /// <param name="job"></param>
-        /// <param name="subspace">The subspace containing the eigenvectors (can be used for an initial guess).</param>
+        /// <param name="eigenvectors">The subspace containing the eigenvectors (can be used for an initial guess).</param>
         /// <returns></returns>
         public abstract ExtendedEigensolverResult<T> SolveStandard(int k0, Job job, DenseColumnMajorStorage<T> eigenvectors);
 
@@ -185,7 +188,7 @@ namespace CSparse.Interop.MKL
         /// </summary>
         /// <param name="k0">The initial guess for subspace dimension.</param>
         /// <param name="job"></param>
-        /// <param name="subspace">The subspace containing the eigenvectors (can be used for an initial guess).</param>
+        /// <param name="eigenvectors">The subspace containing the eigenvectors (can be used for an initial guess).</param>
         /// <returns></returns>
         public abstract ExtendedEigensolverResult<T> SolveGeneralized(int k0, Job job, DenseColumnMajorStorage<T> eigenvectors);
 

@@ -8,8 +8,6 @@ namespace CSparse.Double.Solver
     using System;
     using CSparse.Solvers;
 
-    using ShiftMode = CSparse.Interop.ARPACK.ShiftMode;
-
     public sealed class Spectra : SpectraContext<double>
     {
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿
 namespace CSparse.Interop.MKL
 {
-    using CSparse.Storage;
+    using CSparse.Solvers;
     using System;
     using System.Numerics;
 
-    public abstract class ExtendedEigensolverResult<T>
+    public abstract class ExtendedEigensolverResult<T> : IEigenSolverResult
         where T : struct, IEquatable<T>, IFormattable
     {
         protected int size;
@@ -13,7 +13,7 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedEigensolverResult{T}"/> class.
         /// </summary>
-        /// <param name="info">The status returned by Intel's extended eigensolver.</param>
+        /// <param name="info">The status returned by MKL extended eigensolver.</param>
         /// <param name="size">The matrix size.</param>
         /// <param name="k">The number of eigenvalues found (k &lt; k0).</param>
         /// <param name="e">Array of length k0. The first k entries of e are eigenvalues found in the interval.</param>
@@ -26,19 +26,26 @@ namespace CSparse.Interop.MKL
 
             Status = info;
 
-            ConvergedEigenvalues = k;
+            ConvergedEigenValues = k;
             Residuals = r;
         }
 
+        public int Count => -1; // TODO: remove count property from interface
+
         /// <summary>
-        /// Gets the status code returned by FEAST.
+        /// Gets the status code returned by MKL extended eigensolver.
         /// </summary>
         public SparseStatus Status { get; protected set; }
+
+        /// <summary>
+        /// Gets the integer status code returned by MKL extended eigensolver.
+        /// </summary>
+        public int ErrorCode => (int)Status;
         
         /// <summary>
         /// Gets the number of converged eigenvalues.
         /// </summary>
-        public int ConvergedEigenvalues { get; protected set; }
+        public int ConvergedEigenValues { get; protected set; }
 
         /// <summary>
         /// Gets the dense matrix of eigenvectors stored in column major order.
@@ -54,6 +61,27 @@ namespace CSparse.Interop.MKL
         /// Gets the residuals vector.
         /// </summary>
         public double[] Residuals { get; protected set; }
+
+        /// <summary>
+        /// Gets the number of iteration taken (not supported).
+        /// </summary>
+        public int IterationsTaken => -1;
+
+        /// <summary>
+        /// Gets the number of Arnoldi vectors computed (not supported).
+        /// </summary>
+        public int ArnoldiCount => -1;
+
+        /// <summary>
+        /// Throws an <see cref="Exception"/>, if MKL extended eigensolver failed to solve the problem.
+        /// </summary>
+        public void EnsureSuccess()
+        {
+            if (Status != SparseStatus.Success)
+            {
+                throw new Exception();
+            }
+        }
 
         /// <summary>
         /// Gets the real part of the eigenvalues.
