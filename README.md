@@ -6,9 +6,11 @@ This project contains bindings for some popular solvers of sparse linear systems
 
 | Name      | Type |          | Version | Test (x86)  | Test (x64) |
 |----------:|-----:|---------:|:-------:|:-----------:|:----------:|
-| CHOLMOD | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
-| UMFPACK | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
-| SPQR    | Direct solver | [SuiteSparse](http://faculty.cse.tamu.edu/davis/suitesparse.html) | 5.7.2 | - | OK |
+| AMD     | Ordering      | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
+| CHOLMOD | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
+| UMFPACK | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
+| SPQR    | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
+| Metis   | Graph partitioning | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | - | OK |
 | PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2020.1 | - | OK |
 | FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2020.1 | - | OK |
