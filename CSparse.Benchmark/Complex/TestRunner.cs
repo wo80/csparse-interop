@@ -18,6 +18,10 @@ namespace CSparse.Complex
             new TestSparseLU().Run(A, B);
             new TestSparseQR().Run(A, B);
 
+            new TestCXSparseCholesky().Run(A, B);
+            new TestCXSparseLU().Run(A, B);
+            new TestCXSparseQR().Run(A, B);
+
             new TestUmfpack().Run(A, B);
             new TestCholmod().Run(A, B);
             new TestSPQR().Run(A, B);
