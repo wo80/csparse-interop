@@ -8,6 +8,7 @@ This project contains bindings for some popular solvers of sparse linear systems
 |----------:|-----:|---------:|:-------:|:-----------:|:----------:|
 | AMD     | Ordering      | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | CHOLMOD | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
+| CXSparse | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | UMFPACK | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | SPQR    | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | Metis   | Graph partitioning | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
