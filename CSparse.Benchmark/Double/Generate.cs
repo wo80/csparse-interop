@@ -50,7 +50,7 @@ namespace CSparse.Double
                 }
             }
 
-            return Converter.ToCompressedColumnStorage(C) as SparseMatrix;
+            return SparseMatrix.OfIndexed(C) as SparseMatrix;
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace CSparse.Double
                 C.At(i, i, value);
             }
 
-            var A = Converter.ToCompressedColumnStorage(C);
+            var A = SparseMatrix.OfIndexed(C);
 
             return (SparseMatrix)A.Add(A.Transpose());
         }
@@ -160,7 +160,7 @@ namespace CSparse.Double
 
                 A.At(0, 0, 2.0);
 
-                return Converter.ToCompressedColumnStorage(A);
+                return SparseMatrix.OfIndexed(A);
             }
 
             var C = new CoordinateStorage<double>(nx, nx, 3 * nx);
@@ -204,7 +204,7 @@ namespace CSparse.Double
                 }
             }
 
-            return Converter.ToCompressedColumnStorage(C);
+            return SparseMatrix.OfIndexed(C);
         }
 
         /// <summary>

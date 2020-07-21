@@ -115,8 +115,6 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 return null;
             }
 
-            p[n] = -1;
-
             return p;
         }
 
@@ -145,8 +143,6 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 // error
                 return null;
             }
-
-            p[n] = -1;
 
             return p;
         }
@@ -212,7 +208,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         {
             var info = new Info();
 
-            NativeMethods.symamd_c(n, A, p, perm, knobs, info.data);
+            NativeMethods.symamd_C(n, A, p, perm, knobs, info.data);
 
             return info;
         }
@@ -221,7 +217,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         {
             var info = new Info();
 
-            NativeMethods.csymamd_c(n, A, p, perm, knobs, info.data, cmember, stype);
+            NativeMethods.csymamd_C(n, A, p, perm, knobs, info.data, cmember, stype);
 
             return info;
         }
@@ -307,8 +303,8 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="knobs">Parameter settings for SYMAMD.</param>
             /// <param name="stats">SYMAMD output statistics and error codes.</param>
             /// <returns>Returns 1 if successful, 0 otherwise.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "symamd_c", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int symamd_c(
+            [DllImport(AMD_DLL, EntryPoint = "symamd_C", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int symamd_C(
                 int n,
                 [In, Out] int[] A,
                 [In, Out] int[] p,
@@ -399,8 +395,8 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="cmember">Constraint set of A, of size n_col</param>
             /// <param name="stype">0: use both parts, &gt;0: upper, &lt;0: lower</param>
             /// <returns>Returns 1 if successful, 0 otherwise.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "csymamd_c", CallingConvention = CallingConvention.Cdecl)]
-            public static extern int csymamd_c(
+            [DllImport(AMD_DLL, EntryPoint = "csymamd_C", CallingConvention = CallingConvention.Cdecl)]
+            public static extern int csymamd_C(
                 int n,
                 [In, Out] int[] A,
                 [In, Out] int[] p,

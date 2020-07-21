@@ -46,15 +46,13 @@
 
             var amd = new SYMAMD();
 
-            var info = amd.Order(n, A.ColumnPointers, A.RowIndices, p);
+            var info = amd.Order(n, A.RowIndices, A.ColumnPointers, p);
 
             if (info.Status < COLAMD.COLAMD_OK)
             {
                 // error
                 return null;
             }
-
-            p[n] = -1;
 
             return p;
         }
@@ -80,15 +78,13 @@
 
             var amd = new SYMAMD();
 
-            var info = amd.Order(n, A.ColumnPointers, A.RowIndices, p, constraints, stype);
+            var info = amd.Order(n, A.RowIndices, A.ColumnPointers, p, constraints, stype);
 
             if (info.Status < COLAMD.COLAMD_OK)
             {
                 // error
                 return null;
             }
-
-            p[n] = -1;
 
             return p;
         }
