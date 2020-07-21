@@ -12,6 +12,10 @@ namespace CSparse.Complex.Tests
         {
         }
 
+        protected override void TestRandomSymmetric(SparseMatrix matrix)
+        {
+        }
+
         protected override IDisposableSolver<Complex> CreateSolver(SparseMatrix matrix, bool symmetric)
         {
             return new DisposableSparseQR(matrix);

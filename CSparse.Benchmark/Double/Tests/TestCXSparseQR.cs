@@ -11,6 +11,10 @@ namespace CSparse.Double.Tests
         {
         }
 
+        protected override void TestRandomSymmetric(SparseMatrix matrix)
+        {
+        }
+
         protected override void TestRandomMulti(SparseMatrix matrix)
         {
         }

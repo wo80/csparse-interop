@@ -3,13 +3,16 @@ namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Factorization;
     using CSparse.Factorization;
-    using CSparse.Interop.SPQR;
     using System.Numerics;
 
     class TestSPQR : Test
     {
         public TestSPQR()
             : base("SPQR")
+        {
+        }
+
+        protected override void TestRandomSymmetric(SparseMatrix matrix)
         {
         }
 

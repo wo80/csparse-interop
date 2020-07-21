@@ -1,14 +1,18 @@
 ﻿
 namespace CSparse.Double.Tests
 {
+    using CSparse.Double;
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
-    using CSparse.Interop.SPQR;
 
     class TestSPQR : Test
     {
         public TestSPQR()
             : base("SPQR")
+        {
+        }
+
+        protected override void TestRandomSymmetric(SparseMatrix matrix)
         {
         }
 
