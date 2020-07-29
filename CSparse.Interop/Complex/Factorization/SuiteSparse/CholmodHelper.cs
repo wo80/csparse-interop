@@ -1,8 +1,8 @@
 ﻿
-namespace CSparse.Complex.Factorization
+namespace CSparse.Complex.Factorization.SuiteSparse
 {
-    using CSparse.Interop.Cholmod;
     using CSparse.Interop.Common;
+    using CSparse.Interop.SuiteSparse.Cholmod;
     using CSparse.Storage;
     using System;
     using System.Collections.Generic;

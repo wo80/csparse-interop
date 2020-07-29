@@ -1,9 +1,9 @@
 ﻿
 namespace CSparse.Complex.Tests
 {
-    using CSparse.Complex.Factorization;
+    using CSparse.Complex.Factorization.MKL;
     using CSparse.Factorization;
-    using CSparse.Interop.Pardiso;
+    using CSparse.Interop.MKL.Pardiso;
     using System.Numerics;
 
     class TestPardiso : Test

@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.Pardiso
+namespace CSparse.Interop.MKL.Pardiso
 {
     using CSparse.Factorization;
     using CSparse.Interop.Common;

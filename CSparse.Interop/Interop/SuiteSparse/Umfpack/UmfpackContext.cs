@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.Umfpack
+﻿namespace CSparse.Interop.SuiteSparse.Umfpack
 {
     using CSparse.Factorization;
     using CSparse.Storage;

@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Complex.Factorization
+namespace CSparse.Complex.Factorization.SuiteSparse
 {
-    using CSparse.Interop.Umfpack;
+    using CSparse.Interop.SuiteSparse.Umfpack;
     using System;
     using System.Numerics;
     using System.Runtime.InteropServices;

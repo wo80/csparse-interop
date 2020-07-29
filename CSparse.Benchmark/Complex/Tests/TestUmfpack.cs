@@ -1,9 +1,9 @@
 ﻿
 namespace CSparse.Complex.Tests
 {
-    using CSparse.Complex.Factorization;
+    using CSparse.Complex.Factorization.SuiteSparse;
     using CSparse.Factorization;
-    using CSparse.Interop.Umfpack;
+    using CSparse.Interop.SuiteSparse.Umfpack;
     using System.Numerics;
 
     class TestUmfpack : Test

@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.Pardiso
+namespace CSparse.Interop.MKL.Pardiso
 {
     using System;
     using System.Runtime.InteropServices;

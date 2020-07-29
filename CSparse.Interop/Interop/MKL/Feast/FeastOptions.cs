@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Interop.Feast
+namespace CSparse.Interop.MKL.Feast
 {
-    using CSparse.Interop.Pardiso;
+    using CSparse.Interop.MKL.Pardiso;
     using System;
 
     public enum FeastMode

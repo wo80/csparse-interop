@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.SPQR
+﻿namespace CSparse.Interop.SuiteSparse.SPQR
 {
     internal static class Constants
     {

@@ -1,8 +1,8 @@
 ﻿
 namespace CSparse.Double.Tests
 {
-    using CSparse.Double.Solver;
-    using CSparse.Interop.Feast;
+    using CSparse.Double.Solver.MKL;
+    using CSparse.Interop.MKL.Feast;
     using System;
     using System.Diagnostics;
 

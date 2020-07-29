@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Complex.Factorization
+namespace CSparse.Complex.Factorization.MKL
 {
-    using CSparse.Interop.Pardiso;
+    using CSparse.Interop.MKL.Pardiso;
     using System;
     using System.Numerics;
 

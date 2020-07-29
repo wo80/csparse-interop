@@ -3,6 +3,7 @@ namespace CSparse.Double.Solver
 {
     using CSparse.Interop.Common;
     using CSparse.Interop.MKL;
+    using CSparse.Interop.MKL.ExtendedEigensolver;
     using CSparse.Storage;
     using System;
     using System.Collections.Generic;

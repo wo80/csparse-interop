@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.Umfpack
+namespace CSparse.Interop.SuiteSparse.Umfpack
 {
     /// <summary>
     /// Umfpack solve codes.

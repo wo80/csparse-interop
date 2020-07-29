@@ -2,6 +2,7 @@
 namespace CSparse.Double.Tests
 {
     using CSparse.Double.Solver;
+    using CSparse.Interop.MKL.ExtendedEigensolver;
     using System;
     using System.Diagnostics;
 
@@ -39,7 +40,7 @@ namespace CSparse.Double.Tests
 
             var timer = Stopwatch.StartNew();
             
-            var result = (ExtendedEigensolverResult)solver.SolveStandard(m, Interop.MKL.Job.Largest);
+            var result = (ExtendedEigensolverResult)solver.SolveStandard(m, Job.Largest);
 
             timer.Stop();
 

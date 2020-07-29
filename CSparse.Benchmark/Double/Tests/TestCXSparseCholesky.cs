@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Double.Tests
 {
-    using CSparse.Double.Factorization;
+    using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
 
     class TestCXSparseCholesky : Test

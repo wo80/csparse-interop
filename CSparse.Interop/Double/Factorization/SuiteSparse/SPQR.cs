@@ -1,8 +1,8 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Double.Factorization.SuiteSparse
 {
-    using CSparse.Interop.Cholmod;
-    using CSparse.Interop.SPQR;
+    using CSparse.Interop.SuiteSparse.Cholmod;
+    using CSparse.Interop.SuiteSparse.SPQR;
     using CSparse.Storage;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;

@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.MKL
+namespace CSparse.Interop.MKL.ExtendedEigensolver
 {
     using CSparse.Solvers;
     using System;

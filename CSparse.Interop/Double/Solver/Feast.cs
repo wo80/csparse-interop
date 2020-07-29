@@ -1,8 +1,8 @@
 ﻿
-namespace CSparse.Double.Solver
+namespace CSparse.Double.Solver.MKL
 {
     using CSparse.Interop.Common;
-    using CSparse.Interop.Feast;
+    using CSparse.Interop.MKL.Feast;
     using CSparse.Storage;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;

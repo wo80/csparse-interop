@@ -2,6 +2,7 @@
 namespace CSparse.Double.Solver
 {
     using CSparse.Interop.MKL;
+    using CSparse.Interop.MKL.ExtendedEigensolver;
     using CSparse.Storage;
 
     public class ExtendedEigensolverResult : ExtendedEigensolverResult<double>

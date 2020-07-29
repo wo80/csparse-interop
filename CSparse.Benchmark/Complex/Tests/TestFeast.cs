@@ -2,7 +2,7 @@
 namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Solver;
-    using CSparse.Interop.Feast;
+    using CSparse.Interop.MKL.Feast;
     using System;
     using System.Diagnostics;
 

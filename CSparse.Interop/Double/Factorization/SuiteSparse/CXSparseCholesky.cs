@@ -1,8 +1,8 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Double.Factorization.SuiteSparse
 {
     using CSparse.Interop.Common;
-    using CSparse.Interop.CXSparse;
+    using CSparse.Interop.SuiteSparse.CXSparse;
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;

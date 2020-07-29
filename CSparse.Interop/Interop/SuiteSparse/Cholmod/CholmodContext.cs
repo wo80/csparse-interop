@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.Cholmod
+﻿namespace CSparse.Interop.SuiteSparse.Cholmod
 {
     using CSparse.Factorization;
     using CSparse.Interop.Common;

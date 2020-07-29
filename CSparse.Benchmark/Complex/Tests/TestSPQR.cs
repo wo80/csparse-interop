@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Complex.Tests
 {
-    using CSparse.Complex.Factorization;
+    using CSparse.Complex.Factorization.SuiteSparse;
     using CSparse.Factorization;
     using System.Numerics;
 

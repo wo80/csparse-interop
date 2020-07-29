@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.SPQR
+namespace CSparse.Interop.SuiteSparse.SPQR
 {
     /// <summary>
     /// Ordering method to use.

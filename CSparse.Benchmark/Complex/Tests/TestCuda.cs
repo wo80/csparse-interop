@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Complex.Tests
 {
-    using CSparse.Complex.Factorization;
+    using CSparse.Complex.Factorization.CUDA;
     using CSparse.Factorization;
     using CSparse.Interop.CUDA;
     using System;

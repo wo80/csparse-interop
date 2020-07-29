@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Double.Solver
 {
-    using CSparse.Interop.Feast;
+    using CSparse.Interop.MKL.Feast;
     using CSparse.Storage;
 
     public class FeastResult : FeastResult<double>

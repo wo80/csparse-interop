@@ -1,8 +1,8 @@
 ﻿
-namespace CSparse.Interop.SPQR
+namespace CSparse.Interop.SuiteSparse.SPQR
 {
     using CSparse.Factorization;
-    using CSparse.Interop.Cholmod;
+    using CSparse.Interop.SuiteSparse.Cholmod;
     using CSparse.Interop.Common;
     using CSparse.Storage;
     using System;

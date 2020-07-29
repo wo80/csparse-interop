@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Double.Factorization.MKL
 {
-    using CSparse.Interop.Pardiso;
+    using CSparse.Interop.MKL.Pardiso;
     using System;
 
     /// <summary>

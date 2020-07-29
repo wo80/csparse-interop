@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.CXSparse
+﻿namespace CSparse.Interop.SuiteSparse.CXSparse
 {
     using System;
     using System.Runtime.InteropServices;

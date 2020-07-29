@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.Pardiso
+namespace CSparse.Interop.MKL.Pardiso
 {
     internal class Constants
     {

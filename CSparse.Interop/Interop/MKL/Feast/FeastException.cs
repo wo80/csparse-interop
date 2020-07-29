@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.Feast
+namespace CSparse.Interop.MKL.Feast
 {
     using System;
 

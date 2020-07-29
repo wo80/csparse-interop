@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Double.Tests
 {
-    using CSparse.Double.Factorization;
+    using CSparse.Double.Factorization.CUDA;
     using CSparse.Factorization;
     using CSparse.Interop.CUDA;
     using System;

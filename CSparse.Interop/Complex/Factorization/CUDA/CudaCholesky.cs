@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Complex.Factorization
+namespace CSparse.Complex.Factorization.CUDA
 {
     using CSparse.Interop.CUDA;
     using CSparse.Storage;

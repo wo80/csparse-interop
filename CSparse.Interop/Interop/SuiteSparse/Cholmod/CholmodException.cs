@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.Cholmod
+﻿namespace CSparse.Interop.SuiteSparse.Cholmod
 {
     using System;
 

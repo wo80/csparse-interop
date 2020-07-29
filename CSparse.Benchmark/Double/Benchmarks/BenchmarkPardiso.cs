@@ -2,9 +2,9 @@
 namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
-    using CSparse.Double.Factorization;
+    using CSparse.Double.Factorization.MKL;
     using CSparse.Factorization;
-    using CSparse.Interop.Pardiso;
+    using CSparse.Interop.MKL.Pardiso;
     using CSparse.Storage;
 
     class BenchmarkPardiso : Benchmark<double>

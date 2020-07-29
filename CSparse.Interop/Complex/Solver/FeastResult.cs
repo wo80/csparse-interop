@@ -1,7 +1,7 @@
 ﻿
 namespace CSparse.Complex.Solver
 {
-    using CSparse.Interop.Feast;
+    using CSparse.Interop.MKL.Feast;
     using CSparse.Storage;
     using System.Numerics;
 

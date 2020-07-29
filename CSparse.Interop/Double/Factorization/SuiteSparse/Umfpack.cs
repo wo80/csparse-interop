@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Double.Factorization.SuiteSparse
 {
-    using CSparse.Interop.Umfpack;
+    using CSparse.Interop.SuiteSparse.Umfpack;
     using System;
 
     /// <summary>

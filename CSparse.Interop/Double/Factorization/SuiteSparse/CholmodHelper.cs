@@ -1,7 +1,7 @@
 ﻿
-namespace CSparse.Double.Factorization
+namespace CSparse.Double.Factorization.SuiteSparse
 {
-    using CSparse.Interop.Cholmod;
+    using CSparse.Interop.SuiteSparse.Cholmod;
     using CSparse.Interop.Common;
     using CSparse.Storage;
     using System;

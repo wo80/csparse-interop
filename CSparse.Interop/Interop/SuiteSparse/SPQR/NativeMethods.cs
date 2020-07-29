@@ -1,9 +1,9 @@
 
-namespace CSparse.Interop.SPQR
+namespace CSparse.Interop.SuiteSparse.SPQR
 {
     using System;
     using System.Runtime.InteropServices;
-    using CSparse.Interop.Cholmod;
+    using CSparse.Interop.SuiteSparse.Cholmod;
 
 #if X64
     using size_t = System.UInt64;

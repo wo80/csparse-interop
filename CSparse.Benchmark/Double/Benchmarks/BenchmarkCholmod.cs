@@ -2,7 +2,7 @@
 namespace CSparse.Double.Benchmarks
 {
     using CSparse.Benchmark;
-    using CSparse.Double.Factorization;
+    using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
     using CSparse.Storage;
     using System;
