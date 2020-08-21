@@ -12,7 +12,7 @@ This project contains bindings for some popular solvers of sparse linear systems
 | UMFPACK | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | SPQR    | Direct solver | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
 | Metis   | Graph partitioning | [SuiteSparse](https://github.com/DrTimothyAldenDavis/SuiteSparse) | 5.7.2 | - | OK |
-| SuperLU | Direct solver | [SuperLU](http://crd-legacy.lbl.gov/~xiaoye/SuperLU/) | 5.2.1 | - | OK |
+| SuperLU | Direct solver | [SuperLU](https://github.com/xiaoyeli/superlu) | 5.2.1 | - | OK |
 | PARDISO | Direct solver | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface) | 2020.1 | - | OK |
 | FEAST   | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-the-feast-algorithm) | 2020.1 | - | OK |
 | Extended Eigensolver | Eigenvalues   | [MKL](https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-interfaces-for-extremal-eigenvalues/singular-values) | 2020.1 | - | OK |
