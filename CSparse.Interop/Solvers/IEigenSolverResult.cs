@@ -19,7 +19,7 @@ namespace CSparse.Solvers
         int ConvergedEigenValues { get; }
 
         /// <summary>
-        /// Gets the number of iteration taken.
+        /// Gets the number of iterations taken.
         /// </summary>
         int IterationsTaken { get; }
 
