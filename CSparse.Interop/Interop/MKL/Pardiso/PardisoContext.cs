@@ -57,14 +57,15 @@ namespace CSparse.Interop.MKL.Pardiso
             this.mtype = mtype;
 
             pt = new IntPtr[64];
-            options = new PardisoOptions();
 
             // User supplied permutation - not used.
             perm = null;
 
-            options.SetDefault();
-
+            options = new PardisoOptions();
+            
             DoInitialize();
+
+            options.SetDefault();
         }
         
         ~PardisoContext()

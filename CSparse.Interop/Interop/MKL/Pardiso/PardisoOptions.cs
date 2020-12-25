@@ -215,6 +215,7 @@ namespace CSparse.Interop.MKL.Pardiso
         /// </summary>
         public PardisoOptions()
         {
+            iparm = new int[ARRAY_SIZE];
         }
 
         /// <summary>
@@ -222,8 +223,6 @@ namespace CSparse.Interop.MKL.Pardiso
         /// </summary>
         public void SetDefault()
         {
-            iparm = new int[ARRAY_SIZE];
-
             iparm[0] = 1; // No solver default.
             iparm[1] = 0; // Fill-in reordering from METIS.
             iparm[3] = 0; // No iterative-direct algorithm.
