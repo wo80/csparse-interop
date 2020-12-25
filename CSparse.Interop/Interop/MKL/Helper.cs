@@ -6,17 +6,23 @@ namespace CSparse.Interop.MKL
 
     public static class Helper
     {
+        /// <summary>
+        /// Gets the MKL version.
+        /// </summary>
         public static Version GetVersion()
         {
             MKLVersion version = default(MKLVersion);
 
-            // Does this leak memory (char* pointers in MKLVersion struct)?
+            // NOTE: leaks memory (char* pointers in MKLVersion struct).
 
             NativeMethods.mkl_get_version(ref version);
 
             return new Version(version.MajorVersion, version.MinorVersion, version.BuildNumber);
         }
 
+        /// <summary>
+        /// Gets the MKL version string.
+        /// </summary>
         public static string GetVersionString()
         {
             var buffer = new StringBuilder(200);
@@ -26,11 +32,18 @@ namespace CSparse.Interop.MKL
             return buffer.ToString().TrimEnd();
         }
 
+        /// <summary>
+        /// Sets the number of threads to use.
+        /// </summary>
+        /// <param name="nt">The number of threads.</param>
         public static void SetNumThreads(int nt)
         {
             NativeMethods.mkl_set_num_threads(nt);
         }
 
+        /// <summary>
+        /// Gets the number of threads targeted for parallelism.
+        /// </summary>
         public static int GetMaxThreads()
         {
             return NativeMethods.mkl_get_max_threads();
