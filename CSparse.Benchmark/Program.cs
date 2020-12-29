@@ -29,6 +29,11 @@ namespace ConsoleApp
                 CSparse.Double.Tests.TestCuda.Run(size, density);
                 CSparse.Complex.Tests.TestCuda.Run(size, density);
             }
+            else if (args[0] == "--arpack")
+            {
+                CSparse.Double.Examples.TestArpack.Run();
+                CSparse.Complex.Examples.TestArpack.Run();
+            }
             else
             {
                 var c = GetCommandLine(args);
