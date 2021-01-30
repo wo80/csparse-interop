@@ -3,13 +3,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>benchmark</AssemblyName>
     <RootNamespace>CSparse</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSparse" Version="3.4.9" />
+    <PackageReference Include="CSparse" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>
