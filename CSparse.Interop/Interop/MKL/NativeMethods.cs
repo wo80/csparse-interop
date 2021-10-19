@@ -9,7 +9,7 @@ namespace CSparse.Interop.MKL
 {
     internal static class NativeMethods
     {
-        const string MKL_DLL = "mkl_rt";
+        const string MKL_DLL = "mkl_rt.1";
 
         #region Info
 
