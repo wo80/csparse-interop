@@ -19,7 +19,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
         SuiteSparse_long[] rowIndices;
 
         /// <summary>
-        /// Initializes a new instance of the Umfpack class.
+        /// Initializes a new instance of the Umfpack_Long class.
         /// </summary>
         public Umfpack_Long(SparseMatrix matrix)
             : base(matrix)
@@ -82,7 +82,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
         /// <inheritdoc/>
         protected override int DoSolve(UmfpackSolve sys, double[] input, double[] result)
         {
-            return (int)NativeMethods.umfpack_dl_solve((int)sys, columnPointers, rowIndices, matrix.Values,
+            return (int)NativeMethods.umfpack_dl_solve((SuiteSparse_long)sys, columnPointers, rowIndices, matrix.Values,
                 result, input, numeric, control.Raw, info.Raw);
         }
 

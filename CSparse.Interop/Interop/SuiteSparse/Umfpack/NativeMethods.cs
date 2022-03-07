@@ -430,21 +430,21 @@
 
         #region Double / SuiteSparse_long
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_defaults", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_dl_defaults
         (
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control
         );
 
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_free_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_dl_free_numeric(ref IntPtr Numeric);
 
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern void umfpack_dl_free_symbolic(ref IntPtr Symbolic);
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_numeric", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long umfpack_dl_numeric
         (
             SuiteSparse_long[] Ap,
@@ -457,7 +457,7 @@
         );
 
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_solve", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long umfpack_dl_solve
         (
             SuiteSparse_long sys,
@@ -472,7 +472,7 @@
         );
 
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_symbolic", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long umfpack_dl_symbolic
         (
             SuiteSparse_long n_row,
@@ -486,7 +486,7 @@
         );
 
 
-        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_di_col_to_triplet", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_wsolve", CallingConvention = CallingConvention.Cdecl)]
         public static extern SuiteSparse_long umfpack_dl_wsolve
         (
             SuiteSparse_long sys,
