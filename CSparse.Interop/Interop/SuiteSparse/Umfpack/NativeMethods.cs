@@ -3,6 +3,12 @@
     using System;
     using System.Runtime.InteropServices;
 
+#if X64
+    using SuiteSparse_long = System.Int64;
+#else
+    using SuiteSparse_long = System.Int32;
+#endif
+
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
@@ -421,6 +427,82 @@
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
             [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info,
             int[] Wi, double[] W
+        );
+
+        #endregion
+
+        #region Double / SuiteSparse_long
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_defaults", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void umfpack_dl_defaults
+        (
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control
+        );
+
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_free_numeric", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void umfpack_dl_free_numeric(ref IntPtr Numeric);
+
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_free_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void umfpack_dl_free_symbolic(ref IntPtr Symbolic);
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_numeric", CallingConvention = CallingConvention.Cdecl)]
+        public static extern SuiteSparse_long umfpack_dl_numeric
+        (
+            SuiteSparse_long[] Ap,
+            SuiteSparse_long[] Ai,
+            double[] Ax,
+            IntPtr Symbolic,
+            out IntPtr Numeric,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
+        );
+
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_solve", CallingConvention = CallingConvention.Cdecl)]
+        public static extern SuiteSparse_long umfpack_dl_solve
+        (
+            SuiteSparse_long sys,
+            SuiteSparse_long[] Ap,
+            SuiteSparse_long[] Ai,
+            double[] Ax,
+            double[] X,
+            double[] B,
+            IntPtr Numeric,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)]double[] Control,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
+        );
+
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_symbolic", CallingConvention = CallingConvention.Cdecl)]
+        public static extern SuiteSparse_long umfpack_dl_symbolic
+        (
+            SuiteSparse_long n_row,
+            SuiteSparse_long n_col,
+            SuiteSparse_long[] Ap,
+            SuiteSparse_long[] Ai,
+            double[] Ax,
+            out IntPtr Symbolic,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info
+        );
+
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_dl_wsolve", CallingConvention = CallingConvention.Cdecl)]
+        public static extern SuiteSparse_long umfpack_dl_wsolve
+        (
+            SuiteSparse_long sys,
+            SuiteSparse_long[] Ap,
+            SuiteSparse_long[] Ai,
+            double[] Ax,
+            double[] X,
+            double[] B,
+            IntPtr Numeric,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_CONTROL)] double[] Control,
+            [MarshalAs(UnmanagedType.LPArray, SizeConst = Constants.UMFPACK_INFO)] double[] Info,
+            SuiteSparse_long[] Wi,
+            double[] W
         );
 
         #endregion

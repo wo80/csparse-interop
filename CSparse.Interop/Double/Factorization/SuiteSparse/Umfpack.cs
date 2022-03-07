@@ -46,6 +46,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
             NativeMethods.umfpack_di_defaults(control.Raw);
         }
 
+        /// <inheritdoc/>
         protected override int DoSymbolic()
         {
             return NativeMethods.umfpack_di_symbolic(matrix.RowCount, matrix.ColumnCount,
@@ -53,12 +54,14 @@ namespace CSparse.Double.Factorization.SuiteSparse
                 out symbolic, control.Raw, info.Raw);
         }
 
+        /// <inheritdoc/>
         protected override int DoNumeric()
         {
             return NativeMethods.umfpack_di_numeric(matrix.ColumnPointers, matrix.RowIndices, matrix.Values,
                 symbolic, out numeric, control.Raw, info.Raw);
         }
 
+        /// <inheritdoc/>
         protected override int DoFactorize()
         {
             int status = NativeMethods.umfpack_di_symbolic(matrix.RowCount, matrix.ColumnCount,
@@ -74,23 +77,27 @@ namespace CSparse.Double.Factorization.SuiteSparse
                 symbolic, out numeric, control.Raw, info.Raw);
         }
 
+        /// <inheritdoc/>
         protected override int DoSolve(UmfpackSolve sys, double[] input, double[] result)
         {
             return NativeMethods.umfpack_di_solve((int)sys, matrix.ColumnPointers, matrix.RowIndices, matrix.Values,
                 result, input, numeric, control.Raw, info.Raw);
         }
 
+        /// <inheritdoc/>
         protected override int DoSolve(UmfpackSolve sys, double[] input, double[] result, int[] wi, double[] wx)
         {
             return NativeMethods.umfpack_di_wsolve((int)sys, matrix.ColumnPointers, matrix.RowIndices, matrix.Values,
                 result, input, numeric, control.Raw, info.Raw, wi, wx);
         }
 
+        /// <inheritdoc/>
         protected override double[] CreateWorkspace(int n, bool refine)
         {
             return new double[refine ? 5 * n : n];
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (symbolic != IntPtr.Zero)
