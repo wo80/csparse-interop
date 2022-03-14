@@ -26,5 +26,9 @@
   <ItemGroup>
     <PackageReference Include="CSparse" Version="3.6.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Double\Hypre\" />
+  </ItemGroup>
 
 </Project>
