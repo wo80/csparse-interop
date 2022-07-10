@@ -8,7 +8,7 @@ namespace CSparse.Interop.MKL.Feast
 
     internal static class NativeMethods
     {
-        const string DLL = "mkl_rt.1";
+        const string DLL = Helper.LibraryName;
 
         /// <summary>
         /// Initialize Extended Eigensolver input parameters with default values.

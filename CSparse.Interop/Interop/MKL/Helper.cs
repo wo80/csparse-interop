@@ -7,6 +7,11 @@ namespace CSparse.Interop.MKL
     public static class Helper
     {
         /// <summary>
+        /// The MKL library name used for p/invoke.
+        /// </summary>
+        public const string LibraryName = "mkl_rt.2";
+
+        /// <summary>
         /// Gets the MKL version.
         /// </summary>
         public static Version GetVersion()

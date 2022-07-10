@@ -8,7 +8,7 @@ namespace CSparse.Interop.MKL.Pardiso
 
     internal static class NativeMethods
     {
-        const string DLL = "mkl_rt.1";
+        const string DLL = Helper.LibraryName;
 
         [DllImport(DLL, EntryPoint = "pardisoinit", CallingConvention = CallingConvention.Cdecl)]
         public static extern void pardisoinit(IntPtr[] pt, /*const*/ ref int mtype, int[] iparm);

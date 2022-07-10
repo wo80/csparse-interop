@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace CSparse.Interop.MKL
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     internal static class NativeMethods
     {
-        const string MKL_DLL = "mkl_rt.1";
+        const string MKL_DLL = Helper.LibraryName;
 
         #region Info
 
