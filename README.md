@@ -28,7 +28,7 @@ View [test results](https://github.com/wo80/csparse-interop/wiki/Test-Results) i
 * [vs-arpack](https://github.com/wo80/vs-arpack/) - Visual Studio solution to build ARPACK.
 * [vs-spectra](https://github.com/wo80/vs-spectra/) - Visual Studio solution to build Spectra.
 
-Pre-compiled binaries for windows users can be found [here](http://wo80.bplaced.net/math/packages.html).
+Pre-compiled binaries for windows users can be found [here](http://wo80.bplaced.net/packages/#tag:math).
 
 ## Dependencies
 
