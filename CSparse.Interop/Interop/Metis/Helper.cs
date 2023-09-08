@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.SuiteSparse.Metis
+namespace CSparse.Interop.Metis
 {
     static class Helper
     {

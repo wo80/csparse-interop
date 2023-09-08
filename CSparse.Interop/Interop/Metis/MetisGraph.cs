@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.SuiteSparse.Metis
+namespace CSparse.Interop.Metis
 {
     using CSparse.Interop.Common;
     using System;

@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse.Interop.SuiteSparse.Metis
+namespace CSparse.Interop.Metis
 {
     using System;
     using System.Runtime.InteropServices;
@@ -26,11 +26,7 @@ namespace CSparse.Interop.SuiteSparse.Metis
 
     internal static class NativeMethods
     {
-#if SUITESPARSE_AIO
-        const string METIS_DLL = "libsuitesparse";
-#else
-        const string METIS_DLL = "libmetis";
-#endif
+        const string METIS_DLL = "metis";
 
         /// <summary>
         /// Partition a graph into k parts using multilevel recursive bisection partitioning.
