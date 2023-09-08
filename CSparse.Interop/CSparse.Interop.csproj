@@ -19,6 +19,10 @@
     <RootNamespace>CSparse</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Platform)' != 'x86'">
     <DefineConstants>X64</DefineConstants>
   </PropertyGroup>
