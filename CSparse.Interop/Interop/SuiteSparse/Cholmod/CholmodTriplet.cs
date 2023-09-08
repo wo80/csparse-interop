@@ -46,7 +46,7 @@
     /// cholmod_sparse form of A, which is what cholmod_triplet_to_sparse
     /// does.  Thus:
     /// 
-    /// 	C = cholmod_triplet_to_sparse (T, 0, &Common);
+    /// 	C = cholmod_triplet_to_sparse (T, 0, &amp;Common);
     /// 
     /// will return the matrix C = P*A*P'.
     /// 

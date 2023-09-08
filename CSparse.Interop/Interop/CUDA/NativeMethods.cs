@@ -52,6 +52,7 @@ namespace CSparse.Interop.CUDA
 
         /// <summary>
         /// Creates a stream and returns a handle in <c>phStream</c>. The <c>Flags</c> argument
+        /// </summary>
         [DllImport(CUDART_DLL)]
         public static extern CudaResult cudaStreamCreate(ref IntPtr phStream);
 

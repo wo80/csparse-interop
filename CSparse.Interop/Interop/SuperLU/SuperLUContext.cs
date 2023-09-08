@@ -204,7 +204,6 @@ namespace CSparse.Interop.SuperLU
         /// <summary>
         /// Solve system of linear equations.
         /// </summary>
-        /// <param name="sys">The system to solve.</param>
         /// <param name="input">Right-hand side b.</param>
         /// <param name="result">The solution x.</param>
         /// <returns></returns>

@@ -854,7 +854,7 @@
         }
 
         /// <summary>
-        /// for symbolic & numeric
+        /// for symbolic and numeric
         /// </summary>
         public double PEAK_MEMORY_ESTIMATE
         {
@@ -944,7 +944,7 @@
         }
 
         /// <summary>
-        /// for symbolic & numeric
+        /// for symbolic and numeric
         /// </summary>
         public double PEAK_MEMORY
         {

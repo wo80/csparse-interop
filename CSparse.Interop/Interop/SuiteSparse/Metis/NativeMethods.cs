@@ -31,7 +31,7 @@ namespace CSparse.Interop.SuiteSparse.Metis
 #else
         const string METIS_DLL = "libmetis";
 #endif
-        
+
         /// <summary>
         /// Partition a graph into k parts using multilevel recursive bisection partitioning.
         /// </summary>

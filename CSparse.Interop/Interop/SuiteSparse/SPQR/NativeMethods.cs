@@ -28,7 +28,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// SuiteSparseQR_C
         /// </summary>
         /// <param name="ordering">all, except 3:given treated as 0:fixed</param>
-        /// <param name="tol">columns with 2-norm <= tol treated as 0</param>
+        /// <param name="tol">columns with 2-norm &lt;= tol treated as 0</param>
         /// <param name="econ">e = max(min(m,econ),rank(A))</param>
         /// <param name="getCTX">0: Z=C (e-by-k), 1: Z=C', 2: Z=X (e-by-k)</param>
         /// <param name="A">m-by-n sparse matrix to factorize</param>
@@ -69,7 +69,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// [Q,R,E] = qr(A), returning Q as a sparse matrix
         /// </summary>
         /// <param name="ordering">all, except 3:given treated as 0:fixed</param>
-        /// <param name="tol">columns with 2-norm <= tol treated as 0</param>
+        /// <param name="tol">columns with 2-norm &lt;= tol treated as 0</param>
         /// <param name="econ">e = max(min(m,econ),rank(A))</param>
         /// <param name="A">m-by-n sparse matrix to factorize</param>
         /// <param name="Q">m-by-e sparse matrix</param>
@@ -96,7 +96,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// X = A\B where B is dense
         /// </summary>
         /// <param name="ordering">all, except 3:given treated as 0:fixed</param>
-        /// <param name="tol">columns with 2-norm <= tol treated as 0</param>
+        /// <param name="tol">columns with 2-norm &lt;= tol treated as 0</param>
         /// <param name="A">m-by-n sparse matrix</param>
         /// <param name="B">m-by-k</param>
         /// <param name="cc">workspace and parameters</param>
@@ -130,7 +130,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// X = A\B where B is sparse
         /// </summary>
         /// <param name="ordering">all, except 3:given treated as 0:fixed</param>
-        /// <param name="tol">columns with 2-norm <= tol treated as 0</param>
+        /// <param name="tol">columns with 2-norm &lt;= tol treated as 0</param>
         /// <param name="A">m-by-n sparse matrix</param>
         /// <param name="B">m-by-k</param>
         /// <param name="cc">workspace and parameters</param>
@@ -153,7 +153,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// such that A*P=Q*R. It always exploits singletons.
         /// </summary>
         /// <param name="ordering">all, except 3:given treated as 0:fixed</param>
-        /// <param name="tol">columns with 2-norm <= tol treated as 0</param>
+        /// <param name="tol">columns with 2-norm &lt;= tol treated as 0</param>
         /// <param name="A">m-by-n sparse matrix</param>
         /// <param name="cc">workspace and parameters</param>
         /// <returns>SuiteSparseQR_C_factorization</returns>
