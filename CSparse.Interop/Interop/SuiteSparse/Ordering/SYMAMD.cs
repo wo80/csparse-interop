@@ -1,4 +1,5 @@
-﻿namespace CSparse.Interop.SuiteSparse.Ordering
+﻿#if !LINUX
+namespace CSparse.Interop.SuiteSparse.Ordering
 {
     using CSparse.Storage;
     using System;
@@ -151,3 +152,4 @@
         }
     }
 }
+#endif

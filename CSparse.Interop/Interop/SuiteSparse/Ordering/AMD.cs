@@ -22,7 +22,7 @@
 
         #endregion
 
-        #region Publi properties (AMD options)
+        #region Public properties (AMD options)
 
         /// <summary>
         /// Gets or sets a value used to determine whether or not a given input row is "dense" (default = 10.0).
@@ -238,9 +238,14 @@
         static class NativeMethods
         {
 #if SUITESPARSE_AIO
-        const string AMD_DLL = "libsuitesparse";
+            const string AMD_DLL = "libsuitesparse";
+            const string CAMD_DLL = "libsuitesparse";
+#elif LINUX
+            const string AMD_DLL = "amd";
+            const string CAMD_DLL = "camd";
 #else
-            const string AMD_DLL = "libamd";
+            const string AMD_DLL = "amd";
+            const string CAMD_DLL = "amd";
 #endif
 
             #region AMD
@@ -255,7 +260,7 @@
             /// <param name="Control">input Control settings, of size AMD_CONTROL</param>
             /// <param name="Info">output Info statistics, of size AMD_INFO</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "amd_order", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(AMD_DLL)]
             public static extern int amd_order(
                 int n,
                 [In] int[] Ap,
@@ -270,7 +275,7 @@
             /// </summary>
             /// <param name="Control">Control array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "amd_defaults", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(AMD_DLL)]
             public static extern int amd_defaults(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_CONTROL)]
                 double[] Control
@@ -281,7 +286,7 @@
             /// </summary>
             /// <param name="Control">Control array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "amd_control", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(AMD_DLL)]
             public static extern int amd_control(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_CONTROL)]
                 double[] Control
@@ -292,7 +297,7 @@
             /// </summary>
             /// <param name="Info">Info array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "amd_info", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(AMD_DLL)]
             public static extern int amd_info(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_INFO)]
                 double[] Info
@@ -306,7 +311,7 @@
             /// <param name="Ap">column pointers of A, of size n_col+1 (const)</param>
             /// <param name="Ai">row indices of A, of size nz = Ap [n_col] (const)</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "amd_valid", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(AMD_DLL)]
             public static extern int amd_valid(
                 int n_row,
                 int n_col,
@@ -329,7 +334,7 @@
             /// <param name="Info">output Info statistics, of size AMD_INFO</param>
             /// <param name="C">Constraint set of A, of size n; can be NULL (const)</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_order", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_order(
                 int n,
                 [In] int[] Ap,
@@ -345,7 +350,7 @@
             /// </summary>
             /// <param name="Control">Control array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_defaults", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_defaults(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_CONTROL)]
                 double[] Control
@@ -356,7 +361,7 @@
             /// </summary>
             /// <param name="Control">Control array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_control", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_control(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_CONTROL)]
                 double[] Control
@@ -367,7 +372,7 @@
             /// </summary>
             /// <param name="Info">Info array</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_info", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_info(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = AMD_INFO)]
                 double[] Info
@@ -381,7 +386,7 @@
             /// <param name="Ap">column pointers of A, of size n_col+1 (const)</param>
             /// <param name="Ai">row indices of A, of size nz = Ap [n_col] (const)</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_valid", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_valid(
                 int n_row,
                 int n_col,
@@ -395,7 +400,7 @@
             /// <param name="n"></param>
             /// <param name="C">Constraint set of A, of size n; can be NULL (const)</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "camd_cvalid", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CAMD_DLL)]
             public static extern int camd_cvalid(
                 int n,
                 [In, Out] int[] C

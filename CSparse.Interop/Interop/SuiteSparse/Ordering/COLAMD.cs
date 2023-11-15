@@ -236,9 +236,14 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         internal static class NativeMethods
         {
 #if SUITESPARSE_AIO
-            const string AMD_DLL = "libsuitesparse";
+            const string COLAMD_DLL = "libsuitesparse";
+            const string CCOLAMD_DLL = "libsuitesparse";
+#elif LINUX
+            const string COLAMD_DLL = "colamd";
+            const string CCOLAMD_DLL = "ccolamd";
 #else
-            const string AMD_DLL = "libamd";
+            const string COLAMD_DLL = "amd";
+            const string CCOLAMD_DLL = "amd";
 #endif
 
             #region COLAMD
@@ -250,7 +255,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="n_row">Number of rows in A.</param>
             /// <param name="n_col">Number of columns in A.</param>
             /// <returns>Returns recommended value of alen, or 0 if input arguments are erroneous.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "colamd_recommended", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(COLAMD_DLL)]
             public static extern int colamd_recommended(int nnz, int n_row, int n_col);
 
             /// <summary>
@@ -258,7 +263,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// </summary>
             /// <param name="knobs">The knobs array.</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "colamd_set_defaults", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(COLAMD_DLL)]
             public static extern int colamd_set_defaults(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_KNOBS)] double[] knobs
             );
@@ -279,7 +284,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <remarks>
             /// A and p arguments are modified on output.
             /// </remarks>
-            [DllImport(AMD_DLL, EntryPoint = "colamd", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(COLAMD_DLL)]
             public static extern int colamd(
                 int n_row,
                 int n_col,
@@ -290,6 +295,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)] int[] stats
             );
 
+#if !LINUX
             /// <summary>
             /// Computes an ordering P of a symmetric sparse matrix A such that the Cholesky factorization
             /// PAP' = LL' remains sparse. It is based on a column ordering of a matrix M constructed so that
@@ -303,7 +309,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="knobs">Parameter settings for SYMAMD.</param>
             /// <param name="stats">SYMAMD output statistics and error codes.</param>
             /// <returns>Returns 1 if successful, 0 otherwise.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "symamd_C", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(COLAMD_DLL)]
             public static extern int symamd_C(
                 int n,
                 [In, Out] int[] A,
@@ -312,15 +318,16 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_KNOBS)] double[] knobs,
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)] int[] stats
             );
+#endif
 
             /*
-            [DllImport(AMD_DLL, EntryPoint = "colamd_report", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(COLAMD_DLL)]
             public static extern int colamd_report(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)]
                 double[] stats
             );
-
-            [DllImport(AMD_DLL, EntryPoint = "symamd_report", CallingConvention = CallingConvention.Cdecl)]
+            
+            [DllImport(COLAMD_DLL)]
             public static extern int symamd_report(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)]
                 double[] stats
@@ -338,7 +345,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="n_row">Number of rows in A.</param>
             /// <param name="n_col">Number of columns in A.</param>
             /// <returns>Returns recommended value of alen, or 0 if input arguments are erroneous.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "ccolamd_recommended", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CCOLAMD_DLL)]
             public static extern int ccolamd_recommended(int nnz, int n_row, int n_col);
 
             /// <summary>
@@ -346,7 +353,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// </summary>
             /// <param name="knobs">The knobs array.</param>
             /// <returns></returns>
-            [DllImport(AMD_DLL, EntryPoint = "ccolamd_set_defaults", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CCOLAMD_DLL)]
             public static extern int ccolamd_set_defaults(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_KNOBS)] double[] knobs
             );
@@ -368,7 +375,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <remarks>
             /// A and p arguments are modified on output.
             /// </remarks>
-            [DllImport(AMD_DLL, EntryPoint = "ccolamd", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CCOLAMD_DLL)]
             public static extern int ccolamd(
                 int n_row,
                 int n_col,
@@ -380,6 +387,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [In, Out] int[] cmember
             );
 
+#if !LINUX
             /// <summary>
             /// Computes an ordering P of a symmetric sparse matrix A such that the Cholesky factorization
             /// PAP' = LL' remains sparse. It is based on a column ordering of a matrix M constructed so that
@@ -395,7 +403,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             /// <param name="cmember">Constraint set of A, of size n_col</param>
             /// <param name="stype">0: use both parts, &gt;0: upper, &lt;0: lower</param>
             /// <returns>Returns 1 if successful, 0 otherwise.</returns>
-            [DllImport(AMD_DLL, EntryPoint = "csymamd_C", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CCOLAMD_DLL)]
             public static extern int csymamd_C(
                 int n,
                 [In, Out] int[] A,
@@ -406,22 +414,23 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [In, Out] int[] cmember,
                 int stype
             );
+#endif
 
             /*
-            [DllImport(AMD_DLL, EntryPoint = "ccolamd_report", CallingConvention = CallingConvention.Cdecl)]
+            [DllImport(CCOLAMD_DLL)]
             public static extern int ccolamd_report(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)]
                 double[] stats
             );
-
-            [DllImport(AMD_DLL, EntryPoint = "csymamd_report", CallingConvention = CallingConvention.Cdecl)]
+            
+            [DllImport(CCOLAMD_DLL)]
             public static extern int csymamd_report(
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)]
                 double[] stats
             );
             //*/
 
-            #endregion
+#endregion
         }
     }
 }
