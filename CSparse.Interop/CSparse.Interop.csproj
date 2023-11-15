@@ -28,7 +28,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="CSparse" Version="3.6.0" />
+    <PackageReference Include="CSparse" Version="3.8.1" />
   </ItemGroup>
 
 </Project>
