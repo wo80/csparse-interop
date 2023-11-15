@@ -3,6 +3,7 @@ namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Factorization;
     using CSparse.Factorization;
+    using System;
     using System.Numerics;
 
     class TestSparseCholesky : Test
@@ -41,6 +42,11 @@ namespace CSparse.Complex.Tests
         }
 
         public void Solve(Complex[] input, Complex[] result)
+        {
+            cholesky.Solve(input, result);
+        }
+
+        public void Solve(ReadOnlySpan<Complex> input, Span<Complex> result)
         {
             cholesky.Solve(input, result);
         }

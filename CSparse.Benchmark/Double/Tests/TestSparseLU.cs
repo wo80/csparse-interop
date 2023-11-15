@@ -3,6 +3,7 @@ namespace CSparse.Double.Tests
 {
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
+    using System;
 
     class TestSparseLU : Test
     {
@@ -27,6 +28,11 @@ namespace CSparse.Double.Tests
         }
 
         public void Solve(double[] input, double[] result)
+        {
+            lu.Solve(input, result);
+        }
+
+        public void Solve(ReadOnlySpan<double> input, Span<double> result)
         {
             lu.Solve(input, result);
         }

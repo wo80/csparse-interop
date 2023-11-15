@@ -88,15 +88,17 @@ namespace CSparse.Interop.MKL.Pardiso
             factorized = true;
         }
 
-        /// <summary>
-        /// Solves a system of linear equations, Ax = b.
-        /// </summary>
-        /// <param name="input">Right hand side vector b.</param>
-        /// <param name="result">Solution vector x.</param>
+        /// <inheritdoc />
         public void Solve(T[] input, T[] result)
         {
             // NOTE: use transposed, since PARDISO expects CSR storage, but CSparse uses CSC storage.
             Solve(Constants.Transposed, input, result);
+        }
+
+        /// <inheritdoc />
+        public void Solve(ReadOnlySpan<T> input, Span<T> result)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>

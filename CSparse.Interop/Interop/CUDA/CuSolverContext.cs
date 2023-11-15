@@ -70,11 +70,8 @@ namespace CSparse.Interop.CUDA
             Dispose(false);
         }
 
-        /// <summary>
-        /// Solves a system of linear equations, Ax = b.
-        /// </summary>
-        /// <param name="input">Right hand side vector b.</param>
-        /// <param name="result">Solution vector x.</param>
+
+        /// <inheritdoc />
         public void Solve(T[] input, T[] result)
         {
             if (!factorized)
@@ -103,6 +100,12 @@ namespace CSparse.Interop.CUDA
             {
                 InteropHelper.Free(handles);
             }
+        }
+
+        /// <inheritdoc />
+        public void Solve(ReadOnlySpan<T> input, Span<T> result)
+        {
+            throw new NotSupportedException();
         }
 
         public abstract bool Singular(double tol);

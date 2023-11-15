@@ -3,6 +3,7 @@ namespace CSparse.Complex.Tests
 {
     using CSparse.Complex.Factorization;
     using CSparse.Factorization;
+    using System;
     using System.Numerics;
 
     class TestSparseLU : Test
@@ -28,6 +29,11 @@ namespace CSparse.Complex.Tests
         }
 
         public void Solve(Complex[] input, Complex[] result)
+        {
+            lu.Solve(input, result);
+        }
+
+        public void Solve(ReadOnlySpan<Complex> input, Span<Complex> result)
         {
             lu.Solve(input, result);
         }

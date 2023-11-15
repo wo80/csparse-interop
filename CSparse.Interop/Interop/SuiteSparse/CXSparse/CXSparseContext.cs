@@ -59,13 +59,14 @@
             factorized = true;
         }
 
-        /// <summary>
-        /// Solve system of linear equations.
-        /// </summary>
-        /// <param name="input">Right-hand side b.</param>
-        /// <param name="result">The solution x.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract void Solve(T[] input, T[] result);
+
+        /// <inheritdoc />
+        public void Solve(ReadOnlySpan<T> input, Span<T> result)
+        {
+            throw new NotSupportedException();
+        }
 
         /// <summary>
         /// Do symbolic and numeric factorization for current type.

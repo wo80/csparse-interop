@@ -42,7 +42,14 @@ namespace CSparse.Interop.SuiteSparse.SPQR
             Dispose(false);
         }
 
+        /// <inheritdoc />
         public abstract void Solve(T[] input, T[] result);
+
+        /// <inheritdoc />
+        public void Solve(ReadOnlySpan<T> input, Span<T> result)
+        {
+            throw new NotSupportedException();
+        }
 
         public void Solve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result)
         {

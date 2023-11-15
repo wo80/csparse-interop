@@ -3,6 +3,7 @@ namespace CSparse.Double.Tests
 {
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
+    using System;
 
     class TestSparseQR : Test
     {
@@ -31,6 +32,11 @@ namespace CSparse.Double.Tests
         }
 
         public void Solve(double[] input, double[] result)
+        {
+            qr.Solve(input, result);
+        }
+
+        public void Solve(ReadOnlySpan<double> input, Span<double> result)
         {
             qr.Solve(input, result);
         }

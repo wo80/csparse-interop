@@ -63,14 +63,16 @@
             factorized = true;
         }
 
-        /// <summary>
-        /// Solves a system of linear equations, Ax = b.
-        /// </summary>
-        /// <param name="input">Right hand side vector b.</param>
-        /// <param name="result">Solution vector x.</param>
+        /// <inheritdoc />
         public void Solve(T[] input, T[] result)
         {
             Solve(UmfpackSolve.A, input, result);
+        }
+
+        /// <inheritdoc />
+        public void Solve(ReadOnlySpan<T> input, Span<T> result)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>

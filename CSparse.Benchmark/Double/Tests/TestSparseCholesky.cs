@@ -3,6 +3,7 @@ namespace CSparse.Double.Tests
 {
     using CSparse.Double.Factorization;
     using CSparse.Factorization;
+    using System;
 
     class TestSparseCholesky : Test
     {
@@ -40,6 +41,11 @@ namespace CSparse.Double.Tests
         }
 
         public void Solve(double[] input, double[] result)
+        {
+            cholesky.Solve(input, result);
+        }
+
+        public void Solve(ReadOnlySpan<double> input, Span<double> result)
         {
             cholesky.Solve(input, result);
         }
