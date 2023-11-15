@@ -37,7 +37,7 @@
         /// <summary>
         /// Gets or sets a value used to determine whether or not aggressive absorption is to be performed (default = true).
         /// </summary>
-        public bool Agressive { get; set; } = true;
+        public bool Aggressive { get; set; } = true;
 
         #endregion
 
@@ -230,7 +230,7 @@
             var a = new double[AMD_CONTROL];
 
             a[0] = Dense;
-            a[1] = Agressive ? 1.0 : 0.0;
+            a[1] = Aggressive ? 1.0 : 0.0;
 
             return a;
         }

@@ -35,7 +35,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
 
         #endregion
 
-        #region Publi properties (COLAMD options)
+        #region Public properties (COLAMD options)
 
         /// <summary>
         /// Gets or sets a value used to determine whether or not a given input row is "dense" (default = 10.0).
@@ -57,7 +57,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         /// <summary>
         /// Gets or sets a value used to determine whether or not aggressive absorption is to be performed (default = true).
         /// </summary>
-        public bool Agressive { get; set; } = true;
+        public bool Aggressive { get; set; } = true;
 
         #endregion
 
@@ -204,31 +204,13 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             return info;
         }
 
-        internal Info SymOrder(int n, int[] A, int[] p, int[] perm, double[] knobs)
-        {
-            var info = new Info();
-
-            NativeMethods.symamd_C(n, A, p, perm, knobs, info.data);
-
-            return info;
-        }
-
-        internal Info SymOrder(int n, int[] A, int[] p, int[] perm, double[] knobs, int[] cmember, int stype)
-        {
-            var info = new Info();
-
-            NativeMethods.csymamd_C(n, A, p, perm, knobs, info.data, cmember, stype);
-
-            return info;
-        }
-
         private double[] GetControl()
         {
             var a = new double[COLAMD_KNOBS];
 
             a[0] = DenseRow;
             a[1] = DenseColumn;
-            a[2] = Agressive ? 1.0 : 0.0;
+            a[2] = Aggressive ? 1.0 : 0.0;
 
             return a;
         }

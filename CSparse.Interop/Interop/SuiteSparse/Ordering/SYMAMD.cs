@@ -11,7 +11,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
     /// </summary>
     public class SYMAMD
     {
-        #region Publi properties (SYMAMD options)
+        #region Public properties (SYMAMD options)
 
         /// <summary>
         /// Gets or sets a value used to determine whether or not a given input row is "dense" (default = 10.0).
@@ -24,7 +24,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         /// <summary>
         /// Gets or sets a value used to determine whether or not aggressive absorption is to be performed (default = true).
         /// </summary>
-        public bool Agressive { get; set; } = true;
+        public bool Aggressive { get; set; } = true;
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="n">Number of rows and columns in the symmetrix matrix A.</param>
+        /// <param name="n">Number of rows and columns in the symmetric matrix A.</param>
         /// <param name="A">Row indices of A (of size nnz).</param>
         /// <param name="p">Column pointers of A (of size n+1).</param>
         /// <param name="perm">The permutation vector (of size n+1).</param>
@@ -104,15 +104,17 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         /// </remarks>
         public COLAMD.Info Order(int n, int[] A, int[] p, int[] perm)
         {
-            var amd = new COLAMD();
+            var info = new COLAMD.Info();
 
-            return amd.SymOrder(n, A, p, perm, GetControl());
+            COLAMD.NativeMethods.symamd_C(n, A, p, perm, GetControl(), info.data);
+
+            return info;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="n">Number of rows and columns in the symmetrix matrix A.</param>
+        /// <param name="n">Number of rows and columns in the symmetric matrix A.</param>
         /// <param name="A">Row indices of A (of size nnz).</param>
         /// <param name="p">Column pointers of A (of size n+1).</param>
         /// <param name="perm">The permutation vector (of size n+1).</param>
@@ -136,9 +138,11 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         /// </remarks>
         public COLAMD.Info Order(int n, int[] A, int[] p, int[] perm, int[] cmember, int stype)
         {
-            var amd = new COLAMD();
+            var info = new COLAMD.Info();
 
-            return amd.SymOrder(n, A, p, perm, GetControl(), cmember, stype);
+            COLAMD.NativeMethods.csymamd_C(n, A, p, perm, GetControl(), info.data, cmember, stype);
+
+            return info;
         }
 
         private double[] GetControl()
@@ -146,7 +150,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             var a = new double[COLAMD.COLAMD_KNOBS];
 
             a[0] = DenseRow;
-            a[2] = Agressive ? 1.0 : 0.0;
+            a[2] = Aggressive ? 1.0 : 0.0;
 
             return a;
         }
