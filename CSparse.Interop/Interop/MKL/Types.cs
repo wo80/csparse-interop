@@ -40,7 +40,17 @@ namespace CSparse.Interop.MKL
         /// </summary>
         NotSupported = 6
     }
-    
+
+    /// <summary>
+    /// sparse matrix operations
+    /// </summary>
+    enum SparseOperation
+    {
+        NonTranspose = 10,
+        Transpose = 11,
+        ConjugateTranspose = 12
+    }
+
     /// <summary>
     /// supported matrix types
     /// </summary>
@@ -81,6 +91,21 @@ namespace CSparse.Interop.MKL
     {
         NonUnit = 50,
         Unit = 51
+    }
+
+    /// <summary>
+    /// applicable for Level 3 operations with dense matrices; describes storage scheme for dense matrix (row major or column major)
+    /// </summary>
+    enum SparseLayout
+    {
+        RowMajor = 101, /* C-style */
+        ColumnMajor = 102 /* Fortran-style */
+    }
+
+
+    enum SparseQrHint
+    {
+        SPARSE_QR_WITH_PIVOTS = 0
     }
 
     #endregion

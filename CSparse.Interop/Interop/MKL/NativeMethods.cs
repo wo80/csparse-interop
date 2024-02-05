@@ -64,7 +64,7 @@ namespace CSparse.Interop.MKL
         #endregion
 
         #region Sparse matrix
-        
+
         // compressed sparse row format (4-arrays version),
         // SPARSE_MATRIX_TYPE_GENERAL by default, pointers to input arrays are stored in the handle
         //
@@ -185,7 +185,47 @@ namespace CSparse.Interop.MKL
 
         [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_svd", CallingConvention = CallingConvention.Cdecl)]
         internal static extern SparseStatus mkl_sparse_s_svd(StringBuilder whichE, StringBuilder whichV, int[] pm, /* sparse_matrix_t */ IntPtr A, MatrixDescriptor descrA, int k0, ref int k, IntPtr E, IntPtr X, IntPtr XR, IntPtr res);
-        
+
+        #endregion
+
+        #region Sparse QR
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_set_qr_hint", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_set_qr_hint( /* sparse_matrix_t */ IntPtr A, SparseQrHint hint);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_d_qr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_d_qr(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, MatrixDescriptor descr, SparseLayout layout, int columns, /* double* */ IntPtr x, int ldx, /* const double* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_qr", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_s_qr(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, MatrixDescriptor descr, SparseLayout layout, int columns, /* float* */ IntPtr x, int ldx, /* const float* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_qr_reorder", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_qr_reorder( /* sparse_matrix_t */ IntPtr A, MatrixDescriptor descr);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_d_qr_factorize", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_d_qr_factorize( /* sparse_matrix_t */ IntPtr A, /* double* */ IntPtr alt_values);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_qr_factorize", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_s_qr_factorize( /* sparse_matrix_t */ IntPtr A, /* float* */ IntPtr alt_values);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_d_qr_solve", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_d_qr_solve(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, /* double* */ IntPtr alt_values, SparseLayout layout, int columns, /* double* */ IntPtr x, int ldx, /* const double* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_qr_solve", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_s_qr_solve(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, /* float* */ IntPtr alt_values, SparseLayout layout, int columns, /* float* */ IntPtr x, int ldx, /* const float* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_d_qr_qmult", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_d_qr_qmult(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, SparseLayout layout, int columns, /* double* */ IntPtr x, int ldx, /* const double* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_qr_qmult", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_s_qr_qmult(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, SparseLayout layout, int columns, /* float* */ IntPtr x, int ldx, /* const float* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_d_qr_rsolve", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_d_qr_rsolve(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, SparseLayout layout, int columns, /* double* */ IntPtr x, int ldx, /* const double* */ IntPtr b, int ldb);
+
+        [DllImport(MKL_DLL, EntryPoint = "mkl_sparse_s_qr_rsolve", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern SparseStatus mkl_sparse_s_qr_rsolve(SparseOperation operation, /* sparse_matrix_t */ IntPtr A, SparseLayout layout, int columns, /* float* */ IntPtr x, int ldx, /* const float* */ IntPtr b, int ldb);
+
         #endregion
     }
 }

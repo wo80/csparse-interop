@@ -40,7 +40,10 @@ namespace CSparse.Double
             for (int i = 0; i < rows; i++)
             {
                 // Ensure non-zero diagonal.
-                C.At(i, i, random.NextDouble() - 0.5);
+                if (i < columns)
+                {
+                    C.At(i, i, random.NextDouble() - 0.5);
+                }
 
                 for (int j = 0; j < nz; j++)
                 {

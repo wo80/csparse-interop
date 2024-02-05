@@ -27,6 +27,7 @@ namespace CSparse.Double
             new TestSPQR().Run(A, B);
             new TestSuperLU().Run(A, B);
             new TestPardiso().Run(A, B);
+            new TestSparseQR_MKL().Run(A, B);
 
             Console.WriteLine();
             Console.WriteLine("Running eigensolver tests (Double) ... [N = {0}]", size);
