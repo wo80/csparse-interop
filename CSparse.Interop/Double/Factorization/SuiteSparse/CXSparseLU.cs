@@ -3,6 +3,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
 {
     using CSparse.Interop.Common;
     using CSparse.Interop.SuiteSparse.CXSparse;
+    using CSparse.Storage;
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
@@ -14,7 +15,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the SuperLU class.
         /// </summary>
-        public CXSparseLU(SparseMatrix matrix, ColumnOrdering ordering, double tol)
+        public CXSparseLU(CompressedColumnStorage<double> matrix, ColumnOrdering ordering, double tol)
             : base(matrix, ordering)
         {
             this.tol = tol;

@@ -2,6 +2,7 @@
 namespace CSparse.Double.Factorization.MKL
 {
     using CSparse.Interop.MKL.Pardiso;
+    using CSparse.Storage;
     using System;
 
     /// <summary>
@@ -12,7 +13,7 @@ namespace CSparse.Double.Factorization.MKL
         /// <summary>
         /// Initializes a new instance of the Pardiso class.
         /// </summary>
-        public Pardiso(SparseMatrix matrix)
+        public Pardiso(CompressedColumnStorage<double> matrix)
             : base(matrix, PardisoMatrixType.RealNonsymmetric)
         {
         }
@@ -20,7 +21,7 @@ namespace CSparse.Double.Factorization.MKL
         /// <summary>
         /// Initializes a new instance of the Pardiso class.
         /// </summary>
-        public Pardiso(SparseMatrix matrix, int mtype)
+        public Pardiso(CompressedColumnStorage<double> matrix, int mtype)
             : base(matrix, mtype)
         {
             switch (mtype)

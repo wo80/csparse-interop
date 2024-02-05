@@ -13,7 +13,7 @@ namespace CSparse.Double.Factorization
         /// <summary>
         /// Initializes a new instance of the SuperLU class.
         /// </summary>
-        public SuperLU(SparseMatrix matrix)
+        public SuperLU(CompressedColumnStorage<double> matrix)
             : base(matrix)
         {
         }

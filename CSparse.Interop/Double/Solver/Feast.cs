@@ -13,7 +13,7 @@ namespace CSparse.Double.Solver.MKL
         /// Initializes a new instance of the <see cref="Feast"/> class.
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
-        public Feast(SparseMatrix A)
+        public Feast(CompressedColumnStorage<double> A)
             : base(A)
         {
         }
@@ -23,7 +23,7 @@ namespace CSparse.Double.Solver.MKL
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
         /// <param name="B">Real symmetric positive definite matrix for generalized problem.</param>
-        public Feast(SparseMatrix A, SparseMatrix B)
+        public Feast(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B)
             : base(A, B)
         {
         }

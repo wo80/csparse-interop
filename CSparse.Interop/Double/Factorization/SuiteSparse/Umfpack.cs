@@ -2,6 +2,7 @@
 namespace CSparse.Double.Factorization.SuiteSparse
 {
     using CSparse.Interop.SuiteSparse.Umfpack;
+    using CSparse.Storage;
     using System;
 
     /// <summary>
@@ -12,7 +13,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the Umfpack class.
         /// </summary>
-        public Umfpack(SparseMatrix matrix)
+        public Umfpack(CompressedColumnStorage<double> matrix)
             : base(matrix)
         {
         }

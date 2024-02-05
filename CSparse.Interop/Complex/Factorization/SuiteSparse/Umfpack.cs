@@ -2,6 +2,7 @@
 namespace CSparse.Complex.Factorization.SuiteSparse
 {
     using CSparse.Interop.SuiteSparse.Umfpack;
+    using CSparse.Storage;
     using System;
     using System.Numerics;
     using System.Runtime.InteropServices;
@@ -14,7 +15,7 @@ namespace CSparse.Complex.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the Umfpack class.
         /// </summary>
-        public Umfpack(SparseMatrix matrix)
+        public Umfpack(CompressedColumnStorage<Complex> matrix)
             : base(matrix)
         {
         }

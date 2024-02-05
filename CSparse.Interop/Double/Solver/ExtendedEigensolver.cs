@@ -16,7 +16,7 @@ namespace CSparse.Double.Solver
         /// Initializes a new instance of the ExtendedEigensolver class.
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
-        public ExtendedEigensolver(SparseMatrix A)
+        public ExtendedEigensolver(CompressedColumnStorage<double> A)
             : base(A, false)
         {
         }
@@ -26,7 +26,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric.</param>
-        public ExtendedEigensolver(SparseMatrix A, bool symmetric)
+        public ExtendedEigensolver(CompressedColumnStorage<double> A, bool symmetric)
             : base(A, symmetric)
         {
         }
@@ -36,7 +36,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real symmetric matrix.</param>
         /// <param name="B">Real symmetric positive definite matrix for generalized problem.</param>
-        public ExtendedEigensolver(SparseMatrix A, SparseMatrix B)
+        public ExtendedEigensolver(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B)
             : base(A, B, false)
         {
         }
@@ -47,7 +47,7 @@ namespace CSparse.Double.Solver
         /// <param name="A">Real symmetric matrix.</param>
         /// <param name="B">Real symmetric positive definite matrix for generalized problem.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric and B is symmetric positive definite.</param>
-        public ExtendedEigensolver(SparseMatrix A, SparseMatrix B, bool symmetric)
+        public ExtendedEigensolver(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B, bool symmetric)
             : base(A, B, symmetric)
         {
         }

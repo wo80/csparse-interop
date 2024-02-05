@@ -4,6 +4,7 @@ namespace CSparse.Double.Solver
     using CSparse.Interop.ARPACK;
     using CSparse.Interop.Common;
     using CSparse.Solvers;
+    using CSparse.Storage;
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
@@ -14,7 +15,7 @@ namespace CSparse.Double.Solver
         /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
         /// </summary>
         /// <param name="A">Real matrix.</param>
-        public Arpack(SparseMatrix A)
+        public Arpack(CompressedColumnStorage<double> A)
             : this(A, false)
         {
         }
@@ -24,7 +25,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real matrix.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric.</param>
-        public Arpack(SparseMatrix A, bool symmetric)
+        public Arpack(CompressedColumnStorage<double> A, bool symmetric)
             : base(A, symmetric)
         {
         }
@@ -34,7 +35,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real matrix.</param>
         /// <param name="B">Real matrix for generalized problem.</param>
-        public Arpack(SparseMatrix A, SparseMatrix B)
+        public Arpack(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B)
             : this(A, B, false)
         {
         }
@@ -45,7 +46,7 @@ namespace CSparse.Double.Solver
         /// <param name="A">Real matrix.</param>
         /// <param name="B">Real matrix for generalized problem.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric and B is symmetric positive definite.</param>
-        public Arpack(SparseMatrix A, SparseMatrix B, bool symmetric)
+        public Arpack(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B, bool symmetric)
             : base(A, B, symmetric)
         {
         }

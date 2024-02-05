@@ -7,6 +7,7 @@ namespace CSparse.Double.Solver
     using System.Runtime.InteropServices;
     using System;
     using CSparse.Solvers;
+    using CSparse.Storage;
 
     public sealed class Spectra : SpectraContext<double>
     {
@@ -14,7 +15,7 @@ namespace CSparse.Double.Solver
         /// Initializes a new instance of the <see cref="Spectra"/> class for the standard eigenvalue problem.
         /// </summary>
         /// <param name="A">Real matrix.</param>
-        public Spectra(SparseMatrix A)
+        public Spectra(CompressedColumnStorage<double> A)
             : this(A, false)
         {
         }
@@ -24,7 +25,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real matrix.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric.</param>
-        public Spectra(SparseMatrix A, bool symmetric)
+        public Spectra(CompressedColumnStorage<double> A, bool symmetric)
             : base(A, symmetric)
         {
         }
@@ -34,7 +35,7 @@ namespace CSparse.Double.Solver
         /// </summary>
         /// <param name="A">Real matrix.</param>
         /// <param name="B">Real matrix for generalized problem.</param>
-        public Spectra(SparseMatrix A, SparseMatrix B)
+        public Spectra(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B)
             : this(A, B, false)
         {
         }
@@ -45,7 +46,7 @@ namespace CSparse.Double.Solver
         /// <param name="A">Real matrix.</param>
         /// <param name="B">Real matrix for generalized problem.</param>
         /// <param name="symmetric">Set to true, if the matrix A is symmetric and B is symmetric positive definite.</param>
-        public Spectra(SparseMatrix A, SparseMatrix B, bool symmetric)
+        public Spectra(CompressedColumnStorage<double> A, CompressedColumnStorage<double> B, bool symmetric)
             : base(A, B, symmetric)
         {
         }

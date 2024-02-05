@@ -3,6 +3,7 @@ namespace CSparse.Complex.Factorization.SuiteSparse
 {
     using CSparse.Interop.Common;
     using CSparse.Interop.SuiteSparse.CXSparse;
+    using CSparse.Storage;
     using System;
     using System.Collections.Generic;
     using System.Numerics;
@@ -17,7 +18,7 @@ namespace CSparse.Complex.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the SuperLU class.
         /// </summary>
-        public CXSparseQR(SparseMatrix matrix, ColumnOrdering ordering)
+        public CXSparseQR(CompressedColumnStorage<Complex> matrix, ColumnOrdering ordering)
             : base(matrix, ordering)
         {
         }

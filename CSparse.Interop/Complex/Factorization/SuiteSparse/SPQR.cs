@@ -16,9 +16,9 @@ namespace CSparse.Complex.Factorization.SuiteSparse
         private double[] buffer;
 
         /// <summary>
-        /// Initializes a new instance of the Cholmod class.
+        /// Initializes a new instance of the SPQR class.
         /// </summary>
-        public SPQR(SparseMatrix matrix)
+        public SPQR(CompressedColumnStorage<Complex> matrix)
             : base(matrix)
         {
         }

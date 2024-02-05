@@ -14,7 +14,7 @@ namespace CSparse.Complex.Factorization
         /// <summary>
         /// Initializes a new instance of the SuperLU class.
         /// </summary>
-        public SuperLU(SparseMatrix matrix)
+        public SuperLU(CompressedColumnStorage<Complex> matrix)
             : base(matrix)
         {
         }

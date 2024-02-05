@@ -15,7 +15,7 @@ namespace CSparse.Double.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the Cholmod class.
         /// </summary>
-        public SPQR(SparseMatrix matrix)
+        public SPQR(CompressedColumnStorage<double> matrix)
             : base(matrix)
         {
         }

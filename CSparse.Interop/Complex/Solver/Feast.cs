@@ -14,7 +14,7 @@ namespace CSparse.Complex.Solver
         /// Initializes a new instance of the <see cref="Feast"/> class for the standard Hermitian eigenvalue problem.
         /// </summary>
         /// <param name="A">Complex Hermitian matrix.</param>
-        public Feast(SparseMatrix A)
+        public Feast(CompressedColumnStorage<Complex> A)
             : base(A)
         {
         }
@@ -24,7 +24,7 @@ namespace CSparse.Complex.Solver
         /// </summary>
         /// <param name="A">Complex Hermitian matrix.</param>
         /// <param name="B">Complex Hermitian positive definite matrix for generalized problem.</param>
-        public Feast(SparseMatrix A, SparseMatrix B)
+        public Feast(CompressedColumnStorage<Complex> A, CompressedColumnStorage<Complex> B)
             : base(A, B)
         {
         }

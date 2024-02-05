@@ -4,6 +4,7 @@ namespace CSparse.Complex.Solver
     using CSparse.Interop.ARPACK;
     using CSparse.Interop.Common;
     using CSparse.Solvers;
+    using CSparse.Storage;
     using System;
     using System.Collections.Generic;
     using System.Numerics;
@@ -15,7 +16,7 @@ namespace CSparse.Complex.Solver
         /// Initializes a new instance of the <see cref="Arpack"/> class for the standard eigenvalue problem.
         /// </summary>
         /// <param name="A">Complex matrix.</param>
-        public Arpack(SparseMatrix A)
+        public Arpack(CompressedColumnStorage<Complex> A)
             : this(A, false)
         {
         }
@@ -25,7 +26,7 @@ namespace CSparse.Complex.Solver
         /// </summary>
         /// <param name="A">Complex matrix.</param>
         /// <param name="symmetric">Set to true, if the matrix A is Hermitian.</param>
-        public Arpack(SparseMatrix A, bool symmetric)
+        public Arpack(CompressedColumnStorage<Complex> A, bool symmetric)
             : base(A, symmetric)
         {
         }
@@ -35,7 +36,7 @@ namespace CSparse.Complex.Solver
         /// </summary>
         /// <param name="A">Complex matrix.</param>
         /// <param name="B">Complex matrix for generalized problem.</param>
-        public Arpack(SparseMatrix A, SparseMatrix B)
+        public Arpack(CompressedColumnStorage<Complex> A, CompressedColumnStorage<Complex> B)
             : this(A, B, false)
         {
         }
@@ -46,7 +47,7 @@ namespace CSparse.Complex.Solver
         /// <param name="A">Complex matrix.</param>
         /// <param name="B">Complex matrix for generalized problem.</param>
         /// <param name="symmetric">Set to true, if the matrix A is Hermitian and B is Hermitian positive definite.</param>
-        public Arpack(SparseMatrix A, SparseMatrix B, bool symmetric)
+        public Arpack(CompressedColumnStorage<Complex> A, CompressedColumnStorage<Complex> B, bool symmetric)
             : base(A, B, symmetric)
         {
         }

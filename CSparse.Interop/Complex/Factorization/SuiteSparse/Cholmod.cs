@@ -17,7 +17,7 @@ namespace CSparse.Complex.Factorization.SuiteSparse
         /// <summary>
         /// Initializes a new instance of the Cholmod class.
         /// </summary>
-        public Cholmod(SparseMatrix matrix)
+        public Cholmod(CompressedColumnStorage<Complex> matrix)
             : base(matrix)
         {
         }
