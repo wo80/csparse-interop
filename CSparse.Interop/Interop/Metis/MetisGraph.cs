@@ -158,10 +158,11 @@ namespace CSparse.Interop.Metis
         /// <param name="k">The number of partitions.</param>
         /// <param name="part">Target array storing the partition of the graph (size nvtxs).</param>
         /// <param name="options">Partitioning options.</param>
+        /// <param name="ubvec">Imbalance array for each constraint (size ncon, may be null).</param>
         /// <returns></returns>
-        public MetisStatus PartitionKway(int k, int[] part, MetisOptions options = null)
+        public MetisStatus PartitionKway(int k, int[] part, MetisOptions options = null, float[] ubvec = null)
         {
-            return Partition(k, part, options, true);
+            return Partition(k, part, ubvec, options, true);
         }
 
         /// <summary>
@@ -170,10 +171,11 @@ namespace CSparse.Interop.Metis
         /// <param name="k">The number of partitions.</param>
         /// <param name="part">Target array storing the partition of the graph (size nvtxs).</param>
         /// <param name="options">Partitioning options.</param>
+        /// <param name="ubvec">Imbalance array for each constraint (size ncon, may be null).</param>
         /// <returns></returns>
-        public MetisStatus PartitionRecursive(int k, int[] part, MetisOptions options = null)
+        public MetisStatus PartitionRecursive(int k, int[] part, MetisOptions options = null, float[] ubvec = null)
         {
-            return Partition(k, part, options, false);
+            return Partition(k, part, ubvec, options, false);
         }
 
         /// <summary>
@@ -222,11 +224,15 @@ namespace CSparse.Interop.Metis
             return (MetisStatus)status;
         }
 
-        private MetisStatus Partition(int nparts, int[] part, MetisOptions options, bool kway)
+        private MetisStatus Partition(int nparts, int[] part, float[] ubvec, MetisOptions options, bool kway)
         {
             int objval = 0;
 
             if (part == null || part.Length < this.nvtxs)
+            {
+                return MetisStatus.ERROR_INPUT;
+            }
+            if (ubvec != null && ubvec.Length != ncon)
             {
                 return MetisStatus.ERROR_INPUT;
             }
@@ -242,6 +248,7 @@ namespace CSparse.Interop.Metis
             var p_vsize = InteropHelper.Pin(vsize, handles);
 
             var p_opts = options == null ? IntPtr.Zero : InteropHelper.Pin(options.raw, handles);
+            var p_ubvec = ubvec == null ? IntPtr.Zero : InteropHelper.Pin(ubvec, handles);
 
             int l_nv = nvtxs;
             int l_nw = ncon;
@@ -253,13 +260,13 @@ namespace CSparse.Interop.Metis
                 if (kway)
                 {
                     status = NativeMethods.PartGraphKway(ref l_nv, ref l_nw, p_xadj, p_adjncy,
-                        p_vwgt, p_vsize, p_ewgt, ref nparts, IntPtr.Zero, IntPtr.Zero,
+                        p_vwgt, p_vsize, p_ewgt, ref nparts, IntPtr.Zero, p_ubvec,
                         p_opts, ref objval, p_part);
                 }
                 else
                 {
                     status = NativeMethods.PartGraphRecursive(ref l_nv, ref l_nw, p_xadj, p_adjncy,
-                        p_vwgt, p_vsize, p_ewgt, ref nparts, IntPtr.Zero, IntPtr.Zero,
+                        p_vwgt, p_vsize, p_ewgt, ref nparts, IntPtr.Zero, p_ubvec,
                         p_opts, ref objval, p_part);
                 }
             }
