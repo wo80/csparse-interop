@@ -1,4 +1,4 @@
-﻿namespace CSparse.Interop.ARPACK
+﻿namespace CSparse.Solvers
 {
     public enum ShiftMode
     {
