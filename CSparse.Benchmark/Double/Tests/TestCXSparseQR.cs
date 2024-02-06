@@ -4,7 +4,7 @@ namespace CSparse.Double.Tests
     using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
 
-    class TestCXSparseQR : Test
+    class TestCXSparseQR : TestBase
     {
         public TestCXSparseQR()
             : base("CXSparse QR")

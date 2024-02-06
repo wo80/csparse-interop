@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
 
-    class TestSPQR : Test
+    class TestSPQR : TestBase
     {
         public TestSPQR()
             : base("SPQR")

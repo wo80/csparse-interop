@@ -5,7 +5,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Factorization;
     using System.Numerics;
 
-    class TestSPQR : Test
+    class TestSPQR : TestBase
     {
         public TestSPQR()
             : base("SPQR")

@@ -7,7 +7,7 @@ namespace CSparse.Complex.Tests
 
     using Complex = System.Numerics.Complex;
 
-    abstract class Test
+    abstract class TestBase
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
@@ -15,7 +15,7 @@ namespace CSparse.Complex.Tests
 
         private Stopwatch timer = new Stopwatch();
 
-        public Test(string name)
+        public TestBase(string name)
         {
             this.name = name;
         }

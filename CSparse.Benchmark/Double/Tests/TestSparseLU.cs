@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using System;
 
-    class TestSparseLU : Test
+    class TestSparseLU : TestBase
     {
         public TestSparseLU()
             : base("CSparse.NET LU")

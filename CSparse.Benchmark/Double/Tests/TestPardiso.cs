@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using CSparse.Interop.MKL.Pardiso;
 
-    class TestPardiso : Test
+    class TestPardiso : TestBase
     {
         public TestPardiso()
             : base("PARDISO")

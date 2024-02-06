@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using System;
     using System.Numerics;
 
-    class TestSparseLU : Test
+    class TestSparseLU : TestBase
     {
         public TestSparseLU()
             : base("CSparse.NET LU")

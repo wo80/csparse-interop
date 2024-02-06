@@ -5,7 +5,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Factorization;
     using System.Numerics;
 
-    class TestCXSparseCholesky : Test
+    class TestCXSparseCholesky : TestBase
     {
         public TestCXSparseCholesky()
             : base("CXSparse Cholesky")

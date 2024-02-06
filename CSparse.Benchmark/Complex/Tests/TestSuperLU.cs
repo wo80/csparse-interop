@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Interop.SuperLU;
     using System.Numerics;
 
-    class TestSuperLU : Test
+    class TestSuperLU : TestBase
     {
         public TestSuperLU()
             : base("SuperLU")

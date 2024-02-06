@@ -4,7 +4,7 @@ namespace CSparse.Double.Tests
     using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
 
-    class TestCholmod : Test
+    class TestCholmod : TestBase
     {
         public TestCholmod()
             : base("CHOLMOD")

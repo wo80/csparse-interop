@@ -5,7 +5,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Factorization;
     using System.Numerics;
 
-    class TestCXSparseQR : Test
+    class TestCXSparseQR : TestBase
     {
         public TestCXSparseQR()
             : base("CXSparse QR")

@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Interop.SuiteSparse.Umfpack;
     using System.Numerics;
 
-    class TestUmfpack : Test
+    class TestUmfpack : TestBase
     {
         public TestUmfpack()
             : base("UMFPACK")

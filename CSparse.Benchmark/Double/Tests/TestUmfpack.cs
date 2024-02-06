@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using CSparse.Interop.SuiteSparse.Umfpack;
 
-    class TestUmfpack : Test
+    class TestUmfpack : TestBase
     {
         public TestUmfpack()
             : base("UMFPACK")

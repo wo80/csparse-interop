@@ -5,7 +5,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Factorization;
     using System.Numerics;
 
-    class TestCholmod : Test
+    class TestCholmod : TestBase
     {
         public TestCholmod()
             : base("CHOLMOD")

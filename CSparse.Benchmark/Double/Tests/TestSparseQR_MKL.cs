@@ -6,7 +6,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using CSparse.Storage;
 
-    class TestSparseQR_MKL : Test
+    class TestSparseQR_MKL : TestBase
     {
         public TestSparseQR_MKL()
             : base("SparseQR MKL")

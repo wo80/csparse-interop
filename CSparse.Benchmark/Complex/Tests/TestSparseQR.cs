@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using System;
     using System.Numerics;
 
-    class TestSparseQR : Test
+    class TestSparseQR : TestBase
     {
         public TestSparseQR()
             : base("CSparse.NET QR")

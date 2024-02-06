@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using CSparse.Interop.SuperLU;
 
-    class TestSuperLU : Test
+    class TestSuperLU : TestBase
     {
         public TestSuperLU()
             : base("SuperLU")

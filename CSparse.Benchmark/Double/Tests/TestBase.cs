@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using System;
     using System.Diagnostics;
 
-    abstract class Test
+    abstract class TestBase
     {
         private const double ERROR_THRESHOLD = 1e-3;
 
@@ -13,7 +13,7 @@ namespace CSparse.Double.Tests
 
         private Stopwatch timer = new Stopwatch();
 
-        public Test(string name)
+        public TestBase(string name)
         {
             this.name = name;
         }

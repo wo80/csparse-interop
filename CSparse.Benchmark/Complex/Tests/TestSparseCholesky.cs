@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using System;
     using System.Numerics;
 
-    class TestSparseCholesky : Test
+    class TestSparseCholesky : TestBase
     {
         public TestSparseCholesky()
             : base("CSparse.NET Cholesky")

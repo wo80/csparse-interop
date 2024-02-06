@@ -6,7 +6,7 @@ namespace CSparse.Complex.Tests
     using CSparse.Interop.MKL.Pardiso;
     using System.Numerics;
 
-    class TestPardiso : Test
+    class TestPardiso : TestBase
     {
         public TestPardiso()
             : base("PARDISO")

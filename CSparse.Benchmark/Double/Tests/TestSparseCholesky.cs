@@ -5,7 +5,7 @@ namespace CSparse.Double.Tests
     using CSparse.Factorization;
     using System;
 
-    class TestSparseCholesky : Test
+    class TestSparseCholesky : TestBase
     {
         public TestSparseCholesky()
             : base("CSparse.NET Cholesky")
