@@ -20,12 +20,14 @@ namespace CSparse.Interop.Tests.Double
 
             Vector.Axpy(-1.0, expected, e);
 
+            int n = e.Length;
+
             if (relativeError)
             {
-                return Vector.Norm(e) / Vector.Norm(expected);
+                return Vector.Norm(n, e) / Vector.Norm(n, expected);
             }
 
-            return Vector.Norm(e);
+            return Vector.Norm(n, e);
         }
 
         public static double ComputeResidual(CompressedColumnStorage<double> A, double[] x, double[] b, bool relativeError = true)
@@ -34,12 +36,14 @@ namespace CSparse.Interop.Tests.Double
 
             A.Multiply(-1.0, x, 1.0, e);
 
+            int n = A.RowCount;
+
             if (relativeError)
             {
-                return Vector.Norm(e) / (A.FrobeniusNorm() * Vector.Norm(b));
+                return Vector.Norm(n, e) / (A.FrobeniusNorm() * Vector.Norm(n, b));
             }
 
-            return Vector.Norm(e);
+            return Vector.Norm(n, e);
         }
 
         #endregion
@@ -104,7 +108,7 @@ namespace CSparse.Interop.Tests.Double
         /// <returns>True, if all residuals are below threshold.</returns>
         public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, double[] v, Matrix<double> X, bool print)
         {
-            int N = A.RowCount;
+            int n = A.RowCount;
 
             // If more eigenvalues converged than were requested (real, non-symmetric case only).
             k = Math.Min(k, X.ColumnCount);
@@ -115,8 +119,8 @@ namespace CSparse.Interop.Tests.Double
                 Console.WriteLine("       Lambda         Residual");
             }
 
-            var x = new double[N];
-            var y = new double[N];
+            var x = new double[n];
+            var y = new double[n];
 
             bool ok = true;
 
@@ -137,7 +141,7 @@ namespace CSparse.Interop.Tests.Double
                 // y = A*x - lambda*B*x
                 A.Multiply(1.0, x, -lambda, y);
 
-                double r = Vector.Norm(y) / Math.Abs(lambda);
+                double r = Vector.Norm(n, y) / Math.Abs(lambda);
 
                 if (r > ERROR_THRESHOLD)
                 {
@@ -165,7 +169,7 @@ namespace CSparse.Interop.Tests.Double
         /// <returns>True, if all residuals are below threshold.</returns>
         public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, Complex[] v, Matrix<Complex> X, bool print)
         {
-            int N = A.RowCount;
+            int n = A.RowCount;
 
             // If more eigenvalues converged than were requested (real, non-symmetric case only).
             k = Math.Min(k, X.ColumnCount);
@@ -176,8 +180,8 @@ namespace CSparse.Interop.Tests.Double
                 Console.WriteLine("       Lambda         Residual");
             }
 
-            var x = new Complex[N];
-            var y = new Complex[N];
+            var x = new Complex[n];
+            var y = new Complex[n];
 
             bool ok = true;
 
@@ -198,7 +202,7 @@ namespace CSparse.Interop.Tests.Double
                 // y = A*x - lambda*B*x
                 A.Multiply(1.0, x, -lambda, y);
 
-                double r = CVector.Norm(y) / Complex.Abs(lambda);
+                double r = CVector.Norm(n, y) / Complex.Abs(lambda);
 
                 if (r > ERROR_THRESHOLD)
                 {

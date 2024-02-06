@@ -84,7 +84,7 @@
 
         private static bool CheckResiduals(SparseMatrix A, FeastResult<Complex> result, bool print)
         {
-            int N = A.RowCount;
+            int n = A.RowCount;
 
             var m = result.ConvergedEigenvalues;
 
@@ -97,8 +97,8 @@
                 Console.WriteLine("       Lambda         Residual");
             }
 
-            var x = new Complex[N];
-            var y = new Complex[N];
+            var x = new Complex[n];
+            var y = new Complex[n];
 
             bool ok = true;
 
@@ -113,7 +113,7 @@
                 // y = A*x - lambda*x
                 A.Multiply(1.0, x, -lambda, y);
 
-                double r = Vector.Norm(y);
+                double r = Vector.Norm(n, y);
 
                 if (r > ERROR_THRESHOLD)
                 {

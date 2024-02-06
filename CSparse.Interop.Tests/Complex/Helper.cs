@@ -19,12 +19,14 @@ namespace CSparse.Interop.Tests.Complex
 
             Vector.Axpy(-1.0, expected, e);
 
+            int n = e.Length;
+
             if (relativeError)
             {
-                return Vector.Norm(e) / Vector.Norm(expected);
+                return Vector.Norm(n, e) / Vector.Norm(n, expected);
             }
 
-            return Vector.Norm(e);
+            return Vector.Norm(n, e);
         }
 
         public static double ComputeResidual(CompressedColumnStorage<Complex> A, Complex[] x, Complex[] b, bool relativeError = true)
@@ -33,12 +35,14 @@ namespace CSparse.Interop.Tests.Complex
 
             A.Multiply(-1.0, x, 1.0, e);
 
+            int n = A.RowCount;
+
             if (relativeError)
             {
-                return Vector.Norm(e) / (A.FrobeniusNorm() * Vector.Norm(b));
+                return Vector.Norm(n, e) / (A.FrobeniusNorm() * Vector.Norm(n, b));
             }
 
-            return Vector.Norm(e);
+            return Vector.Norm(n, e);
         }
 
         #endregion
@@ -54,7 +58,7 @@ namespace CSparse.Interop.Tests.Complex
         /// <returns>True, if all residuals are below threshold.</returns>
         public static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool print)
         {
-            int N = A.RowCount;
+            int n = A.RowCount;
 
             var m = result.ConvergedEigenValues;
 
@@ -67,8 +71,8 @@ namespace CSparse.Interop.Tests.Complex
                 Console.WriteLine("       Lambda         Residual");
             }
 
-            var x = new Complex[N];
-            var y = new Complex[N];
+            var x = new Complex[n];
+            var y = new Complex[n];
 
             bool ok = true;
 
@@ -83,7 +87,7 @@ namespace CSparse.Interop.Tests.Complex
                 // y = A*x - lambda*x
                 A.Multiply(1.0, x, -lambda, y);
 
-                double r = Vector.Norm(y);
+                double r = Vector.Norm(n, y);
 
                 if (r > ERROR_THRESHOLD)
                 {

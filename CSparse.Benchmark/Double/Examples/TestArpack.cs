@@ -550,7 +550,7 @@
                         // y = A*x - lambda*x
                         A.Multiply(1.0, x, -lambda, y);
 
-                        r[i] = Vector.Norm(y) / Math.Abs(lambda);
+                        r[i] = Vector.Norm(n, y) / Math.Abs(lambda);
                     }
 
                     for (int i = 0; i < nconv; i++)
@@ -644,7 +644,7 @@
                         // y = A*x - lambda*B*x
                         A.Multiply(1.0, x, -lambda, y);
 
-                        r[i] = Vector.Norm(y) / Math.Abs(lambda);
+                        r[i] = Vector.Norm(n, y) / Math.Abs(lambda);
                     }
 
                     for (int i = 0; i < nconv; i++)
@@ -722,7 +722,7 @@
                         // y = A*x - lambda*x
                         A.Multiply(1.0, x, -lambda, y);
 
-                        r[i] = CVector.Norm(y) / Complex.Abs(lambda);
+                        r[i] = CVector.Norm(n, y) / Complex.Abs(lambda);
                     }
 
                     for (int i = 0; i < nconv; i++)
@@ -799,7 +799,7 @@
                         // y = A*x - lambda*B*x
                         A.Multiply(1.0, x, -lambda, y);
 
-                        r[i] = CVector.Norm(y) / Complex.Abs(lambda);
+                        r[i] = CVector.Norm(n, y) / Complex.Abs(lambda);
                     }
 
                     for (int i = 0; i < nconv; i++)
@@ -922,7 +922,7 @@
 
                         A.Multiply(1.0, v, -sigma, u);
 
-                        r[i] = Vector.Norm(u) / Math.Abs(sigma);
+                        r[i] = Vector.Norm(m, u) / Math.Abs(sigma);
 
                         // Compute A'*u - sigma*v
                         Array.Copy(temp, m, v, 0, n);
@@ -930,7 +930,7 @@
 
                         A.TransposeMultiply(1.0, u, -sigma, v);
 
-                        s[i] = Vector.Norm(v) / Math.Abs(sigma);
+                        s[i] = Vector.Norm(n, v) / Math.Abs(sigma);
                     }
 
                     // Printing the residual norm || A*v - sigma*u ||
