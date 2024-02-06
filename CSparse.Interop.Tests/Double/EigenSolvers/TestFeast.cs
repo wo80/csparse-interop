@@ -1,5 +1,6 @@
-﻿namespace CSparse.Double.Tests.EigenSolvers
+﻿namespace CSparse.Interop.Tests.Double.EigenSolvers
 {
+    using CSparse.Double;
     using CSparse.Double.Solver.MKL;
     using CSparse.Interop.MKL.Feast;
     using System;

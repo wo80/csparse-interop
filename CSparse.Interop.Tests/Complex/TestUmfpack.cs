@@ -1,6 +1,7 @@
 ﻿
-namespace CSparse.Complex.Tests
+namespace CSparse.Interop.Tests.Complex
 {
+    using CSparse.Complex;
     using CSparse.Complex.Factorization.SuiteSparse;
     using CSparse.Factorization;
     using CSparse.Interop.SuiteSparse.Umfpack;

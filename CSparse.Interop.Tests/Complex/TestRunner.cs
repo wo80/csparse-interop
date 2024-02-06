@@ -1,7 +1,8 @@
 ﻿
-namespace CSparse.Complex
+namespace CSparse.Interop.Tests.Complex
 {
-    using CSparse.Complex.Tests;
+    using CSparse.Complex;
+    using CSparse.Interop.Tests.Complex.EigenSolvers;
     using System;
 
     public static class TestRunner

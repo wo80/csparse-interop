@@ -1,5 +1,6 @@
-﻿namespace CSparse.Double.Tests.EigenSolvers
+﻿namespace CSparse.Interop.Tests.Double.EigenSolvers
 {
+    using CSparse.Double;
     using CSparse.Double.Solver;
     using System;
     using System.Diagnostics;

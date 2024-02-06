@@ -1,5 +1,5 @@
 ﻿
-namespace CSparse
+namespace CSparse.Interop.Tests
 {
     using System;
     using System.Globalization;

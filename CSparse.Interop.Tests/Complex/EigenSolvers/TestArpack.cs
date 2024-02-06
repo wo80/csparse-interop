@@ -1,5 +1,6 @@
-﻿namespace CSparse.Complex.Tests.EigenSolvers
+﻿namespace CSparse.Interop.Tests.Complex.EigenSolvers
 {
+    using CSparse.Complex;
     using CSparse.Complex.Solver;
     using System;
     using System.Diagnostics;

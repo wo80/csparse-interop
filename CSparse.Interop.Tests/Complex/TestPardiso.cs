@@ -1,6 +1,7 @@
 ﻿
-namespace CSparse.Complex.Tests
+namespace CSparse.Interop.Tests.Complex
 {
+    using CSparse.Complex;
     using CSparse.Complex.Factorization.MKL;
     using CSparse.Factorization;
     using CSparse.Interop.MKL.Pardiso;

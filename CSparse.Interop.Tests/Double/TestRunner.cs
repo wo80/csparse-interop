@@ -1,7 +1,8 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Interop.Tests.Double
 {
-    using CSparse.Double.Tests;
+    using CSparse.Double;
+    using CSparse.Interop.Tests.Double.EigenSolvers;
     using System;
 
     public static class TestRunner

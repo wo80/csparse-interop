@@ -1,6 +1,7 @@
 ﻿
-namespace CSparse.Double.Tests
+namespace CSparse.Interop.Tests.Double
 {
+    using CSparse.Double;
     using CSparse.Double.Factorization.SuiteSparse;
     using CSparse.Factorization;
     using CSparse.Interop.SuiteSparse.Umfpack;
