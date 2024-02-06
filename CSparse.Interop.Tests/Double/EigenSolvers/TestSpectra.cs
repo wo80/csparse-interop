@@ -1,17 +1,14 @@
-﻿
-namespace CSparse.Complex.Tests
+﻿namespace CSparse.Double.Tests.EigenSolvers
 {
-    using CSparse.Complex.Solver;
+    using CSparse.Double.Solver;
     using System;
     using System.Diagnostics;
 
-    class TestArpack
+    class TestSpectra
     {
-        private const double ERROR_THRESHOLD = 1e-3;
-
         public void Run(int size)
         {
-            Console.Write("Testing ARPACK ... ");
+            Console.Write("Testing Spectra ... ");
 
             // Number of eigenvalues to compute.
             int k = 5;
@@ -35,14 +32,15 @@ namespace CSparse.Complex.Tests
 
         public void Run(SparseMatrix A, int m, bool symmetric)
         {
-            var solver = new Arpack(A, symmetric)
+            var solver = new Spectra(A, symmetric)
             {
                 Tolerance = 1e-6,
-                ComputeEigenVectors = true
+                ComputeEigenVectors = true,
+                ArnoldiCount = m * 3
             };
 
             var timer = Stopwatch.StartNew();
-            
+
             var result = solver.SolveStandard(m, 0.0);
             //var result = solver.SolveStandard(m, Spectrum.SmallestMagnitude);
 
@@ -55,7 +53,7 @@ namespace CSparse.Complex.Tests
 
             result.EnsureSuccess();
 
-            if (Helper.CheckResiduals(A, result, false))
+            if (Helper.CheckResiduals(A, result, symmetric, false))
             {
                 Display.Ok("OK");
             }

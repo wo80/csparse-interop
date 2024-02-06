@@ -1,5 +1,4 @@
-﻿
-namespace CSparse.Double.Tests
+﻿namespace CSparse.Double.Tests.EigenSolvers
 {
     using CSparse.Double.Solver;
     using CSparse.Interop.MKL.ExtendedEigensolver;
@@ -39,7 +38,7 @@ namespace CSparse.Double.Tests
             var solver = new ExtendedEigensolver(A);
 
             var timer = Stopwatch.StartNew();
-            
+
             var result = (ExtendedEigensolverResult)solver.SolveStandard(m, Job.Largest);
 
             timer.Stop();

@@ -1,12 +1,9 @@
-﻿
-namespace CSparse.Complex.Tests
+﻿namespace CSparse.Double.Tests.EigenSolvers
 {
-    using CSparse.Complex.Solver;
+    using CSparse.Double.Solver.MKL;
     using CSparse.Interop.MKL.Feast;
     using System;
     using System.Diagnostics;
-
-    using Complex = System.Numerics.Complex;
 
     class TestFeast
     {
@@ -82,7 +79,7 @@ namespace CSparse.Complex.Tests
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, FeastResult<Complex> result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, FeastResult<double> result, bool print)
         {
             int N = A.RowCount;
 
@@ -97,8 +94,8 @@ namespace CSparse.Complex.Tests
                 Console.WriteLine("       Lambda         Residual");
             }
 
-            var x = new Complex[N];
-            var y = new Complex[N];
+            var x = new double[N];
+            var y = new double[N];
 
             bool ok = true;
 

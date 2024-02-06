@@ -1,12 +1,13 @@
-﻿
-namespace CSparse.Double.Tests
+﻿namespace CSparse.Complex.Tests.EigenSolvers
 {
-    using CSparse.Double.Solver;
+    using CSparse.Complex.Solver;
     using System;
     using System.Diagnostics;
 
     class TestArpack
     {
+        private const double ERROR_THRESHOLD = 1e-3;
+
         public void Run(int size)
         {
             Console.Write("Testing ARPACK ... ");
@@ -33,10 +34,7 @@ namespace CSparse.Double.Tests
 
         public void Run(SparseMatrix A, int m, bool symmetric)
         {
-            // For real symmetric problems, ARPACK++ expects the matrix to be upper triangular.
-            var U = A.ToUpper();
-
-            var solver = new Arpack(U, symmetric)
+            var solver = new Arpack(A, symmetric)
             {
                 Tolerance = 1e-6,
                 ComputeEigenVectors = true
@@ -56,7 +54,7 @@ namespace CSparse.Double.Tests
 
             result.EnsureSuccess();
 
-            if (Helper.CheckResiduals(A, result, symmetric, false))
+            if (Helper.CheckResiduals(A, result, false))
             {
                 Display.Ok("OK");
             }
