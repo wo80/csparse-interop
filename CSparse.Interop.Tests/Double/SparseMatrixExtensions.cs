@@ -1,10 +1,24 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Interop.Tests.Double
 {
+    using CSparse.Double;
     using System.Numerics;
 
-    static class SparseMatrixExtensions
+    internal static class SparseMatrixExtensions
     {
+        /// <summary>
+        /// Remove all non-zero entries in the lower part of the matrix.
+        /// </summary>
+        /// <param name="clone">If true, return a clone of the original matrix, otherwise modify given instance in place.</param>
+        public static SparseMatrix ToUpper(this SparseMatrix A, bool clone = true)
+        {
+            var B = clone ? (SparseMatrix)A.Clone() : A;
+
+            B.Keep((i, j, _) => i <= j);
+
+            return B;
+        }
+
         /// <summary>
         /// Multiplies a real-valued (m-by-n) matrix by a complex vector, y = A*x. 
         /// </summary>

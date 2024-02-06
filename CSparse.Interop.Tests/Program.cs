@@ -6,7 +6,8 @@
     internal class Program
     {
         static void Main(string[] args)
-        {            // Default matrix size.
+        {
+            // Default matrix size.
             int size = 1000;
 
             // Default density (non-zeros = size x size x density).
@@ -14,16 +15,11 @@
 
             GetSize(args, ref size, ref density);
 
-            if (args.Length == 0 || args[0] == "--test")
-            {
-                Double.TestRunner.Run(size, density);
-                Complex.TestRunner.Run(size, density);
-            }
-            else if (args[0] == "--cuda")
-            {
-                Double.TestCuda.Run(size, density);
-                Complex.TestCuda.Run(size, density);
-            }
+            Double.TestRunner.Run(size, density);
+            Complex.TestRunner.Run(size, density);
+
+            //Double.TestCuda.Run(size, density);
+            //Complex.TestCuda.Run(size, density);
         }
 
         private static void GetSize(string[] args, ref int size, ref double density)

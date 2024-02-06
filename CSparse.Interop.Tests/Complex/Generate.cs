@@ -1,6 +1,7 @@
 ﻿
-namespace CSparse.Complex
+namespace CSparse.Interop.Tests.Complex
 {
+    using CSparse.Complex;
     using CSparse.Storage;
     using System;
     using System.Numerics;

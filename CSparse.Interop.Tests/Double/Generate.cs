@@ -1,6 +1,7 @@
 ﻿
-namespace CSparse.Double
+namespace CSparse.Interop.Tests.Double
 {
+    using CSparse.Double;
     using CSparse.Storage;
     using System;
 
