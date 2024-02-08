@@ -3,7 +3,6 @@ namespace CSparse.Double.Solver
 {
     using CSparse.Interop.MKL;
     using CSparse.Interop.MKL.ExtendedEigensolver;
-    using CSparse.Storage;
 
     public class ExtendedEigensolverResult : ExtendedEigensolverResult<double>
     {
@@ -18,6 +17,9 @@ namespace CSparse.Double.Solver
             eigenvalues = e;
             eigenvectors = x;
         }
+
+        /// <inheritdoc />
+        public override bool HasEigenVectors => ConvergedEigenValues > 0 && eigenvectors != null;
 
         /// <inheritdoc />
         public override double[] EigenValuesReal()

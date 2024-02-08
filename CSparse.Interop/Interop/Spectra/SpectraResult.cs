@@ -37,24 +37,16 @@ namespace CSparse.Interop.Spectra
             this.size = size;
         }
 
-        /// <summary>
-        /// Gets the number of requested eigenvalues.
-        /// </summary>
+        /// <inheritdoc />
         public int Count { get; private set; }
 
-        /// <summary>
-        /// Gets the number of converged eigenvalues.
-        /// </summary>
+        /// <inheritdoc />
         public int ConvergedEigenValues { get; internal set; }
 
-        /// <summary>
-        /// Gets the number of iteration taken.
-        /// </summary>
+        /// <inheritdoc />
         public int IterationsTaken { get; internal set; }
 
-        /// <summary>
-        /// Gets the number of Arnoldi vectors.
-        /// </summary>
+        /// <inheritdoc />
         public int ArnoldiCount { get; internal set; }
 
         /// <summary>
@@ -62,12 +54,10 @@ namespace CSparse.Interop.Spectra
         /// </summary>
         public int ErrorCode { get; internal set; }
 
-        /// <summary>
-        /// Gets the dense matrix of eigenvectors stored in column major order.
-        /// </summary>
-        /// <remarks>
-        /// For real symmetric matrices, eigenvectors will be real. Use EigenVectorsReal().
-        /// </remarks>
+        /// <inheritdoc />
+        public bool HasEigenVectors => ConvergedEigenValues > 0 && eigvec != null;
+
+        /// <inheritdoc />
         public Matrix<Complex> EigenVectors
         {
             get
@@ -81,12 +71,7 @@ namespace CSparse.Interop.Spectra
             }
         }
 
-        /// <summary>
-        /// Gets the eigenvalues.
-        /// </summary>
-        /// <remarks>
-        /// For real symmetric matrices, eigenvalues will be real. Use EigenValuesReal().
-        /// </remarks>
+        /// <inheritdoc />
         public Complex[] EigenValues
         {
             get
@@ -111,14 +96,10 @@ namespace CSparse.Interop.Spectra
             }
         }
 
-        /// <summary>
-        /// Gets the real part of the eigenvalues.
-        /// </summary>
+        /// <inheritdoc />
         public abstract double[] EigenValuesReal();
 
-        /// <summary>
-        /// Gets the real part of the eigenvectors.
-        /// </summary>
+        /// <inheritdoc />
         public abstract Matrix<double> EigenVectorsReal();
 
         /// <summary>

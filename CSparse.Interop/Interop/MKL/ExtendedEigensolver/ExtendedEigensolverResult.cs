@@ -30,45 +30,41 @@ namespace CSparse.Interop.MKL.ExtendedEigensolver
             Residuals = r;
         }
 
-        public int Count => -1; // TODO: remove count property from interface
-
         /// <summary>
-        /// Gets the status code returned by MKL extended eigensolver.
+        /// Gets the number of requested eigenvalues (not supported in MKL extended eigensolver).
         /// </summary>
+        public int Count => -1; // TODO: remove count property from interface?
+
+        /// <inheritdoc />
         public SparseStatus Status { get; protected set; }
 
         /// <summary>
         /// Gets the integer status code returned by MKL extended eigensolver.
         /// </summary>
         public int ErrorCode => (int)Status;
-        
-        /// <summary>
-        /// Gets the number of converged eigenvalues.
-        /// </summary>
+
+        /// <inheritdoc />
         public int ConvergedEigenValues { get; protected set; }
 
-        /// <summary>
-        /// Gets the dense matrix of eigenvectors stored in column major order.
-        /// </summary>
+        /// <inheritdoc />
+        public abstract bool HasEigenVectors { get; }
+
+        /// <inheritdoc />
         public Matrix<Complex> EigenVectors { get; protected set; }
 
-        /// <summary>
-        /// Gets the eigenvalues.
-        /// </summary>
+        /// <inheritdoc />
         public Complex[] EigenValues { get; protected set; }
 
-        /// <summary>
-        /// Gets the residuals vector.
-        /// </summary>
+        /// <inheritdoc />
         public double[] Residuals { get; protected set; }
 
         /// <summary>
-        /// Gets the number of iteration taken (not supported).
+        /// Gets the number of iteration taken (not supported in MKL extended eigensolver).
         /// </summary>
         public int IterationsTaken => -1;
 
         /// <summary>
-        /// Gets the number of Arnoldi vectors computed (not supported).
+        /// Gets the number of Arnoldi vectors computed (not supported in MKL extended eigensolver).
         /// </summary>
         public int ArnoldiCount => -1;
 
@@ -83,14 +79,10 @@ namespace CSparse.Interop.MKL.ExtendedEigensolver
             }
         }
 
-        /// <summary>
-        /// Gets the real part of the eigenvalues.
-        /// </summary>
+        /// <inheritdoc />
         public abstract double[] EigenValuesReal();
-        
-        /// <summary>
-        /// Gets the real part of the eigenvectors.
-        /// </summary>
+
+        /// <inheritdoc />
         public abstract Matrix<double> EigenVectorsReal();
 
         protected virtual Complex[] CreateEigenValues(double[] x, int length)

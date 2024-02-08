@@ -39,10 +39,15 @@ namespace CSparse.Solvers
         void EnsureSuccess();
 
         /// <summary>
+        /// Gets a value indicating whether eigenvectors are available.
+        /// </summary>
+        bool HasEigenVectors { get; }
+
+        /// <summary>
         /// Gets the dense matrix of eigenvectors stored in column major order.
         /// </summary>
         /// <remarks>
-        /// For real symmetric matrices, eigenvectors will be real. Use <see cref="EigenVectorsReal()"/>.
+        /// For symmetric (Hermitian) matrices, eigenvectors will be real. Use <see cref="EigenVectorsReal()"/>.
         /// </remarks>
         Matrix<Complex> EigenVectors { get; }
 
@@ -50,7 +55,7 @@ namespace CSparse.Solvers
         /// Gets the eigenvalues.
         /// </summary>
         /// <remarks>
-        /// For real symmetric matrices, eigenvalues will be real. Use <see cref="EigenValuesReal()"/>.
+        /// For symmetric (Hermitian) matrices, eigenvalues will be real. Use <see cref="EigenValuesReal()"/>.
         /// </remarks>
         Complex[] EigenValues { get; }
 
