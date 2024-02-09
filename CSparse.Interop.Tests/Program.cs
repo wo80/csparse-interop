@@ -7,13 +7,7 @@
     {
         static void Main(string[] args)
         {
-            // Default matrix size.
-            int size = 1000;
-
-            // Default density (non-zeros = size x size x density).
-            double density = 0.01;
-
-            GetSize(args, ref size, ref density);
+            GetSize(args, out int size, out double density);
 
             Double.TestRunner.Run(size, density);
             Complex.TestRunner.Run(size, density);
@@ -22,11 +16,28 @@
             //Complex.TestCuda.Run(size, density);
         }
 
-        private static void GetSize(string[] args, ref int size, ref double density)
+        private static void GetSize(string[] args, out int size, out double density)
         {
-            if (args.Length > 1)
+            // Default matrix size.
+            size = 1000;
+
+            // Default density (non-zeros = size x size x density).
+            density = 0.01;
+
+            int length = args.Length;
+
+            for (int i = 0; i < length; i++)
             {
-                int.TryParse(args[1], out size);
+                var arg = args[i];
+
+                if (arg.Equals("--size") && i + 1 < length)
+                {
+                    int.TryParse(args[i + 1], out size);
+                }
+                else if (arg.Equals("--density") && i + 1 < length)
+                {
+                    double.TryParse(args[i + 1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out density);
+                }
             }
 
             if (size < 0 || size > 10000)
@@ -34,11 +45,6 @@
                 Console.WriteLine("Parameter 'size' out of range: reset to default (1000)");
 
                 size = 1000;
-            }
-
-            if (args.Length > 2)
-            {
-                double.TryParse(args[2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out density);
             }
 
             if (density < 1e-6 || density > 0.1)
