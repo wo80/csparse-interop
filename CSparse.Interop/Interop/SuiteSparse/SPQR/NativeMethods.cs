@@ -5,14 +5,6 @@ namespace CSparse.Interop.SuiteSparse.SPQR
     using System.Runtime.InteropServices;
     using CSparse.Interop.SuiteSparse.Cholmod;
 
-#if X64
-    using size_t = System.UInt64;
-    using sp_long = System.Int32; // Modified version of SPQR uses Long = int
-#else
-    using size_t = System.UInt32;
-    using sp_long = System.Int32;
-#endif
-
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
@@ -44,12 +36,12 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns rank(A) estimate, (-1) if failure</returns>
         [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C", CallingConvention = CallingConvention.Cdecl)]
-        public static extern sp_long SuiteSparseQR_C
+        public static extern long SuiteSparseQR_C
         (
             /* inputs: */
             int ordering,
             double tol,
-            sp_long econ,
+            long econ,
             int getCTX,
             ref CholmodSparse A,
             IntPtr Bsparse, // ref CholmodSparse
@@ -58,13 +50,34 @@ namespace CSparse.Interop.SuiteSparse.SPQR
             out IntPtr Zsparse, // CholmodSparse
             out IntPtr Zdense, // CholmodDense
             out IntPtr R, // CholmodSparse
-            out IntPtr E, // SuiteSparse_long[]
+            out IntPtr E, // int64_t[]
             out IntPtr H, // CholmodSparse
-            out IntPtr HPinv, // SuiteSparse_long[]
+            out IntPtr HPinv, // int64_t[]
             out IntPtr HTau, // CholmodDense
             ref CholmodCommon cc // 
         );
 
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_i_C", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SuiteSparseQR_i_C
+        (
+            /* inputs: */
+            int ordering,
+            double tol,
+            int econ,
+            int getCTX,
+            ref CholmodSparse A,
+            IntPtr Bsparse, // ref CholmodSparse
+            ref CholmodDense Bdense,
+            /* outputs: */
+            out IntPtr Zsparse, // CholmodSparse
+            out IntPtr Zdense, // CholmodDense
+            out IntPtr R, // CholmodSparse
+            out IntPtr E, // int32_t[]
+            out IntPtr H, // CholmodSparse
+            out IntPtr HPinv, // int32_t[]
+            out IntPtr HTau, // CholmodDense
+            ref CholmodCommon cc // 
+        );
         /// <summary>
         /// [Q,R,E] = qr(A), returning Q as a sparse matrix
         /// </summary>
@@ -78,17 +91,32 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         /// <param name="cc">workspace and parameters</param>
         /// <returns>returns rank(A) est., (-1) if failure</returns>
         [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_QR", CallingConvention = CallingConvention.Cdecl)]
-        public static extern sp_long SuiteSparseQR_C_QR
+        public static extern long SuiteSparseQR_C_QR
         (
             /* inputs: */
             int ordering,
             double tol,
-            sp_long econ,
+            long econ,
             ref CholmodSparse A,
             /* outputs: */
             out IntPtr Q, // CholmodSparse
             out IntPtr R, // CholmodSparse
-            out IntPtr E, // SuiteSparse_long[]
+            out IntPtr E, // int64_t[]
+            ref CholmodCommon cc
+        );
+
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_i_C_QR", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SuiteSparseQR_i_C_QR
+        (
+            /* inputs: */
+            int ordering,
+            double tol,
+            int econ,
+            ref CholmodSparse A,
+            /* outputs: */
+            out IntPtr Q, // CholmodSparse
+            out IntPtr R, // CholmodSparse
+            out IntPtr E, // int32_t[]
             ref CholmodCommon cc
         );
 
