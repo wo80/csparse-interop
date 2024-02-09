@@ -11,6 +11,7 @@
 
             Double.TestRunner.Run(size, density);
             Complex.TestRunner.Run(size, density);
+            AMD.TestRunner.Run();
 
             //Double.TestCuda.Run(size, density);
             //Complex.TestCuda.Run(size, density);
