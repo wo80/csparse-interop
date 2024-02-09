@@ -156,6 +156,9 @@
         const string CXSPARSE_DLL = "cxsparse";
 #endif
 
+        [DllImport(CXSPARSE_DLL, EntryPoint = "cxsparse_version", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void cxsparse_version(int[] version);
+
         #region Double
 
         [DllImport(CXSPARSE_DLL, EntryPoint = "cs_di_add", CallingConvention = CallingConvention.Cdecl)]

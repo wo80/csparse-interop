@@ -24,6 +24,17 @@ namespace CSparse.Interop.SuiteSparse.SPQR
         protected bool factorized;
 
         /// <summary>
+        /// Return the SPQR version.
+        /// </summary>
+        /// <returns>The SPQR version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.SuiteSparseQR_C_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the SpqrContext class.
         /// </summary>
         /// <param name="matrix">The sparse matrix to factorize.</param>

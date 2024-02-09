@@ -91,6 +91,17 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         #endregion
 
         /// <summary>
+        /// Return the COLAMD version.
+        /// </summary>
+        /// <returns>The COLAMD version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.colamd_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
+        /// <summary>
         /// Generate a fill-reducing ordering using the COLAMD algorithm.
         /// </summary>
         /// <param name="A">The matrix.</param>
@@ -230,6 +241,9 @@ namespace CSparse.Interop.SuiteSparse.Ordering
 
             #region COLAMD
 
+            [DllImport(COLAMD_DLL)]
+            public static extern void colamd_version(int[] version);
+
             /// <summary>
             /// Returns recommended value of alen.
             /// </summary>
@@ -319,6 +333,9 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             #endregion
 
             #region CCOLAMD
+
+            [DllImport(CCOLAMD_DLL)]
+            public static extern void ccolamd_version(int[] version);
 
             /// <summary>
             /// Returns recommended value of alen.

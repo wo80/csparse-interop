@@ -267,5 +267,8 @@ namespace CSparse.Interop.SuiteSparse.SPQR
             ref CholmodDense X,
             ref CholmodCommon cc
         );
+
+        [DllImport(SPQR_DLL, EntryPoint = "SuiteSparseQR_C_version", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SuiteSparseQR_C_version(int[] version);
     }
 }

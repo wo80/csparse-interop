@@ -130,6 +130,17 @@
         #endregion
 
         /// <summary>
+        /// Return the AMD version.
+        /// </summary>
+        /// <returns>The AMD version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.amd_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
+        /// <summary>
         /// Generate a fill-reducing ordering using the AMD algorithm.
         /// </summary>
         /// <param name="A">The matrix.</param>
@@ -250,6 +261,9 @@
 
             #region AMD
 
+            [DllImport(AMD_DLL)]
+            public static extern void amd_version(int[] version);
+
             /// <summary>
             /// Computes the approximate minimum degree ordering of an n-by-n matrix A.
             /// </summary>
@@ -322,6 +336,9 @@
             #endregion
 
             #region CAMD
+
+            [DllImport(CAMD_DLL)]
+            public static extern void camd_version(int[] version);
 
             /// <summary>
             /// Computes the approximate minimum degree ordering of an n-by-n matrix A.
