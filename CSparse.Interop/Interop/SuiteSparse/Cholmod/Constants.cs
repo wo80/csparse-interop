@@ -14,7 +14,7 @@
         /// <summary>
         /// all numerical values are float
         /// </summary>
-        Single = 1
+        Single = 4
     }
 
     /// <summary>
@@ -62,13 +62,17 @@
         /// </summary>
         Pattern = 0,
         /// <summary>
-        /// A real matrix.
+        /// Real (double or single), not complex.
         /// </summary>
         Real = 1,
         /// <summary>
-        /// A complex matrix (ANSI C99 compatible).
+        /// Complex (double or single), interleaved.
         /// </summary>
-        Complex = 2
+        Complex = 2,
+        /// <summary>
+        /// Complex (double or single), with real and imag parts held in different arrays.
+        /// </summary>
+        Zomplex = 3
     }
 
     /// <summary>
@@ -142,7 +146,7 @@
         /// </summary>
         Pt = 8
     }
-    
+
     /// <summary>
     /// Scaling modes.
     /// </summary>
@@ -207,8 +211,8 @@
     {
 
         /* Solves one of many linear systems with a dense right-hand-side, using the
-         * factorization from cholmod_factorize (or as modified by any other CHOLMOD
-         * routine).  D is identity for LL' factorizations. */
+        * factorization from cholmod_factorize (or as modified by any other CHOLMOD
+        * routine).  D is identity for LL' factorizations. */
 
         internal const int CHOLMOD_A = 0;		/* solve Ax=b */
         internal const int CHOLMOD_LDLt = 1;		/* solve LDL'x=b */
@@ -242,44 +246,67 @@
         /* === CHOLMOD Common ======================================================= */
         /* ========================================================================== */
 
-        /* itype defines the types of integer used: */
+        // itype: integer sizes
+        // The itype is held in the Common object and must match the method used.
+        internal const int CHOLMOD_INT  = 0;    /* int32, for cholmod_* methods (no _l_) */
+        internal const int CHOLMOD_LONG = 2;    /* int64, for cholmod_l_* methods        */
 
-        internal const int CHOLMOD_INT = 0;	/* all integer arrays are int */
-        internal const int CHOLMOD_INTLONG = 1;	/* most are int, some are SuiteSparse_long */
-        internal const int CHOLMOD_LONG = 2;    /* all integer arrays are SuiteSparse_long */
+        // dtype: floating point sizes (double or float)
+        // The dtype of all parameters for all CHOLMOD routines must match.
+        // NOTE: CHOLMOD_SINGLE is still under development.
+        internal const int CHOLMOD_DOUBLE = 0;  /* matrix or factorization is double precision */
+        internal const int CHOLMOD_SINGLE = 4;  /* matrix or factorization is single precision */
 
-        /* The itype of all parameters for all CHOLMOD routines must match.
-         * FUTURE WORK: CHOLMOD_INTLONG is not yet supported.
-         */
+        // xtype: pattern, real, complex, or zomplex
+        internal const int CHOLMOD_PATTERN = 0; /* no numerical values                            */
+        internal const int CHOLMOD_REAL    = 1; /* real (double or single), not complex           */
+        internal const int CHOLMOD_COMPLEX = 2; /* complex (double or single), interleaved        */
+        internal const int CHOLMOD_ZOMPLEX = 3; /* complex (double or single), with real and imag */
+        /* parts held in different arrays                 */
+
+        // xdtype is (xtype + dtype), which combines the two type parameters into
+        // a single number handling all 8 cases:
+        //
+        //  (0) CHOLMOD_DOUBLE + CHOLMOD_PATTERN    a pattern-only matrix
+        //  (1) CHOLMOD_DOUBLE + CHOLMOD_REAL       a double real matrix
+        //  (2) CHOLMOD_DOUBLE + CHOLMOD_COMPLEX    a double complex matrix
+        //  (3) CHOLMOD_DOUBLE + CHOLMOD_ZOMPLEX    a double zomplex matrix
+        //  (4) CHOLMOD_SINGLE + CHOLMOD_PATTERN    a pattern-only matrix
+        //  (5) CHOLMOD_SINGLE + CHOLMOD_REAL       a float real matrix
+        //  (6) CHOLMOD_SINGLE + CHOLMOD_COMPLEX    a float complex matrix
+        //  (7) CHOLMOD_SINGLE + CHOLMOD_ZOMPLEX    a float zomplex matrix
 
         /* Definitions for cholmod_common: */
         public const int CHOLMOD_MAXMETHODS = 9;	/* maximum number of different methods that */
         /* cholmod_analyze can try. Must be >= 9. */
 
-        public const int CHOLMOD_OK = 0;			/* success */
+        // Common->status for error handling: 0 is ok, negative is a fatal
+        // error, and positive is a warning
+
+        public const int CHOLMOD_OK = 0;
+        public const int CHOLMOD_NOT_INSTALLED = -1; /* module not installed          */
+        public const int CHOLMOD_OUT_OF_MEMORY = -2; /* malloc/calloc/realloc failed  */
+        public const int CHOLMOD_TOO_LARGE     = -3; /* integer overflow              */
+        public const int CHOLMOD_INVALID       = -4; /* input invalid                 */
+        public const int CHOLMOD_GPU_PROBLEM   = -5; /* CUDA error                    */
+        public const int CHOLMOD_NOT_POSDEF    =  1; /* matrix not positive definite  */
+        public const int CHOLMOD_DSMALL        =  2; /* diagonal entry very small     */
+
         public const int TRUE = 1;
 
-        public const int CHOLMOD_INVALID = -4;
+        // ordering method
+        public const int CHOLMOD_NATURAL = 0; /* no preordering                             */
+        public const int CHOLMOD_GIVEN   = 1; /* user-provided permutation                  */
+        public const int CHOLMOD_AMD     = 2; /* AMD: approximate minimum degree            */
+        public const int CHOLMOD_METIS   = 3; /* METIS: mested dissection                   */
+        public const int CHOLMOD_NESDIS  = 4; /* CHOLMOD's nested dissection                */
+        public const int CHOLMOD_COLAMD  = 5; /* AMD for A, COLAMD for AA' or A'A           */
+        public const int CHOLMOD_POSTORDERED = 6; /* natural then postordered               */
 
-        /* ordering method (also used for L->ordering) */
-        public const int CHOLMOD_NATURAL = 0;	/* use natural ordering */
-        public const int CHOLMOD_GIVEN = 1;		/* use given permutation */
-        public const int CHOLMOD_AMD = 2;		/* use minimum degree (AMD) */
-        public const int CHOLMOD_METIS = 3;		/* use METIS' nested dissection */
-        public const int CHOLMOD_NESDIS = 4;	/* use CHOLMOD's version of nested dissection:*/
-        /* node bisector applied recursively, followed
-         * by constrained minimum degree (CSYMAMD or
-         * CCOLAMD) */
-        public const int CHOLMOD_COLAMD = 5;	/* use AMD for A, COLAMD for A*A' */
-
-        /* POSTORDERED is not a method, but a result of natural ordering followed by a
-         * weighted postorder.  It is used for L->ordering, not method [ ].ordering. */
-        public const int CHOLMOD_POSTORDERED = 6;	/* natural ordering, postordered. */
-
-        /* supernodal strategy (for Common->supernodal) */
-        public const int CHOLMOD_SIMPLICIAL = 0;	/* always do simplicial */
-        public const int CHOLMOD_AUTO = 1;		/* select simpl/super depending on matrix */
-        public const int CHOLMOD_SUPERNODAL = 2;	/* always do supernodal */
+        // supernodal strategy
+        public const int CHOLMOD_SIMPLICIAL = 0; /* always use simplicial method            */
+        public const int CHOLMOD_AUTO       = 1; /* auto select simplicial vs supernodal    */
+        public const int CHOLMOD_SUPERNODAL = 2; /* always use supernoda method             */
 
         public const int CHOLMOD_HOST_SUPERNODE_BUFFERS = 8;	/* always do supernodal */
     }
