@@ -17,575 +17,428 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
     using CHOLMOD_CUDASTREAM = System.IntPtr;
     using CHOLMOD_CUDAEVENT = System.IntPtr;
 
-    public delegate void ErrorHandler(int status, string file, int line, string message);
+    // IntPtr = const char *
+    public delegate void ErrorHandler(int status, IntPtr file, int line, IntPtr message);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct CholmodMethod
     {
-        /* statistics for this method */
-        public double lnz;     /* nnz(L) excl. zeros from supernodal amalgamation,
-			     * for a "pure" L */
 
-        public double fl;      /* flop count for a "pure", real simplicial LL'
-			     * factorization, with no extra work due to
-	    * amalgamation.  Subtract n to get the LDL' flop count.   Multiply
-	    * by about 4 if the matrix is complex or zomplex. */
+        //----------------------------------------------------------------------
+        // statistics from the ordering
+        //----------------------------------------------------------------------
 
-        /* ordering method parameters */
-        public double prune_dense;/* dense row/col control for AMD, SYMAMD, CSYMAMD,
-			     * and NESDIS (cholmod_nested_dissection).  For a
-	    * symmetric n-by-n matrix, rows/columns with more than
-	    * MAX (16, prune_dense * sqrt (n)) entries are removed prior to
-	    * ordering.  They appear at the end of the re-ordered matrix.
-	    *
-	    * If prune_dense < 0, only completely dense rows/cols are removed.
-	    *
-	    * This paramater is also the dense column control for COLAMD and
-	    * CCOLAMD.  For an m-by-n matrix, columns with more than
-	    * MAX (16, prune_dense * sqrt (MIN (m,n))) entries are removed prior
-	    * to ordering.  They appear at the end of the re-ordered matrix.
-	    * CHOLMOD factorizes A*A', so it calls COLAMD and CCOLAMD with A',
-	    * not A.  Thus, this parameter affects the dense *row* control for
-	    * CHOLMOD's matrix, and the dense *column* control for COLAMD and
-	    * CCOLAMD.
-	    *
-	    * Removing dense rows and columns improves the run-time of the
-	    * ordering methods.  It has some impact on ordering quality
-	    * (usually minimal, sometimes good, sometimes bad).
-	    *
-	    * Default: 10. */
+        public double lnz;    // number of nonzeros in L
+        public double fl;     // Cholesky flop count for this ordering (each
+            // multiply and each add counted once (doesn't count complex
+            // flops).
 
-        public double prune_dense2;/* dense row control for COLAMD and CCOLAMD.
-			    *  Rows with more than MAX (16, dense2 * sqrt (n))
-	    * for an m-by-n matrix are removed prior to ordering.  CHOLMOD's
-	    * matrix is transposed before ordering it with COLAMD or CCOLAMD,
-	    * so this controls the dense *columns* of CHOLMOD's matrix, and
-	    * the dense *rows* of COLAMD's or CCOLAMD's matrix.
-	    *
-	    * If prune_dense2 < 0, only completely dense rows/cols are removed.
-	    *
-	    * Default: -1.  Note that this is not the default for COLAMD and
-	    * CCOLAMD.  -1 is best for Cholesky.  10 is best for LU.  */
+        //----------------------------------------------------------------------
+        // ordering parameters:
+        //----------------------------------------------------------------------
 
-        public double nd_oksep;   /* in NESDIS, when a node separator is computed, it
-			     * discarded if nsep >= nd_oksep*n, where nsep is
-	    * the number of nodes in the separator, and n is the size of the
-	    * graph being cut.  Valid range is 0 to 1.  If 1 or greater, the
-	    * separator is discarded if it consists of the entire graph.
-	    * Default: 1 */
+        public double prune_dense;    // dense row/col control.  Default: 10.
+            // Rows/cols with more than max (prune_dense*sqrt(n),16) are
+            // removed prior to orderingm and placed last.  If negative,
+            // only completely dense rows/cols are removed.  Removing these
+            // rows/cols with many entries can speed up the ordering, but
+            // removing too many can reduce the ordering quality.
+            //
+            // For AMD, SYMAMD, and CSYMAMD, this is the only dense row/col
+            // parameter.  For COLAMD and CCOLAMD, this parameter controls
+            // how dense columns are handled.
+
+        public double prune_dense2;   // dense row control for COLAMD and CCOLAMD.
+            // Default -1.  When computing the Cholesky factorization of AA'
+            // rows with more than max(prune_dense2*sqrt(n),16) entries
+            // are removed prior to ordering.  If negative, only completely
+            // dense rows are removed.
+
+        public double nd_oksep;   // for CHOLMOD's nesdis method. Default 1.
+            // A node separator with nsep nodes is discarded if
+            // nsep >= nd_oksep*n.
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal double[] other_1; /* future expansion */
+        public double[] other_1;    // unused, for future expansion
 
-        public size_t nd_small;    /* do not partition graphs with fewer nodes than
-			     * nd_small, in NESDIS.  Default: 200 (same as METIS) */
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal size_t[] other_2; /* future expansion */
-
-        public int aggressive;    /* Aggresive absorption in AMD, COLAMD, SYMAMD,
-			     * CCOLAMD, and CSYMAMD.  Default: TRUE */
-
-        public int order_for_lu;  /* CCOLAMD can be optimized to produce an ordering
-			     * for LU or Cholesky factorization.  CHOLMOD only
-	    * performs a Cholesky factorization.  However, you may wish to use
-	    * CHOLMOD as an interface for CCOLAMD but use it for your own LU
-	    * factorization.  In this case, order_for_lu should be set to FALSE.
-	    * When factorizing in CHOLMOD itself, you should *** NEVER *** set
-	    * this parameter FALSE.  Default: TRUE. */
-
-        public int nd_compress;   /* If TRUE, compress the graph and subgraphs before
-			     * partitioning them in NESDIS.  Default: TRUE */
-
-        public int nd_camd;        /* If 1, follow the nested dissection ordering
-			     * with a constrained minimum degree ordering that
-	    * respects the partitioning just found (using CAMD).  If 2, use
-	    * CSYMAMD instead.  If you set nd_small very small, you may not need
-	    * this ordering, and can save time by setting it to zero (no
-	    * constrained minimum degree ordering).  Default: 1. */
-
-        public int nd_components; /* The nested dissection ordering finds a node
-			     * separator that splits the graph into two parts,
-	    * which may be unconnected.  If nd_components is TRUE, each of
-	    * these connected components is split independently.  If FALSE,
-	    * each part is split as a whole, even if it consists of more than
-	    * one connected component.  Default: FALSE */
-
-        /* fill-reducing ordering to use */
-        public int ordering;
+        public size_t nd_small;   // for CHOLMOD's nesdis method. Default 200.
+            // Subgraphs with fewer than nd_small nodes are not partitioned.
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal size_t[] other_3; /* future expansion */
+        public double[] other_2;    // unused, for future expansion
+
+        public int aggressive;    // if true, AMD, COLAMD, SYMAMD, CCOLAMD, and
+            // CSYMAMD perform aggresive absorption.  Default: true
+
+        public int order_for_lu;  // Default: false.  If the CHOLMOD analysis/
+            // ordering methods are used as an ordering method for an LU
+            // factorization, then set this to true.  For use in a Cholesky
+            // factorization by CHOLMOD itself, never set this to true.
+
+        public int nd_compress;   // if true, then the graph and subgraphs are
+            // compressed before partitioning them in CHOLMOD's nesdis
+            // method.  Default: true.
+
+        public int nd_camd;   // if 1, then CHOLMOD's nesdis is followed by
+            // CAMD.  If 2: followed by CSYMAMD.  If nd_small is very small,
+            // then use 0, which skips CAMD or CSYMAMD.  Default: 1.
+
+        public int nd_components; // CHOLMOD's nesdis can partition a graph and then
+            // find that the subgraphs are unconnected.  If true, each of these
+            // components is partitioned separately.  If false, the whole
+            // subgraph is partitioned.  Default: false.
+
+        public int ordering;  // ordering method to use
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        internal size_t[] other_3;    // unused, for future expansion
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct CholmodCommon
     {
-        /* ---------------------------------------------------------------------- */
-        /* parameters for symbolic/numeric factorization and update/downdate */
-        /* ---------------------------------------------------------------------- */
+        //--------------------------------------------------------------------------
+        // primary parameters for factorization and update/downdate
+        //--------------------------------------------------------------------------
 
-        public double dbound;  /* Smallest absolute value of diagonal entries of D
-			 * for LDL' factorization and update/downdate/rowadd/
-	* rowdel, or the diagonal of L for an LL' factorization.
-	* Entries in the range 0 to dbound are replaced with dbound.
-	* Entries in the range -dbound to 0 are replaced with -dbound.  No
-	* changes are made to the diagonal if dbound <= 0.  Default: zero */
+        public double dbound; // Bounds the diagonal entries of D for LDL'
+            // factorization and update/downdate/rowadd.  Entries outside this
+            // bound are replaced with dbound.  Default: 0.  dbound is used for
+            // double precision factorization only.  See sbound for single
+            // precision factorization.
 
-        public double grow0;   /* For a simplicial factorization, L->i and L->x can
-			 * grow if necessary.  grow0 is the factor by which
-	* it grows.  For the initial space, L is of size MAX (1,grow0) times
-	* the required space.  If L runs out of space, the new size of L is
-	* MAX(1.2,grow0) times the new required space.   If you do not plan on
-	* modifying the LDL' factorization in the Modify module, set grow0 to
-	* zero (or set grow2 to 0, see below).  Default: 1.2 */
+        public double grow0;      // default: 1.2
+        public double grow1;      // default: 1.2
+        public size_t grow2;      // default: 5
+            // Initial space for simplicial factorization is max(grow0,1) times the
+            // required space.  If space is exhausted, L is grown by max(grow0,1.2)
+            // times the required space.  grow1 and grow2 control how each column
+            // of L can grow in an update/downdate; if space runs out, then
+            // grow1*(required space) + grow2 is allocated.
 
-        public double grow1;
+        public size_t maxrank;    // maximum rank for update/downdate.  Valid values are
+            // 2, 4, and 8.  Default is 8.  If a larger update/downdate is done, it
+            // is done in steps of maxrank.
 
-        public size_t grow2;   /* For a simplicial factorization, each column j of L
-			 * is initialized with space equal to
-	* grow1*L->ColCount[j] + grow2.  If grow0 < 1, grow1 < 1, or grow2 == 0,
-	* then the space allocated is exactly equal to L->ColCount[j].  If the
-	* column j runs out of space, it increases to grow1*need + grow2 in
-	* size, where need is the total # of nonzeros in that column.  If you do
-	* not plan on modifying the factorization in the Modify module, set
-	* grow2 to zero.  Default: grow1 = 1.2, grow2 = 5. */
+        public double supernodal_switch;  // default: 40
+        public int supernodal;            // default: CHOLMOD_AUTO.
+            // Controls supernodal vs simplicial factorization.  If
+            // Common->supernodal is CHOLMOD_SIMPLICIAL, a simplicial factorization
+            // is always done; if CHOLMOD_SUPERNODAL, a supernodal factorization is
+            // always done.  If CHOLMOD_AUTO, then a simplicial factorization is
+            // down if flops/nnz(L) < Common->supernodal_switch.
 
-        public size_t maxrank; /* rank of maximum update/downdate.  Valid values:
-			 * 2, 4, or 8.  A value < 2 is set to 2, and a
-	* value > 8 is set to 8.  It is then rounded up to the next highest
-	* power of 2, if not already a power of 2.  Workspace (Xwork, below) of
-	* size nrow-by-maxrank double's is allocated for the update/downdate.
-	* If an update/downdate of rank-k is requested, with k > maxrank,
-	* it is done in steps of maxrank.  Default: 8, which is fastest.
-	* Memory usage can be reduced by setting maxrank to 2 or 4.
-	*/
+        public int final_asis;    // if true, other final_* parameters are ignored,
+            // except for final_pack and the factors are left as-is when done.
+            // Default: true.
 
-        public double supernodal_switch;   /* supernodal vs simplicial factorization */
-        public int supernodal;     /* If Common->supernodal <= CHOLMOD_SIMPLICIAL
-				 * (0) then cholmod_analyze performs a
-	* simplicial analysis.  If >= CHOLMOD_SUPERNODAL (2), then a supernodal
-	* analysis is performed.  If == CHOLMOD_AUTO (1) and
-	* flop/nnz(L) < Common->supernodal_switch, then a simplicial analysis
-	* is done.  A supernodal analysis done otherwise.
-	* Default:  CHOLMOD_AUTO.  Default supernodal_switch = 40 */
+        public int final_super;   // if true, leave factor in supernodal form.
+            // if false, convert to simplicial.  Default: true.
 
-        public int final_asis; /* If TRUE, then ignore the other final_* parameters
-			 * (except for final_pack).
-			 * The factor is left as-is when done.  Default: TRUE.*/
+        public int final_ll;      // if true, simplicial factors are converted to LL',
+            // otherwise left as LDL.  Default: false.
 
-        public int final_super;    /* If TRUE, leave a factor in supernodal form when
-			 * supernodal factorization is finished.  If FALSE,
-			 * then convert to a simplicial factor when done.
-			 * Default: TRUE */
+        public int final_pack;    // if true, the factorize are allocated with exactly
+            // the space required.  Set this to false if you expect future
+            // updates/downdates (giving a little extra space for future growth),
+            // Default: true.
 
-        public int final_ll;   /* If TRUE, leave factor in LL' form when done.
-			 * Otherwise, leave in LDL' form.  Default: FALSE */
+        public int final_monotonic;   // if true, columns are sorted when done, by
+            // ascending row index.  Default: true.
 
-        public int final_pack; /* If TRUE, pack the columns when done.  If TRUE, and
-			 * cholmod_factorize is called with a symbolic L, L is
-	* allocated with exactly the space required, using L->ColCount.  If you
-	* plan on modifying the factorization, set Common->final_pack to FALSE,
-	* and each column will be given a little extra slack space for future
-	* growth in fill-in due to updates.  Default: TRUE */
+        public int final_resymbol;    // if true, a supernodal factorization converted
+            // to simplicial is reanalyzed, to remove zeros added for relaxed
+            // amalgamation.  Default: false.
 
-        public int final_monotonic;   /* If TRUE, ensure columns are monotonic when done.
-			 * Default: TRUE */
-
-        public int final_resymbol;/* if cholmod_factorize performed a supernodal
-			 * factorization, final_resymbol is true, and
-	* final_super is FALSE (convert a simplicial numeric factorization),
-	* then numerically zero entries that resulted from relaxed supernodal
-	* amalgamation are removed.  This does not remove entries that are zero
-	* due to exact numeric cancellation, since doing so would break the
-	* update/downdate rowadd/rowdel routines.  Default: FALSE. */
-
-        /* supernodal relaxed amalgamation parameters: */
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public double[] zrelax;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public size_t[] nrelax;
+            // The zrelax and nrelax parameters control relaxed supernodal
+            // amalgamation,  If ns is the # of columns in two adjacent supernodes,
+            // and z is the fraction of zeros in the two supernodes if merged, then
+            // the two supernodes are merged if any of the 5 following condition
+            // are true:
+            //
+            //      no new zero entries added if the two supernodes are merged
+            //      (ns <= nrelax [0])
+            //      (ns <= nrelax [1] && z < zrelax [0])
+            //      (ns <= nrelax [2] && z < zrelax [1])
+            //      (z < zrelax [2])
+            //
+            // With the defaults, the rules become:
+            //
+            //      no new zero entries added if the two supernodes are merged
+            //      (ns <=  4)
+            //      (ns <= 16 && z < 0.8)
+            //      (ns <= 48 && z < 0.1)
+            //      (z < 0.05)
 
-        /* Let ns be the total number of columns in two adjacent supernodes.
-         * Let z be the fraction of zero entries in the two supernodes if they
-         * are merged (z includes zero entries from prior amalgamations).  The
-         * two supernodes are merged if:
-         *    (ns <= nrelax [0]) || (no new zero entries added) ||
-         *    (ns <= nrelax [1] && z < zrelax [0]) ||
-         *    (ns <= nrelax [2] && z < zrelax [1]) || (z < zrelax [2])
-         *
-         * Default parameters result in the following rule:
-         *    (ns <= 4) || (no new zero entries added) ||
-         *    (ns <= 16 && z < 0.8) || (ns <= 48 && z < 0.1) || (z < 0.05)
-         */
+        public int prefer_zomplex;    // if true, and a complex system is solved,
+            // X is returned as zomplex (with two arrays, one for the real part
+            // and one for the imaginary part).  If false, then X is returned as
+            // a single array with interleaved real and imaginary parts.
+            // Default: false.
 
-        public int prefer_zomplex;    /* X = cholmod_solve (sys, L, B, Common) computes
-			     * x=A\b or solves a related system.  If L and B are
-	 * both real, then X is real.  Otherwise, X is returned as
-	 * CHOLMOD_COMPLEX if Common->prefer_zomplex is FALSE, or
-	 * CHOLMOD_ZOMPLEX if Common->prefer_zomplex is TRUE.  This parameter
-	 * is needed because there is no supernodal zomplex L.  Suppose the
-	 * caller wants all complex matrices to be stored in zomplex form
-	 * (MATLAB, for example).  A supernodal L is returned in complex form
-	 * if A is zomplex.  B can be real, and thus X = cholmod_solve (L,B)
-	 * should return X as zomplex.  This cannot be inferred from the input
-	 * arguments L and B.  Default: FALSE, since all data types are
-	 * supported in CHOLMOD_COMPLEX form and since this is the native type
-	 * of LAPACK and the BLAS.  Note that the MATLAB/cholmod.c mexFunction
-	 * sets this parameter to TRUE, since MATLAB matrices are in
-	 * CHOLMOD_ZOMPLEX form.
-	 */
+        public int prefer_upper;  // if true, then a preference is given for holding
+            // a symmetric matrix by just its upper triangular form.  This gives
+            // the best performance by the CHOLMOD analysis and factorization
+            // methods.  Only used by cholmod_read.  Default: true.
 
-        public int prefer_upper;       /* cholmod_analyze and cholmod_factorize work
-			     * fastest when a symmetric matrix is stored in
-	 * upper triangular form when a fill-reducing ordering is used.  In
-	 * MATLAB, this corresponds to how x=A\b works.  When the matrix is
-	 * ordered as-is, they work fastest when a symmetric matrix is in lower
-	 * triangular form.  In MATLAB, R=chol(A) does the opposite.  This
-	 * parameter affects only how cholmod_read returns a symmetric matrix.
-	 * If TRUE (the default case), a symmetric matrix is always returned in
-	 * upper-triangular form (A->stype = 1).  */
+        public int quick_return_if_not_posdef;    // if true, a supernodal factorization
+            // returns immediately if it finds the matrix is not positive definite.
+            // If false, the failed supernode is refactorized, up to but not
+            // including the failed column (required by MATLAB).
 
-        public int quick_return_if_not_posdef; /* if TRUE, the supernodal numeric
-					 * factorization will return quickly if
-	* the matrix is not positive definite.  Default: FALSE. */
+        public int prefer_binary; // if true, cholmod_read_triplet converts a symmetric
+            // pattern-only matrix to a real matrix with all values set to 1.
+            // if false, diagonal entries A(k,k) are set to one plus the # of
+            // entries in row/column k, and off-diagonals are set to -1.
+            // Default: false.
 
-        public int prefer_binary;      /* cholmod_read_triplet converts a symmetric
-			     * pattern-only matrix into a real matrix.  If
-	* prefer_binary is FALSE, the diagonal entries are set to 1 + the degree
-	* of the row/column, and off-diagonal entries are set to -1 (resulting
-	* in a positive definite matrix if the diagonal is zero-free).  Most
-	* symmetric patterns are the pattern a positive definite matrix.  If
-	* this parameter is TRUE, then the matrix is returned with a 1 in each
-	* entry, instead.  Default: FALSE.  Added in v1.3. */
+        //--------------------------------------------------------------------------
+        // printing and error handling options
+        //--------------------------------------------------------------------------
 
-        /* ---------------------------------------------------------------------- */
-        /* printing and error handling options */
-        /* ---------------------------------------------------------------------- */
+        public int print;     // print level.  Default is 3.
+        public int precise;   // if true, print 16 digits, otherwise 5. Default: false.
 
-        public int print;      /* print level. Default: 3 */
-        public int precise;    /* if TRUE, print 16 digits.  Otherwise print 5 */
-
-        /* CHOLMOD print_function replaced with SuiteSparse_config.print_func */
-
-        public int try_catch;  /* if TRUE, then ignore errors; CHOLMOD is in the middle
-			 * of a try/catch block.  No error message is printed
-	 * and the Common->error_handler function is not called. */
+        public int try_catch; // if true, ignore errors (CHOLMOD is assumed to be inside
+            // a try/catch block.  No error messages are printed and the
+            // error_handler function is not called.  Default: false.
 
         public ErrorHandler error_handler;
+            // User error handling routine; default is NULL.
+            // This function is called if an error occurs, with parameters:
+            // status: the Common->status result.
+            // file: filename where the error occurred.
+            // line: line number where the error occurred.
+            // message: a string that describes the error.
 
-        /* Common->error_handler is the user's error handling routine.  If not
-         * NULL, this routine is called if an error occurs in CHOLMOD.  status
-         * can be CHOLMOD_OK (0), negative for a fatal error, and positive for
-         * a warning. file is a string containing the name of the source code
-         * file where the error occured, and line is the line number in that
-         * file.  message is a string describing the error in more detail. */
+        //--------------------------------------------------------------------------
+        // ordering options
+        //--------------------------------------------------------------------------
 
-        /* ---------------------------------------------------------------------- */
-        /* ordering options */
-        /* ---------------------------------------------------------------------- */
+        // CHOLMOD can try many ordering options and then pick the best result it
+        // finds.  The default is to use one or two orderings: the user's
+        // permutation (if given), and AMD.
 
-        /* The cholmod_analyze routine can try many different orderings and select
-         * the best one.  It can also try one ordering method multiple times, with
-         * different parameter settings.  The default is to use three orderings,
-         * the user's permutation (if provided), AMD which is the fastest ordering
-         * and generally gives good fill-in, and METIS.  CHOLMOD's nested dissection
-         * (METIS with a constrained AMD) usually gives a better ordering than METIS
-         * alone (by about 5% to 10%) but it takes more time.
-         *
-         * If you know the method that is best for your matrix, set Common->nmethods
-         * to 1 and set Common->method [0] to the set of parameters for that method.
-         * If you set it to 1 and do not provide a permutation, then only AMD will
-         * be called.
-         *
-         * If METIS is not available, the default # of methods tried is 2 (the user
-         * permutation, if any, and AMD).
-         *
-         * To try other methods, set Common->nmethods to the number of methods you
-         * want to try.  The suite of default methods and their parameters is
-         * described in the cholmod_defaults routine, and summarized here:
-         *
-         *	    Common->method [i]:
-         *	    i = 0: user-provided ordering (cholmod_analyze_p only)
-         *	    i = 1: AMD (for both A and A*A')
-         *	    i = 2: METIS
-         *	    i = 3: CHOLMOD's nested dissection (NESDIS), default parameters
-         *	    i = 4: natural
-         *	    i = 5: NESDIS with nd_small = 20000
-         *	    i = 6: NESDIS with nd_small = 4, no constrained minimum degree
-         *	    i = 7: NESDIS with no dense node removal
-         *	    i = 8: AMD for A, COLAMD for A*A'
-         *
-         * You can modify the suite of methods you wish to try by modifying
-         * Common.method [...] after calling cholmod_start or cholmod_defaults.
-         *
-         * For example, to use AMD, followed by a weighted postordering:
-         *
-         *	    Common->nmethods = 1 ;
-         *	    Common->method [0].ordering = CHOLMOD_AMD ;
-         *	    Common->postorder = TRUE ;
-         *
-         * To use the natural ordering (with no postordering):
-         *
-         *	    Common->nmethods = 1 ;
-         *	    Common->method [0].ordering = CHOLMOD_NATURAL ;
-         *	    Common->postorder = FALSE ;
-         *
-         * If you are going to factorize hundreds or more matrices with the same
-         * nonzero pattern, you may wish to spend a great deal of time finding a
-         * good permutation.  In this case, try setting Common->nmethods to 9.
-         * The time spent in cholmod_analysis will be very high, but you need to
-         * call it only once.
-         *
-         * cholmod_analyze sets Common->current to a value between 0 and nmethods-1.
-         * Each ordering method uses the set of options defined by this parameter.
-         */
+        // Common->nmethods is the number of methods to try.  If the
+        // Common->method array is left unmodified, the methods are:
 
-        public int nmethods;   /* The number of ordering methods to try.  Default: 0.
-			 * nmethods = 0 is a special case.  cholmod_analyze
-	* will try the user-provided ordering (if given) and AMD.  Let fl and
-	* lnz be the flop count and nonzeros in L from AMD's ordering.  Let
-	* anz be the number of nonzeros in the upper or lower triangular part
-	* of the symmetric matrix A.  If fl/lnz < 500 or lnz/anz < 5, then this
-	* is a good ordering, and METIS is not attempted.  Otherwise, METIS is
-	* tried.   The best ordering found is used.  If nmethods > 0, the
-	* methods used are given in the method[ ] array, below.  The first
-	* three methods in the default suite of orderings is (1) use the given
-	* permutation (if provided), (2) use AMD, and (3) use METIS.  Maximum
-	* allowed value is CHOLMOD_MAXMETHODS.  */
+        // (0) given (skipped if no user permutation)
+        // (1) amd
+        // (2) metis
+        // (3) nesdis with defaults (CHOLMOD's nested dissection, based on METIS)
+        // (4) natural
+        // (5) nesdis: stop at subgraphs of 20000 nodes
+        // (6) nesdis: stop at subgraphs of 4 nodes, do not use CAMD
+        // (7) nesdis: no pruning on of dense rows/cols
+        // (8) colamd
 
-        public int current;    /* The current method being tried.  Default: 0.  Valid
-			 * range is 0 to nmethods-1. */
+        // To use all 9 of the above methods, set Common->nmethods to 9.  The
+        // analysis will take a long time, but that might be worth it if the
+        // ordering will be reused many many times.
 
-        public int selected;   /* The best method found. */
+        // Common->nmethods and Common->methods can be revised to use a different
+        // set of orderings.  For example, to use just a single method
+        // (AMD with a weighted postordering):
+        //
+        //      Common->nmethods = 1 ;
+        //      Common->method [0].ordering = CHOLMOD_AMD ;
+        //      Common->postorder = TRUE ;
+        //
+        //
 
-        /* The suite of ordering methods and parameters: */
+        public int nmethods;  // Number of methods to try, default is 0.
+            // The value of 0 is a special case, and tells CHOLMOD to use the user
+            // permutation (if not NULL) and then AMD.  Next, if fl is lnz are the
+            // flop counts and number of nonzeros in L as found by AMD, then the
+            // this ordering is used if fl/lnz < 500 or lnz/anz < 5, where anz is
+            // the number of entries in A.  If this condition fails, METIS is tried
+            // as well.
+            //
+            // Otherwise, if Common->nmethods > 0, then the methods defined by
+            // Common->method [0 ... Common->nmethods-1] are used.
+
+        public int current;   // The current method being tried in the analysis.
+        public int selected;  // The selected method: Common->method [Common->selected]
+
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.CHOLMOD_MAXMETHODS + 1)]
         public CholmodMethod[] method;
 
-        public int postorder;  /* If TRUE, cholmod_analyze follows the ordering with a
-			 * weighted postorder of the elimination tree.  Improves
-	* supernode amalgamation.  Does not affect fundamental nnz(L) and
-	* flop count.  Default: TRUE. */
+        public int postorder; // if true, CHOLMOD performs a weighted postordering
+            // after its fill-reducing ordering, which improves supernodal
+            // amalgamation.  Has no effect on flop count or nnz(L).
+            // Default: true.
 
-        public int default_nesdis;    /* Default: FALSE.  If FALSE, then the default
-			     * ordering strategy (when Common->nmethods == 0)
-	* is to try the given ordering (if present), AMD, and then METIS if AMD
-	* reports high fill-in.  If Common->default_nesdis is TRUE then NESDIS
-	* is used instead in the default strategy. */
+        public int default_nesdis;    //  If false, then the default ordering strategy
+            // when Common->nmethods is zero is to try the user's permutation
+            // if given, then AMD, and then METIS if the AMD ordering results in
+            // a lot of fill-in.  If true, then nesdis is used instead of METIS.
+            // Default: false.
 
-        /* ---------------------------------------------------------------------- */
-        /* memory management, complex divide, and hypot function pointers moved */
-        /* ---------------------------------------------------------------------- */
+        //--------------------------------------------------------------------------
+        // METIS workarounds
+        //--------------------------------------------------------------------------
 
-        /* Function pointers moved from here (in CHOLMOD 2.2.0) to
-           SuiteSparse_config.[ch].  See CHOLMOD/Include/cholmod_back.h
-           for a set of macros that can be #include'd or copied into your
-           application to define these function pointers on any version of CHOLMOD.
-           */
+        // These workarounds were put into place for METIS 4.0.1.  They are safe
+        // to use with METIS 5.1.0, but they might not longer be necessary.
 
-        /* ---------------------------------------------------------------------- */
-        /* METIS workarounds */
-        /* ---------------------------------------------------------------------- */
+        public double metis_memory;   // default: 0.  If METIS terminates your
+            // program when it runs out of memory, try 2, or higher.
+        public double metis_dswitch;  // default: 0.66
+        public size_t metis_nswitch;  // default: 3000
+            // If a matrix has n > metis_nswitch and a density (nnz(A)/n^2) >
+            // metis_dswitch, then METIS is not used.
 
-        /* These workarounds were put into place for METIS 4.0.1.  They are safe
-           to use with METIS 5.1.0, but they might not longer be necessary. */
+        //--------------------------------------------------------------------------
+        // workspace
+        //--------------------------------------------------------------------------
 
-        public double metis_memory;   /* This is a parameter for CHOLMOD's interface to
-			     * METIS, not a parameter to METIS itself.  METIS
-	* uses an amount of memory that is difficult to estimate precisely
-	* beforehand.  If it runs out of memory, it terminates your program.
-	* All routines in CHOLMOD except for CHOLMOD's interface to METIS
-	* return an error status and safely return to your program if they run
-	* out of memory.  To mitigate this problem, the CHOLMOD interface
-	* can allocate a single block of memory equal in size to an empirical
-	* upper bound of METIS's memory usage times the Common->metis_memory
-	* parameter, and then immediately free it.  It then calls METIS.  If
-	* this pre-allocation fails, it is possible that METIS will fail as
-	* well, and so CHOLMOD returns with an out-of-memory condition without
-	* calling METIS.
-	*
-	* METIS_NodeND (used in the CHOLMOD_METIS ordering option) with its
-	* default parameter settings typically uses about (4*nz+40n+4096)
-	* times sizeof(int) memory, where nz is equal to the number of entries
-	* in A for the symmetric case or AA' if an unsymmetric matrix is
-	* being ordered (where nz includes both the upper and lower parts
-	* of A or AA').  The observed "upper bound" (with 2 exceptions),
-	* measured in an instrumented copy of METIS 4.0.1 on thousands of
-	* matrices, is (10*nz+50*n+4096) * sizeof(int).  Two large matrices
-	* exceeded this bound, one by almost a factor of 2 (Gupta/gupta2).
-	*
-	* If your program is terminated by METIS, try setting metis_memory to
-	* 2.0, or even higher if needed.  By default, CHOLMOD assumes that METIS
-	* does not have this problem (so that CHOLMOD will work correctly when
-	* this issue is fixed in METIS).  Thus, the default value is zero.
-	* This work-around is not guaranteed anyway.
-	*
-	* If a matrix exceeds this predicted memory usage, AMD is attempted
-	* instead.  It, too, may run out of memory, but if it does so it will
-	* not terminate your program.
-	*/
+        // This workspace is kept in the CHOLMOD Common object.  cholmod_start
+        // sets these arrays to NULL, and cholmod_finish frees them.
 
-        public double metis_dswitch;   /* METIS_NodeND in METIS 4.0.1 gives a seg */
-        public size_t metis_nswitch;   /* fault with one matrix of order n = 3005 and
-				 * nz = 6,036,025.  This is a very dense graph.
-     * The workaround is to use AMD instead of METIS for matrices of dimension
-     * greater than Common->metis_nswitch (default 3000) or more and with
-     * density of Common->metis_dswitch (default 0.66) or more.
-     * cholmod_nested_dissection has no problems with the same matrix, even
-     * though it uses METIS_ComputeVertexSeparator on this matrix.  If this
-     * seg fault does not affect you, set metis_nswitch to zero or less,
-     * and CHOLMOD will not switch to AMD based just on the density of the
-     * matrix (it will still switch to AMD if the metis_memory parameter
-     * causes the switch).
-     */
+        public size_t nrow;       // Flag has size nrow, Head has size nrow+1
+        public long mark;  // Flag is cleared if Flag [0..nrow-1] < mark.
+        public size_t iworksize;  // size of Iwork, in Ints (int32 or int64).
+                            // This is at most 6*nrow + ncol.
+        public size_t xworkbytes; // size of Xwork, in bytes.
+            // NOTE: in CHOLMOD v4 and earlier, this variable was called xworksize,
+            // and was in terms of # of doubles, not # of bytes.
 
-        /* ---------------------------------------------------------------------- */
-        /* workspace */
-        /* ---------------------------------------------------------------------- */
+        internal IntPtr Flag;    // size nrow.  If this is "cleared" then
+            // Flag [i] < mark for all i = 0:nrow-1.  Flag is kept cleared between
+            // calls to CHOLMOD.
 
-        /* CHOLMOD has several routines that take less time than the size of
-         * workspace they require.  Allocating and initializing the workspace would
-         * dominate the run time, unless workspace is allocated and initialized
-         * just once.  CHOLMOD allocates this space when needed, and holds it here
-         * between calls to CHOLMOD.  cholmod_start sets these pointers to NULL
-         * (which is why it must be the first routine called in CHOLMOD).
-         * cholmod_finish frees the workspace (which is why it must be the last
-         * call to CHOLMOD).
-         */
+        internal IntPtr Head;    // size nrow+1.  If Head [i] = EMPTY (-1) then that
+            // entry is "cleared".  Head is kept cleared between calls to CHOLMOD.
 
-        public size_t nrow;    /* size of Flag and Head */
-        public SuiteSparse_long mark;  /* mark value for Flag array */
-        public size_t iworksize;   /* size of Iwork.  Upper bound: 6*nrow+ncol */
-        public size_t xworksize;   /* size of Xwork,  in bytes.
-			 * maxrank*nrow*sizeof(double) for update/downdate.
-			 * 2*nrow*sizeof(double) otherwise */
+        internal IntPtr Xwork;   // a double or float array.  It has size nrow for most
+            // routines, or 2*nrow if complex matrices are being handled.
+            // It has size 2*nrow for cholmod_rowadd/rowdel, and maxrank*nrow for
+            // cholmod_updown, where maxrank is 2, 4, or 8.  Xwork is kept all
+            // zero between calls to CHOLMOD.
 
-        /* initialized workspace: contents needed between calls to CHOLMOD */
-        internal IntPtr Flag; /* size nrow, an integer array.  Kept cleared between
-			 * calls to cholmod rouines (Flag [i] < mark) */
+        internal IntPtr Iwork;   // size iworksize integers (int32's or int64's).
+            // Uninitialized integer workspace, of size at most 6*nrow+ncol.
 
-        internal IntPtr Head; /* size nrow+1, an integer array. Kept cleared between
-			 * calls to cholmod routines (Head [i] = EMPTY) */
+        public int itype;     // cholmod_start (for int32's) sets this to CHOLMOD_INT,
+            // and cholmod_l_start sets this to CHOLMOD_LONG.  It defines the
+            // integer sizes for th Flag, Head, and Iwork arrays, and also
+            // defines the integers for all objects created by CHOLMOD.
+            // The itype of the Common object must match the function name
+            // and all objects passed to it.
 
-        internal IntPtr Xwork;    /* a double array.  Its size varies.  It is nrow for
-			 * most routines (cholmod_rowfac, cholmod_add,
-	* cholmod_aat, cholmod_norm, cholmod_ssmult) for the real case, twice
-	* that when the input matrices are complex or zomplex.  It is of size
-	* 2*nrow for cholmod_rowadd and cholmod_rowdel.  For cholmod_updown,
-	* its size is maxrank*nrow where maxrank is 2, 4, or 8.  Kept cleared
-	* between calls to cholmod (set to zero). */
+        public int other_5;   // unused: for future expansion
 
-        /* uninitialized workspace, contents not needed between calls to CHOLMOD */
-        internal IntPtr Iwork;    /* size iworksize, 2*nrow+ncol for most routines,
-			 * up to 6*nrow+ncol for cholmod_analyze. */
+        public int no_workspace_reallocate;   // an internal flag, usually false.
+            // This is set true to disable any reallocation of the workspace
+            // in the Common object.
 
-        public int itype;      /* If CHOLMOD_LONG, Flag, Head, and Iwork are
-                         * SuiteSparse_long.  Otherwise all three are int. */
+        //--------------------------------------------------------------------------
+        // statistics
+        //--------------------------------------------------------------------------
 
-        public int dtype;      /* double or float */
+        public int status;    // status code (0: ok, negative: error, pos: warning)
 
-        /* Common->itype and Common->dtype are used to define the types of all
-         * sparse matrices, triplet matrices, dense matrices, and factors
-         * created using this Common struct.  The itypes and dtypes of all
-         * parameters to all CHOLMOD routines must match.  */
+        public double fl;     // flop count from last analysis
+        public double lnz;    // nnz(L) from last analysis
+        public double anz;    // in last analysis: nnz(tril(A)) or nnz(triu(A)) if A
+                        // symmetric, or tril(A*A') if A is unsymmetric.
+        public double modfl;  // flop count from last update/downdate/rowadd/rowdel,
+                        // not included the flops to revise the solution to Lx=b,
+                        // if that was performed.
 
-        public int no_workspace_reallocate;   /* this is an internal flag, used as a
-	* precaution by cholmod_analyze.  It is normally false.  If true,
-	* cholmod_allocate_work is not allowed to reallocate any workspace;
-	* they must use the existing workspace in Common (Iwork, Flag, Head,
-	* and Xwork).  Added for CHOLMOD v1.1 */
+        public size_t malloc_count;   // # of malloc'd objects not yet freed
+        public size_t memory_usage;   // peak memory usage in bytes
+        public size_t memory_inuse;   // current memory usage in bytes
 
-        /* ---------------------------------------------------------------------- */
-        /* statistics */
-        /* ---------------------------------------------------------------------- */
+        public double nrealloc_col;   // # of column reallocations
+        public double nrealloc_factor;// # of factor reallocations due to col. reallocs
+        public double ndbounds_hit;   // # of times diagonal modified by dbound
 
-        /* fl and lnz are set only in cholmod_analyze and cholmod_rowcolcounts,
-         * in the Cholesky modudle.  modfl is set only in the Modify module. */
+        public double rowfacfl;       // flop count of cholmod_rowfac
+        public double aatfl;          // flop count to compute A(:,f)*A(:,f)'
 
-        public int status;     /* error code */
-        public double fl;          /* LL' flop count from most recent analysis */
-        public double lnz;     /* fundamental nz in L */
-        public double anz;     /* nonzeros in tril(A) if A is symmetric/lower,
-			     * triu(A) if symmetric/upper, or tril(A*A') if
-			     * unsymmetric, in last call to cholmod_analyze. */
-        public double modfl;       /* flop count from most recent update/downdate/
-			     * rowadd/rowdel (excluding flops to modify the
-			     * solution to Lx=b, if computed) */
-        public size_t malloc_count;   /* # of objects malloc'ed minus the # free'd*/
-        public size_t memory_usage;   /* peak memory usage in bytes */
-        public size_t memory_inuse;   /* current memory usage in bytes */
+        public int called_nd; // true if last analysis used nesdis or METIS.
+        public int blas_ok;   // true if no integer overflow has occured when trying to
+            // call the BLAS.  The typical BLAS library uses 32-bit integers for
+            // its input parameters, even on a 64-bit platform.  CHOLMOD uses int64
+            // in its cholmod_l_* methods, and these must be typecast to the BLAS
+            // integer.  If integer overflow occurs, this is set false.
 
-        public double nrealloc_col;   /* # of column reallocations */
-        public double nrealloc_factor;/* # of factor reallocations due to col. reallocs */
-        public double ndbounds_hit;   /* # of times diagonal modified by dbound */
+        //--------------------------------------------------------------------------
+        // SuiteSparseQR control parameters and statistics
+        //--------------------------------------------------------------------------
 
-        public double rowfacfl;        /* # of flops in last call to cholmod_rowfac */
-        public double aatfl;       /* # of flops to compute A(:,f)*A(:,f)' */
+        // SPQR uses the CHOLMOD Common object for its control and statistics.
+        // These parameters are not used by CHOLMOD itself.
 
-        public int called_nd;      /* TRUE if the last call to
-			     * cholmod_analyze called NESDIS or METIS. */
-        public int blas_ok;           /* FALSE if BLAS int overflow; TRUE otherwise */
+        // control parameters:
+        public double SPQR_grain;     // task size is >= max (total flops / grain)
+        public double SPQR_small;     // task size is >= small
+        public int SPQR_shrink;       // controls stack realloc method
+        public int SPQR_nthreads;     // number of TBB threads, 0 = auto
 
-        /* ---------------------------------------------------------------------- */
-        /* SuiteSparseQR control parameters: */
-        /* ---------------------------------------------------------------------- */
+        // statistics:
+        public double SPQR_flopcount;         // flop count for SPQR
+        public double SPQR_analyze_time;      // analysis time in seconds for SPQR
+        public double SPQR_factorize_time;    // factorize time in seconds for SPQR
+        public double SPQR_solve_time;        // backsolve time in seconds
+        public double SPQR_flopcount_bound;   // upper bound on flop count
+        public double SPQR_tol_used;          // tolerance used
+        public double SPQR_norm_E_fro;        // Frobenius norm of dropped entries
+ 
+        //--------------------------------------------------------------------------
+        // Revised for CHOLMOD v5.0
+        //--------------------------------------------------------------------------
 
-        public double SPQR_grain;      /* task size is >= max (total flops / grain) */
-        public double SPQR_small;      /* task size is >= small */
-        public int SPQR_shrink;        /* controls stack realloc method */
-        public int SPQR_nthreads;      /* number of TBB threads, 0 = auto */
+        // was size 10 in CHOLMOD v4.2; reduced to 8 in CHOLMOD v5:
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        public long[] SPQR_istat;        // other statistics
 
-        /* ---------------------------------------------------------------------- */
-        /* SuiteSparseQR statistics */
-        /* ---------------------------------------------------------------------- */
+        //--------------------------------------------------------------------------
+        // Added for CHOLMOD v5.0
+        //--------------------------------------------------------------------------
 
-        /* was other1 [0:3] */
-        public double SPQR_flopcount;         /* flop count for SPQR */
-        public double SPQR_analyze_time;      /* analysis time in seconds for SPQR */
-        public double SPQR_factorize_time;    /* factorize time in seconds for SPQR */
-        public double SPQR_solve_time;        /* backsolve time in seconds */
+        // These terms have been added to the CHOLMOD Common struct for v5.0, and
+        // on most systems they will total 16 bytes.  The preceding term,
+        // SPQR_istat, was reduced by 16 bytes, since those last 2 entries were
+        // unused in CHOLMOD v4.2.  As a result, the Common struct in v5.0 has the
+        // same size as v4.0, and all entries would normally be in the same offset,
+        // as well.  This mitigates any changes between v4.0 and v5.0, and may make
+        // it easier to upgrade from v4 to v5.
 
-        /* was SPQR_xstat [0:3] */
-        public double SPQR_flopcount_bound;   /* upper bound on flop count */
-        public double SPQR_tol_used;          /* tolerance used */
-        public double SPQR_norm_E_fro;        /* Frobenius norm of dropped entries */
+        public double nsbounds_hit;   // # of times diagonal modified by sbound.
+                        // This ought to be int64_t, but ndbounds_hit was double in
+                        // v4 (see above), so nsbounds_hit is made the same type
+                        // for consistency.
+        public float sbound;  // Same as dbound,
+                        // but for single precision factorization.
+        public float other_6; // for future expansion
 
-        /* was SPQR_istat [0:9] */
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public SuiteSparse_long[] SPQR_istat;
+        //--------------------------------------------------------------------------
+        // GPU configuration and statistics
+        //--------------------------------------------------------------------------
 
-        /* ---------------------------------------------------------------------- */
-        /* GPU configuration and statistics */
-        /* ---------------------------------------------------------------------- */
+        public int useGPU; // 1 if GPU is requested for CHOLMOD
+                     // 0 if GPU is not requested for CHOLMOD
+                     // -1 if the use of the GPU is in CHOLMOD controled by the
+                     // CHOLMOD_USE_GPU environment variable.
 
-        /*  useGPU:  1 if gpu-acceleration is requested */
-        /*           0 if gpu-acceleration is prohibited */
-        /*          -1 if gpu-acceleration is undefined in which case the */
-        /*             environment CHOLMOD_USE_GPU will be queried and used. */
-        /*             useGPU=-1 is only used by CHOLMOD and treated as 0 by SPQR */
-        public int useGPU;
+        public size_t maxGpuMemBytes;     // GPU control for CHOLMOD
+        public double maxGpuMemFraction;  // GPU control for CHOLMOD
 
-        /* for CHOLMOD: */
-        public size_t maxGpuMemBytes;
-        public double maxGpuMemFraction;
-
-        /* for SPQR: */
-        public size_t gpuMemorySize;       /* Amount of memory in bytes on the GPU */
-        public double gpuKernelTime;       /* Time taken by GPU kernels */
-        public SuiteSparse_long gpuFlops;  /* Number of flops performed by the GPU */
-        public int gpuNumKernelLaunches;   /* Number of GPU kernel launches */
-
-        /* If not using the GPU, these items are not used, but they should be
-           present so that the CHOLMOD Common has the same size whether the GPU
-           is used or not.  This way, all packages will agree on the size of
-           the CHOLMOD Common, regardless of whether or not they are compiled
-           with the GPU libraries or not */
-
+        // for SPQR:
+        public size_t gpuMemorySize;      // Amount of memory in bytes on the GPU
+        public double gpuKernelTime;      // Time taken by GPU kernels
+        public long gpuFlops;             // Number of flops performed by the GPU
+        public int gpuNumKernelLaunches;  // Number of GPU kernel launches
 
         internal CHOLMOD_CUBLAS_HANDLE cublasHandle;
 
-        /* a set of streams for general use */
+        // a set of streams for general use
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS)]
         internal CHOLMOD_CUDASTREAM[] gpuStream;
 
@@ -595,18 +448,17 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS)]
         internal CHOLMOD_CUDAEVENT[] updateCBuffersFree;
 
-        internal IntPtr dev_mempool;    /* pointer to single allocation of device memory */
+        internal IntPtr dev_mempool; // pointer to single allocation of device memory
         internal size_t dev_mempool_size;
 
-        internal IntPtr host_pinned_mempool;  /* pointer to single allocation of pinned mem */
+        internal IntPtr host_pinned_mempool; // pointer to single alloc of pinned mem
         internal size_t host_pinned_mempool_size;
 
         internal size_t devBuffSize;
         internal int ibuffer;
+        internal double syrkStart;          // time syrk started
 
-        internal double syrkStart;          /* time syrk started */
-
-        /* run times of the different parts of CHOLMOD (GPU and CPU) */
+        // run times of the different parts of CHOLMOD (GPU and CPU):
         internal double cholmod_cpu_gemm_time;
         internal double cholmod_cpu_syrk_time;
         internal double cholmod_cpu_trsm_time;
@@ -618,7 +470,7 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
         internal double cholmod_assemble_time;
         internal double cholmod_assemble_time2;
 
-        /* number of times the BLAS are called on the CPU and the GPU */
+        // number of times the BLAS are called on the CPU and the GPU:
         internal size_t cholmod_cpu_gemm_calls;
         internal size_t cholmod_cpu_syrk_calls;
         internal size_t cholmod_cpu_trsm_calls;
@@ -627,6 +479,13 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
         internal size_t cholmod_gpu_syrk_calls;
         internal size_t cholmod_gpu_trsm_calls;
         internal size_t cholmod_gpu_potrf_calls;
+
+        public double chunk;      // chunksize for computing # of OpenMP threads to use.
+            // Given nwork work to do, # of threads is
+            // max (1, min (floor (work / chunk), nthreads_max))
+
+        public int nthreads_max; // max # of OpenMP threads to use in CHOLMOD.
+            // Defaults to SUITESPARSE_OPENMP_MAX_THREADS.
 
         public void Initialize()
         {
@@ -638,15 +497,15 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
             for (int i = 0; i < Constants.CHOLMOD_MAXMETHODS + 1; i++)
             {
                 method[i].other_1 = new double[4];
-                method[i].other_2 = new size_t[4];
+                method[i].other_2 = new double[4];
                 method[i].other_3 = new size_t[4];
             }
 
             SPQR_istat = new SuiteSparse_long[10];
 
-            gpuStream = new IntPtr[Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS];
-            cublasEventPotrf = new IntPtr[3];
-            updateCBuffersFree = new IntPtr[Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS];
+            gpuStream = new CHOLMOD_CUBLAS_HANDLE[Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS];
+            cublasEventPotrf = new CHOLMOD_CUBLAS_HANDLE[3];
+            updateCBuffersFree = new CHOLMOD_CUBLAS_HANDLE[Constants.CHOLMOD_HOST_SUPERNODE_BUFFERS];
         }
     }
 }
