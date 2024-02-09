@@ -23,7 +23,7 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
 #if SUITESPARSE_AIO
         const string CHOLMOD_DLL = "libsuitesparse";
 #else
-        const string CHOLMOD_DLL = "libcholmod";
+        const string CHOLMOD_DLL = "cholmod";
 #endif
 
         /// <summary>

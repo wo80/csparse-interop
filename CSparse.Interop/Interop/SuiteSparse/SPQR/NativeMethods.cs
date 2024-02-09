@@ -18,7 +18,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
 #if SUITESPARSE_AIO
         const string SPQR_DLL = "libsuitesparse";
 #else
-        const string SPQR_DLL = "libspqr";
+        const string SPQR_DLL = "spqr";
 #endif
 
         [DllImport(SPQR_DLL, EntryPoint = "SuiteSparse_free", CallingConvention = CallingConvention.Cdecl)]

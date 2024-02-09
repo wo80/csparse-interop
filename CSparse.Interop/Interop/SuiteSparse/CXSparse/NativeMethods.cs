@@ -153,7 +153,7 @@
 #if SUITESPARSE_AIO
         const string CXSPARSE_DLL = "libsuitesparse";
 #else
-        const string CXSPARSE_DLL = "libcxsparse";
+        const string CXSPARSE_DLL = "cxsparse";
 #endif
 
         #region Double

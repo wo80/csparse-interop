@@ -8,7 +8,7 @@
 #if SUITESPARSE_AIO
         const string UMFPACK_DLL = "libsuitesparse";
 #else
-        const string UMFPACK_DLL = "libumfpack";
+        const string UMFPACK_DLL = "umfpack";
 #endif
 
         #region Double / int
