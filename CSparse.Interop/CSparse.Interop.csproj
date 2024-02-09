@@ -21,10 +21,11 @@
 
   <PropertyGroup>
     <NoWarn>1591</NoWarn>
+    <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' != 'x86'">
-    <DefineConstants>X64</DefineConstants>
+    <DefineConstants>$(DefineConstants);X64</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
