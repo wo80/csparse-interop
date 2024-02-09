@@ -1,18 +1,17 @@
-﻿namespace CSparse.Double.Examples
+﻿namespace CSparse.Examples.Double
 {
     using CSparse.Double.Solver;
     using CSparse.Solvers;
 
     /// <summary>
-    /// Examples taken from ARPACK++.
+    /// Examples taken from ARPACK++ and applied to Spectra.
     /// </summary>
-    static class TestArpack
+    static class TestSpectra
     {
         public static void Run()
         {
             Symmetric();
             General();
-            Svd();
         }
 
         public static void Symmetric()
@@ -29,15 +28,9 @@
         {
             LNSymReg();
             LNSymShf();
-            LNSymGRe();
-            LNSymGSh();
-            LNSymGSC();
-        }
-
-        public static void Svd()
-        {
-            LSVDcond();
-            LSVDpart();
+            //LNSymGRe();
+            //LNSymGSh();
+            //LNSymGSC();
         }
 
         #region Symmetric
@@ -58,16 +51,16 @@
             int nx = 10;
 
             // Creating a 100x100 matrix.
-            var A = Generate.SymmetricMatrixA(nx);
+            var A = Generate.SymmetricMatrixA(nx).Expand();
 
             // Defining what we need: the four eigenvectors of A with smallest magnitude.
-            var prob = new Arpack(A, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveStandard(2, Spectrum.SmallestMagnitude);
 
             // Printing solution.
-            Solution.Symmetric(A, (ArpackResult)result, false);
+            Solution.Symmetric("Spectra", A, result,  ShiftMode.None);
         }
 
         /// <summary>
@@ -89,16 +82,16 @@
             int n = 100; // Dimension of the problem.
 
             // Creating a 100x100 matrix.
-            var A = Generate.SymmetricMatrixB(n);
+            var A = Generate.SymmetricMatrixB(n).Expand();
 
             // Defining what we need: the four eigenvectors of A nearest to 1.0.
-            var prob = new Arpack(A, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveStandard(4, 1.0);
 
             // Printing solution.
-            Solution.Symmetric(A, (ArpackResult)result, true);
+            Solution.Symmetric("Spectra", A, result, ShiftMode.Regular);
         }
 
         /// <summary>
@@ -120,17 +113,17 @@
             int n = 100; // Dimension of the problem.
 
             // Creating matrices A and B.
-            var A = Generate.SymmetricMatrixC(n);
-            var B = Generate.SymmetricMatrixD(n);
+            var A = Generate.SymmetricMatrixC(n).Expand();
+            var B = Generate.SymmetricMatrixD(n).Expand();
 
             // Defining what we need: the four eigenvectors with largest magnitude.
-            var prob = new Arpack(A, B, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.Symmetric(A, B, (ArpackResult)result, ShiftMode.None);
+            Solution.Symmetric("Spectra", A, B, result, ShiftMode.None);
         }
 
         /// <summary>
@@ -152,17 +145,17 @@
             int n = 100; // Dimension of the problem.
 
             // Creating matrices A and B.
-            var A = Generate.SymmetricMatrixC(n);
-            var B = Generate.SymmetricMatrixD(n);
+            var A = Generate.SymmetricMatrixC(n).Expand();
+            var B = Generate.SymmetricMatrixD(n).Expand();
 
             // Defining what we need: the four eigenvectors nearest to 0.0.
-            var prob = new Arpack(A, B, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, 0.0, ShiftMode.Regular);
 
             // Printing solution.
-            Solution.Symmetric(A, B, (ArpackResult)result, ShiftMode.Regular);
+            Solution.Symmetric("Spectra", A, B, result, ShiftMode.Regular);
         }
 
         /// <summary>
@@ -184,17 +177,17 @@
             int n = 100; // Dimension of the problem.
 
             // Creating matrices A and B.
-            var A = Generate.SymmetricMatrixC(n, 'U');
-            var B = Generate.SymmetricMatrixD(n, 'U');
+            var A = Generate.SymmetricMatrixC(n).Expand();
+            var B = Generate.SymmetricMatrixD(n).Expand();
 
             // Defining what we need: the four eigenvectors nearest to 1.0.
-            var prob = new Arpack(A, B, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, 1.0, ShiftMode.Buckling);
 
             // Printing solution.
-            Solution.Symmetric(A, B, (ArpackResult)result, ShiftMode.Buckling);
+            Solution.Symmetric("Spectra", A, B, result, ShiftMode.Buckling);
         }
 
         /// <summary>
@@ -216,17 +209,17 @@
             int n = 100; // Dimension of the problem.
 
             // Creating matrices A and B.
-            var A = Generate.SymmetricMatrixC(n);
-            var B = Generate.SymmetricMatrixD(n);
+            var A = Generate.SymmetricMatrixC(n).Expand();
+            var B = Generate.SymmetricMatrixD(n).Expand();
 
             // Defining what we need: the four eigenvectors nearest to 150.0.
-            var prob = new Arpack(A, B, true) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B, true) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, 150.0, ShiftMode.Cayley);
 
             // Printing solution.
-            Solution.Symmetric(A, B, (ArpackResult)result, ShiftMode.Cayley);
+            Solution.Symmetric("Spectra", A, B, result, ShiftMode.Cayley);
         }
 
         #endregion
@@ -254,13 +247,13 @@
             var A = Generate.BlockTridMatrix(nx);
 
             // Defining what we need: the four eigenvectors of A with largest magnitude.
-            var prob = new Arpack(A) { ComputeEigenVectors = true };
+            var prob = new Spectra(A) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveStandard(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.General(A, (ArpackResult)result, false);
+            Solution.General("Spectra", A, result, false);
         }
 
         /// <summary>
@@ -283,13 +276,13 @@
             var A = Generate.BrusselatorMatrix(1.0, 0.004, 0.008, 2.0, 5.45, n);
 
             // Defining what we need: the four eigenvectors of BWM nearest to 0.0.
-            var prob = new Arpack(A) { ComputeEigenVectors = true, ArnoldiCount = 30 };
+            var prob = new Spectra(A) { ComputeEigenVectors = true, ArnoldiCount = 30 };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveStandard(4, 0.0, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.General(A, (ArpackResult)result, true);
+            Solution.General("Spectra", A, result, true);
         }
 
         /// <summary>
@@ -316,13 +309,13 @@
             var B = Generate.MassMatrix(n);
 
             // Defining what we need: the four eigenvectors with largest magnitude.
-            var prob = new Arpack(A, B) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.General(A, B, (ArpackResult)result, false);
+            Solution.General("Spectra", A, B, result, false);
         }
 
         /// <summary>
@@ -351,13 +344,13 @@
             var B = Generate.MassMatrix(n);
 
             // Defining what we need: the four eigenvectors nearest to 1.0.
-            var prob = new Arpack(A, B) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B) { ComputeEigenVectors = true };
 
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, 1.0);
 
             // Printing solution.
-            Solution.General(A, B, (ArpackResult)result, true);
+            Solution.General("Spectra", A, B, result, true);
         }
 
         /// <summary>
@@ -383,90 +376,15 @@
             var B = Generate.NonSymMatrixF(n);
 
             // Defining what we need: the four eigenvectors nearest to 0.4 + 0.6i.
-            var prob = new Arpack(A, B) { ComputeEigenVectors = true };
+            var prob = new Spectra(A, B) { ComputeEigenVectors = true };
 
+            /*
             // Finding eigenvalues and eigenvectors.
             var result = prob.SolveGeneralized(4, 0.4, 0.6, 'R');
 
             // Printing solution.
-            Solution.General(A, B, (ArpackResult)result, true, true);
-        }
-
-        #endregion
-
-        #region SVD
-
-        /// <summary>
-        /// Example program that illustrates how to determine the condition number of a matrix
-        /// to find its largest and smallest singular values.
-        /// </summary>
-        /// <remarks>
-        /// MODULE LSVD.cc
-        /// 
-        /// In this example, Arpack++ is called to solve the symmetric problem:
-        /// 
-        ///                   (A'*A)*v = sigma*v
-        /// 
-        /// where A is an m by n real matrix. This formulation is appropriate when m >= n.
-        /// The roles of A and A' must be reversed in the case that m &lt; n.
-        /// </remarks>
-        private static void LSVDcond()
-        {
-            // Number of columns in A.
-            int n = 100;
-
-            // Creating a rectangular matrix with m = 200 and n = 100.
-            var A = Generate.RectangularMatrix(n);
-
-            int m = A.RowCount; // Number of rows in A.
-
-            // Defining what we need: eigenvalues from both ends of the spectrum.
-            var prob = new Arpack(A) { ArnoldiCount = 20 };
-
-            // Finding eigenvalues.
-            var result = prob.SingularValues(6, true, Spectrum.BothEnds);
-
-            Solution.Condition(A, (ArpackResult)result);
-        }
-
-        /// <summary>
-        /// Example program that illustrates how to determine the truncated SVD of a matrix.
-        /// </summary>
-        /// <remarks>
-        /// MODULE LSVD.cc
-        /// 
-        /// In this example, Arpack++ is called to solve the symmetric problem:
-        /// 
-        ///                           | 0  A |*y = sigma*y,
-        ///                           | A' 0 |
-        ///                           
-        /// where A is an m by n real matrix.
-        /// 
-        /// This problem can be used to obtain the decomposition A = U*S*V'. The positive
-        /// eigenvalues of this problem are the singular values of A (the eigenvalues come
-        /// in pairs, the negative eigenvalues have the same magnitude of the positive ones
-        /// and can be discarded). The columns of U can be extracted from the first m
-        /// components of the eigenvectors y, while the columns of V can be extracted from
-        /// the the remaining n components.
-        /// </remarks>
-        private static void LSVDpart()
-        {
-            // Number of columns in A.
-            int n = 100;
-
-            // Creating a rectangular matrix with m = 200 and n = 100.
-            var A = Generate.RectangularMatrix(n);
-
-            int m = A.RowCount; // Number of rows in A.
-
-            // Defining what we need: the four eigenvalues with largest algebraic value.
-            var prob = new Arpack(A) { ArnoldiCount = 20, ComputeEigenVectors = true };
-
-            // Finding eigenvalues.
-            var result = prob.SingularValues(5, false, Spectrum.LargestAlgebraic);
-
-            // Printing the solution.
-            Solution.SVD(A, (ArpackResult)result);
+            Solution.General(A, B, result, true, true);
+            //*/
         }
 
         #endregion

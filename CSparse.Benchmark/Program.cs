@@ -10,8 +10,9 @@ namespace ConsoleApp
         {
             if (args[0] == "--arpack")
             {
-                CSparse.Double.Examples.TestArpack.Run();
-                CSparse.Complex.Examples.TestArpack.Run();
+                CSparse.Examples.Double.TestArpack.Run();
+                CSparse.Examples.Complex.TestArpack.Run();
+                CSparse.Examples.Double.TestSpectra.Run();
             }
             else
             {

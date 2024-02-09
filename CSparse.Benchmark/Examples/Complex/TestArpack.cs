@@ -1,4 +1,4 @@
-﻿namespace CSparse.Complex.Examples
+﻿namespace CSparse.Examples.Complex
 {
     using CSparse.Complex.Solver;
     using CSparse.Solvers;
@@ -46,7 +46,7 @@
             var result = dprob.SolveStandard(2, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.Print(A, (ArpackResult)result, false);
+            Solution.Print("ARPACK", A, result, false);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
             var result = dprob.SolveStandard(4, new Complex(0.0, 0.0));
 
             // Printing solution.
-            Solution.Print(A, (ArpackResult)result, true);
+            Solution.Print("ARPACK", A, result, true);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@
             var result = dprob.SolveGeneralized(4, Spectrum.LargestMagnitude);
 
             // Printing solution.
-            Solution.Print(A, B, (ArpackResult)result, false);
+            Solution.Print("ARPACK", A, B, result, false);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@
             var result = dprob.SolveGeneralized(4, new Complex(1.0, 0.0));
 
             // Printing solution.
-            Solution.Print(A, B, (ArpackResult)result, true);
+            Solution.Print("ARPACK", A, B, result, true);
         }
     }
 }

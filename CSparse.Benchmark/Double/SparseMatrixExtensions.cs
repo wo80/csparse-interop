@@ -1,6 +1,7 @@
 ﻿
 namespace CSparse.Double
 {
+    using CSparse.Storage;
     using System.Numerics;
 
     static class SparseMatrixExtensions
@@ -10,7 +11,7 @@ namespace CSparse.Double
         /// </summary>
         /// <param name="x">Vector of length n (column count).</param>
         /// <param name="y">Vector of length m (row count), containing the result.</param>
-        public static void Multiply(this SparseMatrix A, Complex[] x, Complex[] y)
+        public static void Multiply(this CompressedColumnStorage<double> A, Complex[] x, Complex[] y)
         {
             var ax = A.Values;
             var ap = A.ColumnPointers;
@@ -47,7 +48,7 @@ namespace CSparse.Double
         /// <param name="x">Vector of length n (column count).</param>
         /// <param name="beta">Scaling factor for vector y.</param>
         /// <param name="y">Vector of length m (row count), containing the result.</param>
-        public static void Multiply(this SparseMatrix A, Complex alpha, Complex[] x, Complex beta, Complex[] y)
+        public static void Multiply(this CompressedColumnStorage<double> A, Complex alpha, Complex[] x, Complex beta, Complex[] y)
         {
             var ax = A.Values;
             var ap = A.ColumnPointers;

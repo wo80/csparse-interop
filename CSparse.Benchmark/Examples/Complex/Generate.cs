@@ -1,4 +1,4 @@
-﻿namespace CSparse.Complex.Examples
+﻿namespace CSparse.Examples.Complex
 {
     using CSparse.Complex;
     using System.Numerics;

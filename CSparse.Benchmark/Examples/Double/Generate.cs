@@ -1,4 +1,4 @@
-﻿namespace CSparse.Double.Examples
+﻿namespace CSparse.Examples.Double
 {
     using CSparse.Double;
     using System;
