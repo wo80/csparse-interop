@@ -35,9 +35,9 @@ namespace CSparse.Double.Benchmarks
             return Vector.Create(size, 1.0);
         }
 
-        protected override double ComputeError(double[] actual, double[] expected)
+        protected override double ComputeError(int n, double[] actual, double[] expected)
         {
-            return Helper.ComputeError(actual, expected);
+            return Helper.ComputeError(n, actual, expected);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 namespace CSparse.Benchmark
 {
+    using CSparse.Double;
     using CSparse.Factorization;
     using CSparse.IO;
     using CSparse.Storage;
@@ -78,7 +79,7 @@ namespace CSparse.Benchmark
 
                 info.Time = Solve(A, b, x, file.Symmetric, timer);
 
-                info.Residual = ComputeError(x, s);
+                info.Residual = ComputeError(columns, x, s);
 
                 results.Add(info);
             }
@@ -115,6 +116,6 @@ namespace CSparse.Benchmark
 
         protected abstract IDisposableSolver<T> CreateSolver(CompressedColumnStorage<T> matrix, bool symmetric);
 
-        protected abstract double ComputeError(T[] actual, T[] expected);
+        protected abstract double ComputeError(int n, T[] actual, T[] expected);
     }
 }
