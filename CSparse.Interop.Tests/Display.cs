@@ -6,12 +6,12 @@ namespace CSparse.Interop.Tests
 
     static class Display
     {
-        public static void Time(long ticks)
+        public static void Time(TimeSpan time)
         {
             var color = Console.ForegroundColor;
 
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.000s}] ", TimeSpan.FromTicks(ticks).TotalSeconds));
+            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.000s}] ", time.TotalSeconds));
             Console.ForegroundColor = color;
         }
         

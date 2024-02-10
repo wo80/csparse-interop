@@ -50,7 +50,7 @@
 
             timer.Stop();
 
-            Display.Time(timer.ElapsedTicks);
+            Display.Time(timer.Elapsed);
 
             result.EnsureSuccess();
 

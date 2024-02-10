@@ -44,7 +44,7 @@
 
             timer.Stop();
 
-            Display.Time(timer.ElapsedTicks);
+            Display.Time(timer.Elapsed);
 
             if (result.Status == Interop.MKL.SparseStatus.Success)
             {
