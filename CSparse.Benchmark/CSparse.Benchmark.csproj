@@ -16,4 +16,10 @@
     <ProjectReference Include="..\CSparse.Interop\CSparse.Interop.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="benchmark.lst">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

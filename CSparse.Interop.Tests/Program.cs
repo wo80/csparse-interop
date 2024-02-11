@@ -13,7 +13,7 @@
                 Library.SetImportResolver();
             }
 
-            GetSize(args, out int size, out double density);
+            ParseCommandlineArgs(args, out int size, out double density);
 
             Double.TestRunner.Run(size, density);
             Complex.TestRunner.Run(size, density);
@@ -23,7 +23,7 @@
             //Complex.TestCuda.Run(size, density);
         }
 
-        private static void GetSize(string[] args, out int size, out double density)
+        private static void ParseCommandlineArgs(string[] args, out int size, out double density)
         {
             // Default matrix size.
             size = 1000;
@@ -40,10 +40,12 @@
                 if (arg.Equals("--size") && i + 1 < length)
                 {
                     int.TryParse(args[i + 1], out size);
+                    i++;
                 }
                 else if (arg.Equals("--density") && i + 1 < length)
                 {
                     double.TryParse(args[i + 1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out density);
+                    i++;
                 }
             }
 
