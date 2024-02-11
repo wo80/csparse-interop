@@ -2,16 +2,14 @@
 {
     using System;
     using System.Globalization;
+    using System.Reflection;
     using System.Runtime.InteropServices;
 
     internal class Program
     {
         static void Main(string[] args)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Library.SetImportResolver();
-            }
+            SetImportResolver();
 
             ParseCommandlineArgs(args, out int size, out double density);
 
@@ -62,6 +60,34 @@
 
                 density = 0.01;
             }
+        }
+
+        // In case Windows library names don't match their Linux counterparts, we can modify
+        // the names to look for, as done below for MKL.
+
+        private static void SetImportResolver()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                var assembly = AppDomain.CurrentDomain.Load("CSparse.Interop");
+
+                NativeLibrary.SetDllImportResolver(assembly, DllImportResolver);
+            }
+        }
+
+        private static IntPtr DllImportResolver(string library, Assembly assembly, DllImportSearchPath? searchPath)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                if (library.Equals("mkl_rt.2"))
+                {
+                    // Trying to find MKL on Linux (specifically Debian).
+                    return NativeLibrary.Load("libmkl_rt.so", assembly, searchPath);
+                }
+            }
+
+            // Otherwise, fall back to default import resolver.
+            return IntPtr.Zero;
         }
     }
 }
