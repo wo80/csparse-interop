@@ -2,11 +2,17 @@
 {
     using System;
     using System.Globalization;
+    using System.Runtime.InteropServices;
 
     internal class Program
     {
         static void Main(string[] args)
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Library.SetImportResolver();
+            }
+
             GetSize(args, out int size, out double density);
 
             Double.TestRunner.Run(size, density);
