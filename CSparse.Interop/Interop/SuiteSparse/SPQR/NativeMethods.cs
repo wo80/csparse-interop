@@ -8,7 +8,7 @@ namespace CSparse.Interop.SuiteSparse.SPQR
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string SPQR_DLL = "libsuitesparse";
+        const string SPQR_DLL = "suitesparse";
 #else
         const string SPQR_DLL = "spqr";
 #endif

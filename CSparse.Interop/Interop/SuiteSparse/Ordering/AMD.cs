@@ -249,8 +249,8 @@
         static class NativeMethods
         {
 #if SUITESPARSE_AIO
-            const string AMD_DLL = "libsuitesparse";
-            const string CAMD_DLL = "libsuitesparse";
+            const string AMD_DLL = "suitesparse";
+            const string CAMD_DLL = "suitesparse";
 #elif LINUX
             const string AMD_DLL = "amd";
             const string CAMD_DLL = "camd";

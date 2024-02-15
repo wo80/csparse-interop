@@ -229,8 +229,8 @@ namespace CSparse.Interop.SuiteSparse.Ordering
         internal static class NativeMethods
         {
 #if SUITESPARSE_AIO
-            const string COLAMD_DLL = "libsuitesparse";
-            const string CCOLAMD_DLL = "libsuitesparse";
+            const string COLAMD_DLL = "suitesparse";
+            const string CCOLAMD_DLL = "suitesparse";
 #elif LINUX
             const string COLAMD_DLL = "colamd";
             const string CCOLAMD_DLL = "ccolamd";

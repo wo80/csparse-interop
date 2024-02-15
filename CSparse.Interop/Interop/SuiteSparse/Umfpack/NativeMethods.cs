@@ -6,7 +6,7 @@
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string UMFPACK_DLL = "libsuitesparse";
+        const string UMFPACK_DLL = "suitesparse";
 #else
         const string UMFPACK_DLL = "umfpack";
 #endif

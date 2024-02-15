@@ -21,7 +21,7 @@ namespace CSparse.Interop.SuiteSparse.Cholmod
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string CHOLMOD_DLL = "libsuitesparse";
+        const string CHOLMOD_DLL = "suitesparse";
 #else
         const string CHOLMOD_DLL = "cholmod";
 #endif

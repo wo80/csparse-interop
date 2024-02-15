@@ -151,7 +151,7 @@
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string CXSPARSE_DLL = "libsuitesparse";
+        const string CXSPARSE_DLL = "suitesparse";
 #else
         const string CXSPARSE_DLL = "cxsparse";
 #endif
