@@ -54,9 +54,8 @@ namespace CSparse.Interop.Tests.Complex
         /// </summary>
         /// <param name="A">The matrix.</param>
         /// <param name="result">The eigensolver result.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool print)
+        public static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result)
         {
             int n = A.RowCount;
 
@@ -65,16 +64,8 @@ namespace CSparse.Interop.Tests.Complex
             var v = result.EigenValues;
             var X = result.EigenVectors;
 
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
             var x = new Complex[n];
             var y = new Complex[n];
-
-            bool ok = true;
 
             for (int i = 0; i < m; i++)
             {
@@ -91,16 +82,11 @@ namespace CSparse.Interop.Tests.Complex
 
                 if (r > ERROR_THRESHOLD)
                 {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
+                    return false;
                 }
             }
 
-            return ok;
+            return true;
         }
 
         #endregion

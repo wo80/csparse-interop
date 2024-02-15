@@ -26,6 +26,17 @@
         // Contains handles to pinned objects associated with the factorization.
         protected List<GCHandle> handles;
 
+        /// <summary>
+        /// Return the CXSparse version.
+        /// </summary>
+        /// <returns>The CXSparse version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.cxsparse_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
         public CXSparseContext(CompressedColumnStorage<T> matrix, ColumnOrdering ordering)
         {
             handles = new List<GCHandle>();

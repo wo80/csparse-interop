@@ -30,6 +30,17 @@
         public UmfpackControl Control { get { return control; } }
 
         /// <summary>
+        /// Return the UMFPACK version.
+        /// </summary>
+        /// <returns>The UMFPACK version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.umfpack_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the UmfpackContext class.
         /// </summary>
         /// <param name="matrix">The sparse matrix to factorize.</param>

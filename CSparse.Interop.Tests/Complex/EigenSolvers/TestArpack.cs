@@ -51,11 +51,11 @@
 
             timer.Stop();
 
-            Display.Time(timer.ElapsedTicks);
+            Display.Time(timer.Elapsed);
 
             result.EnsureSuccess();
 
-            if (Helper.CheckResiduals(A, result, false))
+            if (Helper.CheckResiduals(A, result))
             {
                 Display.Ok("OK");
             }

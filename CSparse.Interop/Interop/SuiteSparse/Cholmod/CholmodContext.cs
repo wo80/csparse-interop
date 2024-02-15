@@ -35,9 +35,7 @@
         public static Version Version()
         {
             int[] version = new int[3];
-
-            int i = NativeMethods.cholmod_version(version);
-
+            _ = NativeMethods.cholmod_version(version);
             return new Version(version[0], version[1], version[2]);
         }
 

@@ -56,11 +56,10 @@ namespace CSparse.Interop.Tests.Double
         /// <param name="A">The matrix A.</param>
         /// <param name="result">The eigensolver result.</param>
         /// <param name="symmetric">Indicates, whether the problem is symmetric.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool symmetric, bool print)
+        public static bool CheckResiduals(SparseMatrix A, IEigenSolverResult result, bool symmetric)
         {
-            return CheckResiduals(A, null, result, symmetric, print);
+            return CheckResiduals(A, null, result, symmetric);
         }
 
         /// <summary>
@@ -70,16 +69,15 @@ namespace CSparse.Interop.Tests.Double
         /// <param name="B">The matrix B.</param>
         /// <param name="result">The eigensolver result.</param>
         /// <param name="symmetric">Indicates, whether the problem is symmetric.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, IEigenSolverResult result, bool symmetric, bool print)
+        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, IEigenSolverResult result, bool symmetric)
         {
             if (symmetric)
             {
-                return CheckResiduals(A, B, result.ConvergedEigenValues, result.EigenValuesReal(), result.EigenVectorsReal(), print);
+                return CheckResiduals(A, B, result.ConvergedEigenValues, result.EigenValuesReal(), result.EigenVectorsReal());
             }
 
-            return CheckResiduals(A, B, result.ConvergedEigenValues, result.EigenValues, result.EigenVectors, print);
+            return CheckResiduals(A, B, result.ConvergedEigenValues, result.EigenValues, result.EigenVectors);
         }
 
         /// <summary>
@@ -89,11 +87,10 @@ namespace CSparse.Interop.Tests.Double
         /// <param name="k">The number of converged eigenvalues.</param>
         /// <param name="v">The eigenvalues array.</param>
         /// <param name="X">The eigenvectors matrix.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, int k, double[] v, Matrix<double> X, bool print)
+        public static bool CheckResiduals(SparseMatrix A, int k, double[] v, Matrix<double> X)
         {
-            return CheckResiduals(A, null, k, v, X, print);
+            return CheckResiduals(A, null, k, v, X);
         }
 
         /// <summary>
@@ -104,25 +101,16 @@ namespace CSparse.Interop.Tests.Double
         /// <param name="k">The number of converged eigenvalues.</param>
         /// <param name="v">The eigenvalues array.</param>
         /// <param name="X">The eigenvectors matrix.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, double[] v, Matrix<double> X, bool print)
+        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, double[] v, Matrix<double> X)
         {
             int n = A.RowCount;
 
             // If more eigenvalues converged than were requested (real, non-symmetric case only).
             k = Math.Min(k, X.ColumnCount);
 
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
             var x = new double[n];
             var y = new double[n];
-
-            bool ok = true;
 
             for (int i = 0; i < k; i++)
             {
@@ -145,16 +133,11 @@ namespace CSparse.Interop.Tests.Double
 
                 if (r > ERROR_THRESHOLD)
                 {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
+                    return false;
                 }
             }
 
-            return ok;
+            return true;
         }
 
         /// <summary>
@@ -165,25 +148,16 @@ namespace CSparse.Interop.Tests.Double
         /// <param name="k">The number of converged eigenvalues.</param>
         /// <param name="v">The eigenvalues array.</param>
         /// <param name="X">The eigenvectors matrix.</param>
-        /// <param name="print">If true, print residuals.</param>
         /// <returns>True, if all residuals are below threshold.</returns>
-        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, Complex[] v, Matrix<Complex> X, bool print)
+        public static bool CheckResiduals(SparseMatrix A, SparseMatrix B, int k, Complex[] v, Matrix<Complex> X)
         {
             int n = A.RowCount;
 
             // If more eigenvalues converged than were requested (real, non-symmetric case only).
             k = Math.Min(k, X.ColumnCount);
 
-            if (print)
-            {
-                Console.WriteLine();
-                Console.WriteLine("       Lambda         Residual");
-            }
-
             var x = new Complex[n];
             var y = new Complex[n];
-
-            bool ok = true;
 
             for (int i = 0; i < k; i++)
             {
@@ -206,16 +180,11 @@ namespace CSparse.Interop.Tests.Double
 
                 if (r > ERROR_THRESHOLD)
                 {
-                    ok = false;
-                }
-
-                if (print)
-                {
-                    Console.WriteLine("{0,3}:   {1,10:0.00000000}   {2,10:0.00e+00}", i, lambda, r);
+                    return false;
                 }
             }
 
-            return ok;
+            return true;
         }
 
         #endregion

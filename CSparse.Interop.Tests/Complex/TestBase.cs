@@ -72,7 +72,7 @@ namespace CSparse.Interop.Tests.Complex
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedTicks);
+                Display.Time(timer.Elapsed);
 
                 double error = Helper.ComputeError(x, s);
 
@@ -142,7 +142,7 @@ namespace CSparse.Interop.Tests.Complex
 
                 timer.Stop();
 
-                Display.Time(timer.ElapsedTicks);
+                Display.Time(timer.Elapsed);
 
                 double error = 0.0;
 

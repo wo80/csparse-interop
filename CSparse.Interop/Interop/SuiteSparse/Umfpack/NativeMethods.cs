@@ -6,10 +6,13 @@
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string UMFPACK_DLL = "libsuitesparse";
+        const string UMFPACK_DLL = "suitesparse";
 #else
-        const string UMFPACK_DLL = "libumfpack";
+        const string UMFPACK_DLL = "umfpack";
 #endif
+
+        [DllImport(UMFPACK_DLL, EntryPoint = "umfpack_version", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void umfpack_version(int[] version);
 
         #region Double / int
 

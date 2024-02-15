@@ -151,10 +151,13 @@
     internal static class NativeMethods
     {
 #if SUITESPARSE_AIO
-        const string CXSPARSE_DLL = "libsuitesparse";
+        const string CXSPARSE_DLL = "suitesparse";
 #else
-        const string CXSPARSE_DLL = "libcxsparse";
+        const string CXSPARSE_DLL = "cxsparse";
 #endif
+
+        [DllImport(CXSPARSE_DLL, EntryPoint = "cxsparse_version", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void cxsparse_version(int[] version);
 
         #region Double
 

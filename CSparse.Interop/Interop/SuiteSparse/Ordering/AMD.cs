@@ -130,6 +130,17 @@
         #endregion
 
         /// <summary>
+        /// Return the AMD version.
+        /// </summary>
+        /// <returns>The AMD version.</returns>
+        public static Version Version()
+        {
+            int[] version = new int[3];
+            NativeMethods.amd_version(version);
+            return new Version(version[0], version[1], version[2]);
+        }
+
+        /// <summary>
         /// Generate a fill-reducing ordering using the AMD algorithm.
         /// </summary>
         /// <param name="A">The matrix.</param>
@@ -238,17 +249,17 @@
         static class NativeMethods
         {
 #if SUITESPARSE_AIO
-            const string AMD_DLL = "libsuitesparse";
-            const string CAMD_DLL = "libsuitesparse";
-#elif LINUX
-            const string AMD_DLL = "amd";
-            const string CAMD_DLL = "camd";
+            const string AMD_DLL = "suitesparse";
+            const string CAMD_DLL = "suitesparse";
 #else
             const string AMD_DLL = "amd";
-            const string CAMD_DLL = "amd";
+            const string CAMD_DLL = "camd";
 #endif
 
             #region AMD
+
+            [DllImport(AMD_DLL)]
+            public static extern void amd_version(int[] version);
 
             /// <summary>
             /// Computes the approximate minimum degree ordering of an n-by-n matrix A.
@@ -322,6 +333,9 @@
             #endregion
 
             #region CAMD
+
+            [DllImport(CAMD_DLL)]
+            public static extern void camd_version(int[] version);
 
             /// <summary>
             /// Computes the approximate minimum degree ordering of an n-by-n matrix A.

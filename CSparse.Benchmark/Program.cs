@@ -16,7 +16,7 @@ namespace ConsoleApp
             }
             else
             {
-                var c = GetCommandLine(args);
+                var c = ParseCommandlineArgs(args);
 
                 CSparse.Double.BenchmarkRunner.Run(c["data"], c["benchmark"]);
             }
@@ -24,7 +24,7 @@ namespace ConsoleApp
             Console.WriteLine("Done.");
         }
 
-        private static Dictionary<string, string> GetCommandLine(string[] args)
+        private static Dictionary<string, string> ParseCommandlineArgs(string[] args)
         {
             var c = new Dictionary<string, string>();
 
@@ -38,12 +38,14 @@ namespace ConsoleApp
 
             for (int i = 0; i < length; i++)
             {
-                if (args[i] == "-d" && (i + 1 < length))
+                var arg = args[i];
+
+                if ((arg == "-d" || arg == "--data-dir") && i + 1 < length)
                 {
                     c["data"] = Path.GetFullPath(args[i + 1]);
                     i++;
                 }
-                else if (args[i] == "-b" && (i + 1 < length))
+                else if ((arg == "-b" || arg == "--benchmark-file") && i + 1 < length)
                 {
                     c["benchmark"] = args[i + 1];
                     i++;
