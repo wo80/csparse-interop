@@ -231,12 +231,9 @@ namespace CSparse.Interop.SuiteSparse.Ordering
 #if SUITESPARSE_AIO
             const string COLAMD_DLL = "suitesparse";
             const string CCOLAMD_DLL = "suitesparse";
-#elif LINUX
+#else
             const string COLAMD_DLL = "colamd";
             const string CCOLAMD_DLL = "ccolamd";
-#else
-            const string COLAMD_DLL = "amd";
-            const string CCOLAMD_DLL = "amd";
 #endif
 
             #region COLAMD

@@ -55,7 +55,7 @@
 
             result.EnsureSuccess();
 
-            if (Helper.CheckResiduals(A, result, false))
+            if (Helper.CheckResiduals(A, result))
             {
                 Display.Ok("OK");
             }

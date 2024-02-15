@@ -48,7 +48,7 @@
 
             if (result.Status == Interop.MKL.SparseStatus.Success)
             {
-                if (CheckResiduals(A, result, false))
+                if (CheckResiduals(A, result))
                 {
                     Display.Ok("OK");
                 }
@@ -63,12 +63,12 @@
             }
         }
 
-        private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult result, bool print)
+        private static bool CheckResiduals(SparseMatrix A, ExtendedEigensolverResult result)
         {
             var evals = result.EigenValuesReal();
             var evecs = result.EigenVectorsReal();
 
-            return Helper.CheckResiduals(A, result.ConvergedEigenValues, evals, evecs, print);
+            return Helper.CheckResiduals(A, result.ConvergedEigenValues, evals, evecs);
         }
     }
 }

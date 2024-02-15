@@ -1,4 +1,4 @@
-﻿#if !LINUX
+﻿#if SUITESPARSE_AIO
 namespace CSparse.Interop.SuiteSparse.Ordering
 {
     using CSparse.Storage;

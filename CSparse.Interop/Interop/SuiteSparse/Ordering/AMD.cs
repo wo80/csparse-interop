@@ -251,12 +251,9 @@
 #if SUITESPARSE_AIO
             const string AMD_DLL = "suitesparse";
             const string CAMD_DLL = "suitesparse";
-#elif LINUX
-            const string AMD_DLL = "amd";
-            const string CAMD_DLL = "camd";
 #else
             const string AMD_DLL = "amd";
-            const string CAMD_DLL = "amd";
+            const string CAMD_DLL = "camd";
 #endif
 
             #region AMD

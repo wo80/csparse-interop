@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
 
 #if X64
     using size_t = System.UInt64;
@@ -26,6 +27,24 @@
             NativeMethods.SuiteSparse_free(p);
         }
 
+        public static string GetInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("SuiteSparse version " + GetVersion());
+            sb.AppendLine();
+            sb.AppendLine("  BLAS provider    : " + GetBlasLibrary());
+            sb.AppendLine("  BLAS integer size: " + GetBlasIntegerSize());
+            sb.AppendLine();
+            sb.AppendLine("  AMD     : " + Ordering.AMD.Version());
+            sb.AppendLine("  CHOLMOD : " + Cholmod.CholmodContext<double>.Version());
+            sb.AppendLine("  CXSparse: " + CXSparse.CXSparseContext<double>.Version());
+            sb.AppendLine("  SPQR    : " + SPQR.SpqrContext<double>.Version());
+            sb.AppendLine("  UMFPACK : " + Umfpack.UmfpackContext<double>.Version());
+
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Gets the name of the linked BLAS library (WARNING: leaks memory).
         /// </summary>
@@ -34,11 +53,7 @@
             // NOTE: this leaks native memory, since the returned char* pointer isn't free'd.
             var p = NativeMethods.SuiteSparse_BLAS_library();
 
-            var name = Marshal.PtrToStringAnsi(p);
-
-            NativeMethods.SuiteSparse_free(p);
-
-            return name;
+            return Marshal.PtrToStringAnsi(p);
         }
 
         /// <summary>

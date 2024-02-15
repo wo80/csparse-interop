@@ -54,7 +54,7 @@
 
             result.EnsureSuccess();
 
-            if (Helper.CheckResiduals(A, result, symmetric, false))
+            if (Helper.CheckResiduals(A, result, symmetric))
             {
                 Display.Ok("OK");
             }
