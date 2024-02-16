@@ -41,7 +41,7 @@
 
     internal static class NativeMethods
     {
-        const string SPECTRA_DLL = "libspectra";
+        const string SPECTRA_DLL = "cspectra";
 
         // Method naming: spectra_[1]i_[2][3]_(shift)
         //
