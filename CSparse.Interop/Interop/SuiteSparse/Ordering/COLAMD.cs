@@ -288,7 +288,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [MarshalAs(UnmanagedType.LPArray, SizeConst = COLAMD_STATS)] int[] stats
             );
 
-#if !LINUX
+#if SUITESPARSE_AIO
             /// <summary>
             /// Computes an ordering P of a symmetric sparse matrix A such that the Cholesky factorization
             /// PAP' = LL' remains sparse. It is based on a column ordering of a matrix M constructed so that
@@ -383,7 +383,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
                 [In, Out] int[] cmember
             );
 
-#if !LINUX
+#if SUITESPARSE_AIO
             /// <summary>
             /// Computes an ordering P of a symmetric sparse matrix A such that the Cholesky factorization
             /// PAP' = LL' remains sparse. It is based on a column ordering of a matrix M constructed so that
@@ -426,7 +426,7 @@ namespace CSparse.Interop.SuiteSparse.Ordering
             );
             //*/
 
-#endregion
+            #endregion
         }
     }
 }

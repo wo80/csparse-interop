@@ -29,6 +29,8 @@
                     return "Cholesky decomposition failed, the matrix is not positive definite.";
                 case EXCEPTION_STD:
                     return "C++ std::exception was thrown.";
+                case INVALID_ARGUMENT:
+                    return "C++ std::invalid_argument was thrown.";
                 case EXCEPTION_UNKNOWN:
                     return "C++ unkown exception occurred.";
                 default:
@@ -52,6 +54,7 @@
         
         private const int EXCEPTION_STD = -1000;
         private const int EXCEPTION_UNKNOWN = -1001;
+        private const int INVALID_ARGUMENT = -1002;
 
         #endregion
     }

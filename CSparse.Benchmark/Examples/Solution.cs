@@ -295,7 +295,7 @@
         /// </summary>
         public static void Print(string name, CompressedColumnStorage<CComplex> A, CompressedColumnStorage<CComplex> B, IEigenSolverResult result, bool shift)
         {
-            PrintHeader(name, A.RowCount, result, false, false, B != null, shift ? ShiftMode.Regular : ShiftMode.None);
+            PrintHeader(name, A.RowCount, result, true, false, B != null, shift ? ShiftMode.Regular : ShiftMode.None);
 
             if (!EnsureSuccess(result))
             {

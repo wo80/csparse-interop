@@ -8,7 +8,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            if (args[0] == "--arpack")
+            if (args.Length == 0 || args[0] == "--arpack")
             {
                 CSparse.Examples.Double.TestArpack.Run();
                 CSparse.Examples.Complex.TestArpack.Run();

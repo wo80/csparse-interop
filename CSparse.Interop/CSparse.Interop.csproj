@@ -21,7 +21,6 @@
 
   <PropertyGroup>
     <NoWarn>1591</NoWarn>
-    <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' != 'x86'">
