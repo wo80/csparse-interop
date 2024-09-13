@@ -28,6 +28,9 @@
         // Stores a pointer to cholmod_factor (native memory). Needed for disposing with cholmod_free_factor.
         private IntPtr Lp;
 
+        /// <inheritdoc />
+        public int NonZerosCount => (int)common.lnz;
+
         /// <summary>
         /// Return the CHOLMOD version.
         /// </summary>

@@ -1,7 +1,6 @@
 ﻿
 namespace CSparse.Interop.Tests.Double
 {
-    using CSparse.Double;
     using CSparse.Interop.Tests.Double.EigenSolvers;
     using System;
 
@@ -9,7 +8,7 @@ namespace CSparse.Interop.Tests.Double
     {
         public static void Run(int size, double density)
         {
-            var A = Generate.Random(size, size, density);
+            var A = Generate.Random(size, size, density, Random.Shared);
             var B = Generate.RandomSymmetric(size, density, true);
 
             Console.WriteLine("Running tests (Double) ... [N = {0}]", size);

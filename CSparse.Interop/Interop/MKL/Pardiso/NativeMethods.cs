@@ -4,7 +4,7 @@ namespace CSparse.Interop.MKL.Pardiso
     using System;
     using System.Runtime.InteropServices;
 
-    // See https://software.intel.com/en-us/mkl-developer-reference-c-intel-mkl-pardiso-parallel-direct-sparse-solver-interface
+    // See https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/onemkl-pardiso-parallel-direct-sparse-solver-iface.html
 
     internal static class NativeMethods
     {

@@ -44,7 +44,10 @@ namespace CSparse.Interop.MKL.Pardiso
         /// <summary>
         /// Gets the PARDISO options.
         /// </summary>
-        public PardisoOptions Options { get { return options; } }
+        public PardisoOptions Options => options;
+
+        /// <inheritdoc />
+        public int NonZerosCount => options.iparm[17];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PardisoContext{T}"/> class.

@@ -27,6 +27,8 @@ namespace CSparse.Interop.Tests.Double
     {
         SparseQR qr;
 
+        public int NonZerosCount => qr.NonZerosCount;
+
         public DisposableSparseQR(SparseMatrix matrix)
         {
             qr = SparseQR.Create(matrix, ColumnOrdering.MinimumDegreeAtA);

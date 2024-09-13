@@ -26,6 +26,9 @@
         // Contains handles to pinned objects associated with the factorization.
         protected List<GCHandle> handles;
 
+        /// <inheritdoc />
+        public int NonZerosCount => GetNonZerosCount();
+
         /// <summary>
         /// Return the CXSparse version.
         /// </summary>
@@ -97,6 +100,26 @@
             A.x = InteropHelper.Pin(matrix.Values, handles);
 
             return A;
+        }
+
+        private int GetNonZerosCount()
+        {
+            int lnz = GetNonZerosCount(N.L);
+            int unz = GetNonZerosCount(N.U);
+
+            return lnz + unz;
+        }
+
+        private static int GetNonZerosCount(IntPtr mat)
+        {
+            if (mat == IntPtr.Zero)
+            {
+                return -1;
+            }
+
+            var cs_obj = Marshal.PtrToStructure<cs>(mat);
+
+            return cs_obj.nzmax;
         }
 
         #region IDisposable

@@ -22,12 +22,15 @@
         /// <summary>
         /// Gets the UMFPACK info.
         /// </summary>
-        public UmfpackInfo Info { get { return info; } }
+        public UmfpackInfo Info => info;
 
         /// <summary>
         /// Gets the UMFPACK control.
         /// </summary>
-        public UmfpackControl Control { get { return control; } }
+        public UmfpackControl Control => control;
+
+        /// <inheritdoc />
+        public int NonZerosCount => info.LU_ENTRIES;
 
         /// <summary>
         /// Return the UMFPACK version.

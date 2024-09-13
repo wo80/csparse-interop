@@ -35,6 +35,9 @@ namespace CSparse.Interop.CUDA
         // The lifetime of the stream is controlled by the calling code!
         private CudaStream stream;
 
+        /// <inheritdoc />
+        public int NonZerosCount => -1;
+
         /// <summary>
         /// Gets the factorization time (seconds).
         /// </summary>

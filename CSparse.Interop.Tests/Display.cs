@@ -8,43 +8,45 @@ namespace CSparse.Interop.Tests
     {
         public static void Time(TimeSpan time)
         {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(string.Format(CultureInfo.InvariantCulture, "[{0:0.000s}] ", time.TotalSeconds));
-            Console.ForegroundColor = color;
+            Info(string.Format(CultureInfo.InvariantCulture, "[{0:0.000s}] ", time.TotalSeconds), ConsoleColor.DarkGray, false);
         }
         
         public static void Ok(string message)
         {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(message);
-            Console.ForegroundColor = color;
+            Info(message, ConsoleColor.DarkGreen);
         }
 
         public static void Warning(string message)
         {
-            var color = Console.ForegroundColor;
-
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(message);
-            Console.ForegroundColor = color;
+            Info(message, ConsoleColor.DarkYellow);
         }
 
         public static void Error(string message, bool cleanup = true)
         {
-            var color = Console.ForegroundColor;
-
             if (cleanup)
             {
                 message = Cleanup(message);
             }
 
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine(message);
+            Info(message, ConsoleColor.DarkRed);
+        }
+
+        public static void Info(string message, ConsoleColor color, bool newline = true)
+        {
+            var colorSave = Console.ForegroundColor;
+
             Console.ForegroundColor = color;
+
+            if (newline)
+            {
+                Console.WriteLine(message);
+            }
+            else
+            {
+                Console.Write(message);
+            }
+
+            Console.ForegroundColor = colorSave;
         }
 
         private static string Cleanup(string message)

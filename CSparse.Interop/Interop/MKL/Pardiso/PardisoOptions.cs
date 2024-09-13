@@ -155,8 +155,8 @@ namespace CSparse.Interop.MKL.Pardiso
         /// over the factorization process. Make sure you understand all the options
         /// you are setting.
         /// 
-        /// See https://software.intel.com/en-us/mkl-developer-reference-c-pardiso-iparm-parameter and
-        ///     https://software.intel.com/en-us/articles/pardiso-parameter-table
+        /// See https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/pardiso-iparm-parameter.html and
+        ///     https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2024-2/onemkl-pardiso-parameters-in-tabular-form.html
         /// </remarks>
         internal int[] iparm;
 

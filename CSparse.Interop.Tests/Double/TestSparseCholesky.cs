@@ -36,6 +36,8 @@ namespace CSparse.Interop.Tests.Double
     {
         SparseCholesky cholesky;
 
+        public int NonZerosCount => cholesky.NonZerosCount;
+
         public DisposableSparseCholesky(SparseMatrix matrix)
         {
             cholesky = SparseCholesky.Create(matrix, ColumnOrdering.MinimumDegreeAtPlusA);

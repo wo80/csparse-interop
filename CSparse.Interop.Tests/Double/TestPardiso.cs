@@ -31,7 +31,7 @@ namespace CSparse.Interop.Tests.Double
             // Perturb the pivot elements with 1E-13.
             options.PivotingPerturbation = 13;
 
-            // Use nonsymmetric permutation and scaling MPS.
+            // Use non-symmetric permutation and scaling MPS.
             options.Scaling = true;
 
             // Maximum weighted matching algorithm is switched-on (default for non-symmetric).

@@ -23,6 +23,9 @@ namespace CSparse.Interop.SuiteSparse.SPQR
 
         protected bool factorized;
 
+        /// <inheritdoc />
+        public int NonZerosCount => (int)common.lnz;
+
         /// <summary>
         /// Return the SPQR version.
         /// </summary>

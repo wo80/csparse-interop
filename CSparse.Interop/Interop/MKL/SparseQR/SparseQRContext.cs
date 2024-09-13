@@ -30,6 +30,9 @@ namespace CSparse.Interop.MKL.SparseQR
         // Contains handles to pinned objects associated with the factorization.
         protected List<GCHandle> handles;
 
+        /// <inheritdoc />
+        public int NonZerosCount => -1;
+
         public SparseQRContext(CompressedRowStorage<T> matrix)
         {
             if (matrix.RowCount < matrix.ColumnCount)

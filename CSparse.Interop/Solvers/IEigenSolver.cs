@@ -15,7 +15,7 @@ namespace CSparse.Solvers
         /// </summary>
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
-        /// <returns>Retruns an <see cref="IEigenSolverResult"/>.</returns>
+        /// <returns>Returns an <see cref="IEigenSolverResult"/>.</returns>
         IEigenSolverResult SolveStandard(int k, Spectrum job);
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace CSparse.Solvers
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="sigma">The shift value.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
-        /// <returns>Retruns an <see cref="IEigenSolverResult"/>.</returns>
+        /// <returns>Returns an <see cref="IEigenSolverResult"/>.</returns>
         IEigenSolverResult SolveStandard(int k, T sigma, Spectrum job);
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace CSparse.Solvers
         /// </summary>
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
-        /// <returns>Retruns an <see cref="IEigenSolverResult"/>.</returns>
+        /// <returns>Returns an <see cref="IEigenSolverResult"/>.</returns>
         IEigenSolverResult SolveGeneralized(int k, Spectrum job);
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace CSparse.Solvers
         /// <param name="k">The number of eigenvalues to compute.</param>
         /// <param name="sigma">The shift value.</param>
         /// <param name="job">The part of the spectrum to compute.</param>
-        /// <returns>Retruns an <see cref="IEigenSolverResult"/>.</returns>
+        /// <returns>Returns an <see cref="IEigenSolverResult"/>.</returns>
         IEigenSolverResult SolveGeneralized(int k, T sigma, Spectrum job);
     }
 }

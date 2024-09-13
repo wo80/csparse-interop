@@ -38,7 +38,10 @@ namespace CSparse.Interop.SuperLU
         /// <summary>
         /// Gets the SuperLU options.
         /// </summary>
-        public SuperLUOptions Options { get { return options; } }
+        public SuperLUOptions Options => options;
+
+        /// <inheritdoc />
+        public int NonZerosCount => GetNonZerosCount();
 
         public SuperLUContext(CompressedColumnStorage<T> matrix)
         {
@@ -49,20 +52,20 @@ namespace CSparse.Interop.SuperLU
 
             this.matrix = matrix;
 
-            this.A = CreateSparse(matrix, handles);
-            this.L = new SuperMatrix();
-            this.U = new SuperMatrix();
+            A = CreateSparse(matrix, handles);
+            L = new SuperMatrix();
+            U = new SuperMatrix();
 
-            this.glu = new GlobalLU();
+            glu = new GlobalLU();
 
-            this.perm_c = new int[n];
-            this.perm_r = new int[m];
-            this.etree = new int[n];
+            perm_c = new int[n];
+            perm_r = new int[m];
+            etree = new int[n];
 
-            this.R = CreateArray(m);
-            this.C = CreateArray(n);
+            R = CreateArray(m);
+            C = CreateArray(n);
 
-            this.equed = new byte[2];
+            equed = new byte[2];
 
             options = new SuperLUOptions();
         }
@@ -210,6 +213,44 @@ namespace CSparse.Interop.SuperLU
         /// <param name="result">The solution x.</param>
         /// <returns></returns>
         protected abstract int DoSolve(DenseColumnMajorStorage<T> input, DenseColumnMajorStorage<T> result);
+
+        private int GetNonZerosCount()
+        {
+            int lnz = GetNonZerosCount(L);
+            int unz = GetNonZerosCount(U);
+
+            return lnz + unz;
+        }
+
+        private static int GetNonZerosCount(SuperMatrix mat)
+        {
+            if (mat.Store == IntPtr.Zero)
+            {
+                return -1;
+            }
+
+            switch (mat.Stype)
+            {
+                case Stype.SLU_NC:
+                case Stype.SLU_NCP:
+                    var nc = Marshal.PtrToStructure<NCformat>(mat.Store);
+                    return nc.nnz;
+                case Stype.SLU_NR:
+                    var nr = Marshal.PtrToStructure<NRformat>(mat.Store);
+                    return nr.nnz;
+                case Stype.SLU_SC:
+                case Stype.SLU_SCP:
+                    var sc = Marshal.PtrToStructure<SCformat>(mat.Store);
+                    return sc.nnz;
+                case Stype.SLU_DN:
+                case Stype.SLU_NR_loc:
+                case Stype.SLU_SR:
+                default:
+                    break;
+            }
+
+            return -1;
+        }
 
         #region IDisposable
 

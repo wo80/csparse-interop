@@ -23,6 +23,8 @@ namespace CSparse.Interop.Tests.Double
     {
         SparseLU lu;
 
+        public int NonZerosCount => lu.NonZerosCount;
+
         public DisposableSparseLU(SparseMatrix matrix)
         {
             lu = SparseLU.Create(matrix, ColumnOrdering.MinimumDegreeAtPlusA, 0.1);

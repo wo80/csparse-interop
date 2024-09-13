@@ -5,6 +5,7 @@ namespace CSparse.Interop.Tests.Double
     using CSparse.Factorization;
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     abstract class TestBase
     {
@@ -66,6 +67,15 @@ namespace CSparse.Interop.Tests.Double
                 using (var solver = CreateSolver(A, symmetric))
                 {
                     solver.Solve(b, x);
+
+                    if (Config.Verbose)
+                    {
+                        double fillin = solver.NonZerosCount / (double)A.NonZerosCount;
+
+                        var message = string.Format("[fill-in: {0}] ", fillin > 0 ? fillin.ToString("0.0", CultureInfo.InvariantCulture) : "-");
+
+                        Display.Info(message, ConsoleColor.DarkGray, false);
+                    }
                 }
 
                 timer.Stop();
