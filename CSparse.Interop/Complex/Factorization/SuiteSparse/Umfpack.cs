@@ -20,6 +20,57 @@ namespace CSparse.Complex.Factorization.SuiteSparse
         {
         }
 
+        /// <inheritdoc />
+        public override void GetFactors(out CompressedColumnStorage<Complex> L, out CompressedColumnStorage<Complex> U, out int[] P, out int[] Q, out Complex[] D, out double[] R)
+        {
+            if (numeric == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Numeric factorization unavailable.");
+            }
+
+            int rows = info.NROW;
+            int cols = info.NCOL;
+            int inner = Math.Min(rows, cols);
+
+            L = new SparseMatrix(rows, inner, info.LNZ);
+            U = new SparseMatrix(inner, cols, info.UNZ);
+
+            P = new int[rows];
+            Q = new int[cols];
+            D = new Complex[inner];
+            R = new double[rows];
+
+            var Lx = new double[inner];
+            var Lz = new double[inner];
+
+            var Ux = new double[inner];
+            var Uz = new double[inner];
+
+            var Dx = new double[inner];
+            var Dz = new double[inner];
+
+            NativeMethods.umfpack_zi_get_numeric(L.ColumnPointers, L.RowIndices, Lx, Lz, U.ColumnPointers, U.RowIndices, Ux, Uz, P, Q, Dx, Dz, out int recip, R, numeric);
+
+            var Lval = L.Values;
+
+            for (int i = 0; i < info.LNZ; i++)
+            {
+                Lval[i] = new Complex(Lx[i], Lz[i]);
+            }
+
+            var Uval = U.Values;
+
+            for (int i = 0; i < info.UNZ; i++)
+            {
+                Uval[i] = new Complex(Ux[i], Uz[i]);
+            }
+
+            for (int i = 0; i < inner; i++)
+            {
+                D[i] = new Complex(Dx[i], Dz[i]);
+            }
+        }
+
         protected override void DoInitialize()
         {
             NativeMethods.umfpack_zi_defaults(control.Raw);

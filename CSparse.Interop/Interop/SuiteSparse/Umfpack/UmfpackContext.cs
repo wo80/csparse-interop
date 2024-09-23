@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the UmfpackContext class.
+        /// Initializes a new instance of the <see cref="UmfpackContext{T}"/> class.
         /// </summary>
         /// <param name="matrix">The sparse matrix to factorize.</param>
         public UmfpackContext(CompressedColumnStorage<T> matrix)
@@ -108,6 +108,17 @@
         {
             Solve(UmfpackSolve.A, input, result);
         }
+
+        /// <summary>
+        /// Gets the factors L and U, the permutation vectors P and Q, the diagonal of L in D, and the row scaling factors R.
+        /// </summary>
+        /// <param name="L">The L factor (nrow-by-min(nrow, ncol)) with respect to input matrix size).</param>
+        /// <param name="U">The U factor (min(nrow, ncol)-by-ncol) with respect to input matrix size).</param>
+        /// <param name="P">The permutation vector P is defined as P[k] = i, where the original row i of A is the k-th pivot row in PAQ</param>
+        /// <param name="Q">The permutation vector Q is defined as Q[k] = j, where the original column j of A is the k-th pivot column in PAQ.</param>
+        /// <param name="D">The diagonal of U is also returned in D.</param>
+        /// <param name="R">The row scale factors are returned in R.</param>
+        public abstract void GetFactors(out CompressedColumnStorage<T> L, out CompressedColumnStorage<T> U, out int[] P, out int[] Q, out T[] D, out double[] R);
 
         private void Solve(UmfpackSolve sys, T[] input, T[] result)
         {

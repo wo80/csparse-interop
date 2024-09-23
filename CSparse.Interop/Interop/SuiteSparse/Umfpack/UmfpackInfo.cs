@@ -1,7 +1,5 @@
 ﻿namespace CSparse.Interop.SuiteSparse.Umfpack
 {
-    using System;
-
     /* symbolic factorization:
      
             Info [UMFPACK_STATUS]: status code.  This is also the return value,
@@ -536,7 +534,7 @@
             entries of Info are not accessed or modified by umfpack_*_solve.
             Future versions might modify different parts of Info.
      */
-     
+
     /// <summary>
     /// UMFPACK info.
     /// </summary>
@@ -572,240 +570,153 @@
         /// <summary>
         /// Status code. This is also the return value, whether or not Info is present.
         /// </summary>
-        public int STATUS
-        {
-            get { return (int)Raw[UMFPACK_STATUS]; }
-        }
+        public int STATUS => (int)Raw[UMFPACK_STATUS];
 
         /// <summary>
         /// The value of the input argument n_row.
         /// </summary>
-        public int NROW
-        {
-            get { return (int)Raw[UMFPACK_NROW]; }
-        }
+        public int NROW => (int)Raw[UMFPACK_NROW];
 
         /// <summary>
         /// The value of the input argument n_col.
         /// </summary>
-        public int NCOL
-        {
-            get { return (int)Raw[UMFPACK_NCOL]; }
-        }
+        public int NCOL => (int)Raw[UMFPACK_NCOL];
 
         /// <summary>
         /// # of entries in A
         /// </summary>
-        public int NZ
-        {
-            get { return (int)Raw[UMFPACK_NZ]; }
-        }
+        public int NZ => (int)Raw[UMFPACK_NZ];
 
         /* computed in UMFPACK_*symbolic and UMFPACK_numeric: */
 
         /// <summary>
         /// sizeof (Unit)
         /// </summary>
-        public int SIZE_OF_UNIT
-        {
-            get { return (int)Raw[UMFPACK_SIZE_OF_UNIT]; }
-        }
+        public int SIZE_OF_UNIT => (int)Raw[UMFPACK_SIZE_OF_UNIT];
 
         /* computed in UMFPACK_*symbolic: */
 
         /// <summary>
         /// sizeof (int)
         /// </summary>
-        public int SIZE_OF_INT
-        {
-            get { return (int)Raw[UMFPACK_SIZE_OF_INT]; }
-        }
+        public int SIZE_OF_INT => (int)Raw[UMFPACK_SIZE_OF_INT];
 
         /// <summary>
         /// sizeof (SuiteSparse_long)
         /// </summary>
-        public int SIZE_OF_LONG
-        {
-            get { return (int)Raw[UMFPACK_SIZE_OF_LONG]; }
-        }
+        public int SIZE_OF_LONG => (int)Raw[UMFPACK_SIZE_OF_LONG];
 
         /// <summary>
         /// sizeof (void *)
         /// </summary>
-        public int SIZE_OF_POINTER
-        {
-            get { return (int)Raw[UMFPACK_SIZE_OF_POINTER]; }
-        }
+        public int SIZE_OF_POINTER => (int)Raw[UMFPACK_SIZE_OF_POINTER];
 
         /// <summary>
         /// sizeof (Entry), real or complex
         /// </summary>
-        public int SIZE_OF_ENTRY
-        {
-            get { return (int)Raw[UMFPACK_SIZE_OF_ENTRY]; }
-        }
+        public int SIZE_OF_ENTRY => (int)Raw[UMFPACK_SIZE_OF_ENTRY];
 
         /// <summary>
         /// number of dense rows
         /// </summary>
-        public int NDENSE_ROW
-        {
-            get { return (int)Raw[UMFPACK_NDENSE_ROW]; }
-        }
+        public int NDENSE_ROW => (int)Raw[UMFPACK_NDENSE_ROW];
 
         /// <summary>
         /// number of empty rows
         /// </summary>
-        public int NEMPTY_ROW
-        {
-            get { return (int)Raw[UMFPACK_NEMPTY_ROW]; }
-        }
+        public int NEMPTY_ROW => (int)Raw[UMFPACK_NEMPTY_ROW];
 
         /// <summary>
         /// number of dense rows
         /// </summary>
-        public int NDENSE_COL
-        {
-            get { return (int)Raw[UMFPACK_NDENSE_COL]; }
-        }
+        public int NDENSE_COL => (int)Raw[UMFPACK_NDENSE_COL];
 
         /// <summary>
         /// number of empty rows
         /// </summary>
-        public int NEMPTY_COL
-        {
-            get { return (int)Raw[UMFPACK_NEMPTY_COL]; }
-        }
+        public int NEMPTY_COL => (int)Raw[UMFPACK_NEMPTY_COL];
 
         /// <summary>
         /// # of memory compactions
         /// </summary>
-        public int SYMBOLIC_DEFRAG
-        {
-            get { return (int)Raw[UMFPACK_SYMBOLIC_DEFRAG]; }
-        }
+        public int SYMBOLIC_DEFRAG => (int)Raw[UMFPACK_SYMBOLIC_DEFRAG];
 
         /// <summary>
         /// memory used by symbolic analysis
         /// </summary>
-        public int SYMBOLIC_PEAK_MEMORY
-        {
-            get { return (int)Raw[UMFPACK_SYMBOLIC_PEAK_MEMORY]; }
-        }
+        public int SYMBOLIC_PEAK_MEMORY => (int)Raw[UMFPACK_SYMBOLIC_PEAK_MEMORY];
 
         /// <summary>
         /// size of Symbolic object, in Units
         /// </summary>
-        public int SYMBOLIC_SIZE
-        {
-            get { return (int)Raw[UMFPACK_SYMBOLIC_SIZE]; }
-        }
+        public int SYMBOLIC_SIZE => (int)Raw[UMFPACK_SYMBOLIC_SIZE];
 
         /// <summary>
         /// time (sec.) for symbolic analysis
         /// </summary>
-        public double SYMBOLIC_TIME
-        {
-            get { return Raw[UMFPACK_SYMBOLIC_TIME]; }
-        }
+        public double SYMBOLIC_TIME => Raw[UMFPACK_SYMBOLIC_TIME];
 
         /// <summary>
         /// wall clock time for sym. analysis
         /// </summary>
-        public double SYMBOLIC_WALLTIME
-        {
-            get { return Raw[UMFPACK_SYMBOLIC_WALLTIME]; }
-        }
+        public double SYMBOLIC_WALLTIME => Raw[UMFPACK_SYMBOLIC_WALLTIME];
 
         /// <summary>
         /// strategy used: sym, unsym
         /// </summary>
-        public int STRATEGY_USED
-        {
-            get { return (int)Raw[UMFPACK_STRATEGY_USED]; }
-        }
+        public int STRATEGY_USED => (int)Raw[UMFPACK_STRATEGY_USED];
 
         /// <summary>
         /// ordering used: colamd, amd, given
         /// </summary>
-        public int ORDERING_USED
-        {
-            get { return (int)Raw[UMFPACK_ORDERING_USED]; }
-        }
+        public int ORDERING_USED => (int)Raw[UMFPACK_ORDERING_USED];
 
         /// <summary>
         /// whether Q is fixed or refined
         /// </summary>
-        public double QFIXED
-        {
-            get { return Raw[UMFPACK_QFIXED]; }
-        }
+        public double QFIXED => Raw[UMFPACK_QFIXED];
 
         /// <summary>
         /// whether diagonal pivoting attempted
         /// </summary>
-        public double DIAG_PREFERRED
-        {
-            get { return Raw[UMFPACK_DIAG_PREFERRED]; }
-        }
+        public double DIAG_PREFERRED => Raw[UMFPACK_DIAG_PREFERRED];
 
         /// <summary>
         /// symmetry of pattern of S
         /// </summary>
-        public double PATTERN_SYMMETRY
-        {
-            get { return Raw[UMFPACK_PATTERN_SYMMETRY]; }
-        }
+        public double PATTERN_SYMMETRY => Raw[UMFPACK_PATTERN_SYMMETRY];
 
         /// <summary>
         /// nnz (S+S'), excl. diagonal
         /// </summary>
-        public double NZ_A_PLUS_AT
-        {
-            get { return Raw[UMFPACK_NZ_A_PLUS_AT]; }
-        }
+        public double NZ_A_PLUS_AT => Raw[UMFPACK_NZ_A_PLUS_AT];
 
         /// <summary>
         /// nnz (diag (S))
         /// </summary>
-        public int NZDIAG
-        {
-            get { return (int)Raw[UMFPACK_NZDIAG]; }
-        }
+        public int NZDIAG => (int)Raw[UMFPACK_NZDIAG];
 
         /* AMD statistics, computed in UMFPACK_*symbolic: */
 
         /// <summary>
         /// nz in L+U, if AMD ordering used
         /// </summary>
-        public int SYMMETRIC_LUNZ
-        {
-            get { return (int)Raw[UMFPACK_SYMMETRIC_LUNZ]; }
-        }
+        public int SYMMETRIC_LUNZ => (int)Raw[UMFPACK_SYMMETRIC_LUNZ];
 
         /// <summary>
         /// flops for LU, if AMD ordering used
         /// </summary>
-        public double SYMMETRIC_FLOPS
-        {
-            get { return Raw[UMFPACK_SYMMETRIC_FLOPS]; }
-        }
+        public double SYMMETRIC_FLOPS => Raw[UMFPACK_SYMMETRIC_FLOPS];
 
         /// <summary>
         /// # of "dense" rows/cols in S+S'
         /// </summary>
-        public int SYMMETRIC_NDENSE
-        {
-            get { return (int)Raw[UMFPACK_SYMMETRIC_NDENSE]; }
-        }
+        public int SYMMETRIC_NDENSE => (int)Raw[UMFPACK_SYMMETRIC_NDENSE];
 
         /// <summary>
         /// max nz in cols of L, for AMD
         /// </summary>
-        public int SYMMETRIC_DMAX
-        {
-            get { return (int)Raw[UMFPACK_SYMMETRIC_DMAX]; }
-        }
+        public int SYMMETRIC_DMAX => (int)Raw[UMFPACK_SYMMETRIC_DMAX];
 
         /* 51:55 unused */
 
@@ -814,435 +725,276 @@
         /// <summary>
         /// # of column singletons
         /// </summary>
-        public int COL_SINGLETONS
-        {
-            get { return (int)Raw[UMFPACK_COL_SINGLETONS]; }
-        }
+        public int COL_SINGLETONS => (int)Raw[UMFPACK_COL_SINGLETONS];
 
         /// <summary>
         /// # of row singletons
         /// </summary>
-        public int ROW_SINGLETONS
-        {
-            get { return (int)Raw[UMFPACK_ROW_SINGLETONS]; }
-        }
+        public int ROW_SINGLETONS => (int)Raw[UMFPACK_ROW_SINGLETONS];
 
         /// <summary>
         /// size of S
         /// </summary>
-        public int N2
-        {
-            get { return (int)Raw[UMFPACK_N2]; }
-        }
+        public int N2 => (int)Raw[UMFPACK_N2];
 
         /// <summary>
         /// 1 if S square and symmetricly perm.
         /// </summary>
-        public double S_SYMMETRIC
-        {
-            get { return Raw[UMFPACK_S_SYMMETRIC]; }
-        }
+        public double S_SYMMETRIC => Raw[UMFPACK_S_SYMMETRIC];
 
         /* estimates computed in UMFPACK_*symbolic: */
 
         /// <summary>
         /// final size of Numeric->Memory
         /// </summary>
-        public double NUMERIC_SIZE_ESTIMATE
-        {
-            get { return Raw[UMFPACK_NUMERIC_SIZE_ESTIMATE]; }
-        }
+        public double NUMERIC_SIZE_ESTIMATE => Raw[UMFPACK_NUMERIC_SIZE_ESTIMATE];
 
         /// <summary>
         /// for symbolic and numeric
         /// </summary>
-        public double PEAK_MEMORY_ESTIMATE
-        {
-            get { return Raw[UMFPACK_PEAK_MEMORY_ESTIMATE]; }
-        }
+        public double PEAK_MEMORY_ESTIMATE => Raw[UMFPACK_PEAK_MEMORY_ESTIMATE];
 
         /// <summary>
         /// flop count
         /// </summary>
-        public double FLOPS_ESTIMATE
-        {
-            get { return Raw[UMFPACK_FLOPS_ESTIMATE]; }
-        }
+        public double FLOPS_ESTIMATE => Raw[UMFPACK_FLOPS_ESTIMATE];
 
         /// <summary>
         /// nz in L, incl. diagonal
         /// </summary>
-        public int LNZ_ESTIMATE
-        {
-            get { return (int)Raw[UMFPACK_LNZ_ESTIMATE]; }
-        }
+        public int LNZ_ESTIMATE => (int)Raw[UMFPACK_LNZ_ESTIMATE];
 
         /// <summary>
         /// nz in U, incl. diagonal
         /// </summary>
-        public int UNZ_ESTIMATE
-        {
-            get { return (int)Raw[UMFPACK_UNZ_ESTIMATE]; }
-        }
+        public int UNZ_ESTIMATE => (int)Raw[UMFPACK_UNZ_ESTIMATE];
 
         /// <summary>
         /// initial size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_INIT_ESTIMATE
-        {
-            get { return Raw[UMFPACK_VARIABLE_INIT_ESTIMATE]; }
-        }
+        public double VARIABLE_INIT_ESTIMATE => Raw[UMFPACK_VARIABLE_INIT_ESTIMATE];
 
         /// <summary>
         /// peak size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_PEAK_ESTIMATE
-        {
-            get { return Raw[UMFPACK_VARIABLE_PEAK_ESTIMATE]; }
-        }
+        public double VARIABLE_PEAK_ESTIMATE => Raw[UMFPACK_VARIABLE_PEAK_ESTIMATE];
 
         /// <summary>
         /// final size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_FINAL_ESTIMATE
-        {
-            get { return Raw[UMFPACK_VARIABLE_FINAL_ESTIMATE]; }
-        }
+        public double VARIABLE_FINAL_ESTIMATE => Raw[UMFPACK_VARIABLE_FINAL_ESTIMATE];
 
         /// <summary>
         /// max frontal matrix size
         /// </summary>
-        public int MAX_FRONT_SIZE_ESTIMATE
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_SIZE_ESTIMATE]; }
-        }
+        public int MAX_FRONT_SIZE_ESTIMATE => (int)Raw[UMFPACK_MAX_FRONT_SIZE_ESTIMATE];
 
         /// <summary>
         /// max # rows in any front
         /// </summary>
-        public int MAX_FRONT_NROWS_ESTIMATE
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_NROWS_ESTIMATE]; }
-        }
+        public int MAX_FRONT_NROWS_ESTIMATE => (int)Raw[UMFPACK_MAX_FRONT_NROWS_ESTIMATE];
 
         /// <summary>
         /// max # columns in any front
         /// </summary>
-        public int MAX_FRONT_NCOLS_ESTIMATE
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_NCOLS_ESTIMATE]; }
-        }
+        public int MAX_FRONT_NCOLS_ESTIMATE => (int)Raw[UMFPACK_MAX_FRONT_NCOLS_ESTIMATE];
 
         /* exact values, (estimates shown above) computed in UMFPACK_numeric: */
 
         /// <summary>
         /// final size of Numeric->Memory
         /// </summary>
-        public double NUMERIC_SIZE
-        {
-            get { return Raw[UMFPACK_NUMERIC_SIZE]; }
-        }
+        public double NUMERIC_SIZE => Raw[UMFPACK_NUMERIC_SIZE];
 
         /// <summary>
         /// for symbolic and numeric
         /// </summary>
-        public double PEAK_MEMORY
-        {
-            get { return Raw[UMFPACK_PEAK_MEMORY]; }
-        }
+        public double PEAK_MEMORY => Raw[UMFPACK_PEAK_MEMORY];
 
         /// <summary>
         /// flop count
         /// </summary>
-        public double FLOPS
-        {
-            get { return Raw[UMFPACK_FLOPS]; }
-        }
+        public double FLOPS => Raw[UMFPACK_FLOPS];
 
         /// <summary>
         /// nz in L, incl. diagonal
         /// </summary>
-        public int LNZ
-        {
-            get { return (int)Raw[UMFPACK_LNZ]; }
-        }
+        public int LNZ => (int)Raw[UMFPACK_LNZ];
 
         /// <summary>
         /// nz in U, incl. diagonal
         /// </summary>
-        public int UNZ
-        {
-            get { return (int)Raw[UMFPACK_UNZ]; }
-        }
+        public int UNZ => (int)Raw[UMFPACK_UNZ];
 
         /// <summary>
         /// initial size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_INIT
-        {
-            get { return Raw[UMFPACK_VARIABLE_INIT]; }
-        }
+        public double VARIABLE_INIT => Raw[UMFPACK_VARIABLE_INIT];
 
         /// <summary>
         /// peak size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_PEAK
-        {
-            get { return Raw[UMFPACK_VARIABLE_PEAK]; }
-        }
+        public double VARIABLE_PEAK => Raw[UMFPACK_VARIABLE_PEAK];
 
         /// <summary>
         /// final size of Numeric->Memory
         /// </summary>
-        public double VARIABLE_FINAL
-        {
-            get { return Raw[UMFPACK_VARIABLE_FINAL]; }
-        }
+        public double VARIABLE_FINAL => Raw[UMFPACK_VARIABLE_FINAL];
 
         /// <summary>
         /// max frontal matrix size
         /// </summary>
-        public int MAX_FRONT_SIZE
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_SIZE]; }
-        }
+        public int MAX_FRONT_SIZE => (int)Raw[UMFPACK_MAX_FRONT_SIZE];
 
         /// <summary>
         /// max # rows in any front
         /// </summary>
-        public int MAX_FRONT_NROWS
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_NROWS]; }
-        }
+        public int MAX_FRONT_NROWS => (int)Raw[UMFPACK_MAX_FRONT_NROWS];
 
         /// <summary>
         /// max # columns in any front
         /// </summary>
-        public int MAX_FRONT_NCOLS
-        {
-            get { return (int)Raw[UMFPACK_MAX_FRONT_NCOLS]; }
-        }
+        public int MAX_FRONT_NCOLS => (int)Raw[UMFPACK_MAX_FRONT_NCOLS];
 
         /* computed in UMFPACK_numeric: */
 
         /// <summary>
         /// # of garbage collections
         /// </summary>
-        public int NUMERIC_DEFRAG
-        {
-            get { return (int)Raw[UMFPACK_NUMERIC_DEFRAG]; }
-        }
+        public int NUMERIC_DEFRAG => (int)Raw[UMFPACK_NUMERIC_DEFRAG];
 
         /// <summary>
         /// # of memory reallocations
         /// </summary>
-        public int NUMERIC_REALLOC
-        {
-            get { return (int)Raw[UMFPACK_NUMERIC_REALLOC]; }
-        }
+        public int NUMERIC_REALLOC => (int)Raw[UMFPACK_NUMERIC_REALLOC];
 
         /// <summary>
         /// # of costlly memory realloc's
         /// </summary>
-        public int NUMERIC_COSTLY_REALLOC
-        {
-            get { return (int)Raw[UMFPACK_NUMERIC_COSTLY_REALLOC]; }
-        }
+        public int NUMERIC_COSTLY_REALLOC => (int)Raw[UMFPACK_NUMERIC_COSTLY_REALLOC];
 
         /// <summary>
         /// # of integers in LU pattern
         /// </summary>
-        public int COMPRESSED_PATTERN
-        {
-            get { return (int)Raw[UMFPACK_COMPRESSED_PATTERN]; }
-        }
+        public int COMPRESSED_PATTERN => (int)Raw[UMFPACK_COMPRESSED_PATTERN];
 
         /// <summary>
         /// # of reals in LU factors
         /// </summary>
-        public int LU_ENTRIES
-        {
-            get { return (int)Raw[UMFPACK_LU_ENTRIES]; }
-        }
+        public int LU_ENTRIES => (int)Raw[UMFPACK_LU_ENTRIES];
 
         /// <summary>
         /// numeric factorization time
         /// </summary>
-        public double NUMERIC_TIME
-        {
-            get { return Raw[UMFPACK_NUMERIC_TIME]; }
-        }
+        public double NUMERIC_TIME => Raw[UMFPACK_NUMERIC_TIME];
 
         /// <summary>
         /// nz on diagonal of U
         /// </summary>
-        public int UDIAG_NZ
-        {
-            get { return (int)Raw[UMFPACK_UDIAG_NZ]; }
-        }
+        public int UDIAG_NZ => (int)Raw[UMFPACK_UDIAG_NZ];
 
         /// <summary>
         /// est. reciprocal condition #
         /// </summary>
-        public double RCOND
-        {
-            get { return Raw[UMFPACK_RCOND]; }
-        }
+        public double RCOND => Raw[UMFPACK_RCOND];
 
         /// <summary>
         /// none, max row, or sum row
         /// </summary>
-        public double WAS_SCALED
-        {
-            get { return Raw[UMFPACK_WAS_SCALED]; }
-        }
+        public double WAS_SCALED => Raw[UMFPACK_WAS_SCALED];
 
         /// <summary>
         /// min (max row) or min (sum row)
         /// </summary>
-        public double RSMIN
-        {
-            get { return Raw[UMFPACK_RSMIN]; }
-        }
+        public double RSMIN => Raw[UMFPACK_RSMIN];
 
         /// <summary>
         /// max (max row) or max (sum row)
         /// </summary>
-        public double RSMAX
-        {
-            get { return Raw[UMFPACK_RSMAX]; }
-        }
+        public double RSMAX => Raw[UMFPACK_RSMAX];
 
         /// <summary>
         /// min abs diagonal entry of U
         /// </summary>
-        public double UMIN
-        {
-            get { return Raw[UMFPACK_UMIN]; }
-        }
+        public double UMIN => Raw[UMFPACK_UMIN];
 
         /// <summary>
         /// max abs diagonal entry of U
         /// </summary>
-        public double UMAX
-        {
-            get { return Raw[UMFPACK_UMAX]; }
-        }
+        public double UMAX => Raw[UMFPACK_UMAX];
 
         /// <summary>
         /// alloc_init parameter used
         /// </summary>
-        public double ALLOC_INIT_USED
-        {
-            get { return Raw[UMFPACK_ALLOC_INIT_USED]; }
-        }
+        public double ALLOC_INIT_USED => Raw[UMFPACK_ALLOC_INIT_USED];
 
         /// <summary>
         /// # of forced updates
         /// </summary>
-        public double FORCED_UPDATES
-        {
-            get { return Raw[UMFPACK_FORCED_UPDATES]; }
-        }
+        public double FORCED_UPDATES => Raw[UMFPACK_FORCED_UPDATES];
 
         /// <summary>
         /// numeric wall clock time
         /// </summary>
-        public double NUMERIC_WALLTIME
-        {
-            get { return Raw[UMFPACK_NUMERIC_WALLTIME]; }
-        }
+        public double NUMERIC_WALLTIME => Raw[UMFPACK_NUMERIC_WALLTIME];
 
         /// <summary>
         /// number of off-diagonal pivots
         /// </summary>
-        public int NOFF_DIAG
-        {
-            get { return (int)Raw[UMFPACK_NOFF_DIAG]; }
-        }
+        public int NOFF_DIAG => (int)Raw[UMFPACK_NOFF_DIAG];
 
 
         /// <summary>
         /// nz in L, if no dropped entries
         /// </summary>
-        public int ALL_LNZ
-        {
-            get { return (int)Raw[UMFPACK_ALL_LNZ]; }
-        }
+        public int ALL_LNZ => (int)Raw[UMFPACK_ALL_LNZ];
 
         /// <summary>
         /// nz in U, if no dropped entries
         /// </summary>
-        public int ALL_UNZ
-        {
-            get { return (int)Raw[UMFPACK_ALL_UNZ]; }
-        }
+        public int ALL_UNZ => (int)Raw[UMFPACK_ALL_UNZ];
 
         /// <summary>
         /// # of dropped small entries
         /// </summary>
-        public int NZDROPPED
-        {
-            get { return (int)Raw[UMFPACK_NZDROPPED]; }
-        }
+        public int NZDROPPED => (int)Raw[UMFPACK_NZDROPPED];
 
         /* computed in UMFPACK_solve: */
 
         /// <summary>
         /// # of iterative refinement steps taken
         /// </summary>
-        public int IR_TAKEN
-        {
-            get { return (int)Raw[UMFPACK_IR_TAKEN]; }
-        }
+        public int IR_TAKEN => (int)Raw[UMFPACK_IR_TAKEN];
 
         /// <summary>
         /// # of iter. refinement steps attempted
         /// </summary>
-        public int IR_ATTEMPTED
-        {
-            get { return (int)Raw[UMFPACK_IR_ATTEMPTED]; }
-        }
+        public int IR_ATTEMPTED => (int)Raw[UMFPACK_IR_ATTEMPTED];
 
         /// <summary>
         /// omega1, sparse backward error estimate
         /// </summary>
-        public double OMEGA1
-        {
-            get { return Raw[UMFPACK_OMEGA1]; }
-        }
+        public double OMEGA1 => Raw[UMFPACK_OMEGA1];
 
         /// <summary>
         /// omega2, sparse backward error estimate
         /// </summary>
-        public double OMEGA2
-        {
-            get { return Raw[UMFPACK_OMEGA2]; }
-        }
+        public double OMEGA2 => Raw[UMFPACK_OMEGA2];
 
         /// <summary>
         /// flop count for solve
         /// </summary>
-        public double SOLVE_FLOPS
-        {
-            get { return Raw[UMFPACK_SOLVE_FLOPS]; }
-        }
+        public double SOLVE_FLOPS => Raw[UMFPACK_SOLVE_FLOPS];
 
         /// <summary>
         /// solve time (seconds)
         /// </summary>
-        public double SOLVE_TIME
-        {
-            get { return Raw[UMFPACK_SOLVE_TIME]; }
-        }
+        public double SOLVE_TIME => Raw[UMFPACK_SOLVE_TIME];
 
         /// <summary>
         /// solve time (wall clock, seconds)
         /// </summary>
-        public double SOLVE_WALLTIME
-        {
-            get { return Raw[UMFPACK_SOLVE_WALLTIME]; }
-        }
+        public double SOLVE_WALLTIME => Raw[UMFPACK_SOLVE_WALLTIME];
 
         #endregion
 

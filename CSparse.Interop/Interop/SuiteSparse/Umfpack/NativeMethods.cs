@@ -106,7 +106,7 @@
         /// <param name="P">The permutation vector P is defined as P [k] = i, where the original row i of A is the kth pivot row in PAQ</param>
         /// <param name="Q">The permutation vector Q is defined as Q [k] = j, where the original column j of A is the kth pivot column in PAQ.</param>
         /// <param name="Dx">The diagonal of U is also returned in Dx.</param>
-        /// <param name="do_recip">This argument defines how the scale factors Rs are to be interpretted.</param>
+        /// <param name="do_recip">This argument defines how the scale factors Rs are to be interpreted.</param>
         /// <param name="Rs">The row scale factors are returned in Rs [0..n_row-1].</param>
         /// <param name="Numeric">Numeric must point to a valid Numeric object.</param>
         /// <returns>UMFPACK status code.</returns>

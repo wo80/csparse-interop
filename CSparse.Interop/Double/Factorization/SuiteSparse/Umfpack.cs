@@ -18,6 +18,29 @@ namespace CSparse.Double.Factorization.SuiteSparse
         {
         }
 
+        /// <inheritdoc />
+        public override void GetFactors(out CompressedColumnStorage<double> L, out CompressedColumnStorage<double> U, out int[] P, out int[] Q, out double[] D, out double[] R)
+        {
+            if (numeric == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Numeric factorization unavailable.");
+            }
+
+            int rows = info.NROW;
+            int cols = info.NCOL;
+            int inner = Math.Min(rows, cols);
+
+            L = new SparseMatrix(rows, inner, info.LNZ);
+            U = new SparseMatrix(inner, cols, info.UNZ);
+
+            P = new int[rows];
+            Q = new int[cols];
+            D = new double[inner];
+            R = new double[rows];
+
+            NativeMethods.umfpack_di_get_numeric(L.ColumnPointers, L.RowIndices, L.Values, U.ColumnPointers, U.RowIndices, U.Values, P, Q, D, out int recip, R, numeric);
+        }
+
         protected override void DoInitialize()
         {
             NativeMethods.umfpack_di_defaults(control.Raw);
