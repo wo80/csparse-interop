@@ -5,6 +5,7 @@ namespace CSparse.Interop.Tests.Double
     using CSparse.Double.Factorization.MKL;
     using CSparse.Factorization;
     using CSparse.Interop.MKL.Pardiso;
+    using CSparse.Storage;
 
     class TestPardiso : TestBase
     {
@@ -15,8 +16,13 @@ namespace CSparse.Interop.Tests.Double
         
         protected override IDisposableSolver<double> CreateSolver(SparseMatrix matrix, bool symmetric)
         {
-            // TODO: why does 'RealSymmetricPositiveDefinite' not work?
-            int mtype = symmetric ? PardisoMatrixType.RealStructurallySymmetric : PardisoMatrixType.RealNonsymmetric;
+            if (symmetric && !matrix.IsLower())
+            {
+                // The PARDISO spd solver expects a triangular matrix.
+                matrix = (SparseMatrix)matrix.ToLower();
+            }
+
+            int mtype = symmetric ? PardisoMatrixType.RealSymmetricPositiveDefinite : PardisoMatrixType.RealNonsymmetric;
 
             var solver = new Pardiso(matrix, mtype);
 

@@ -7,19 +7,6 @@ namespace CSparse.Interop.Tests.Double
     internal static class SparseMatrixExtensions
     {
         /// <summary>
-        /// Remove all non-zero entries in the lower part of the matrix.
-        /// </summary>
-        /// <param name="clone">If true, return a clone of the original matrix, otherwise modify given instance in place.</param>
-        public static SparseMatrix ToUpper(this SparseMatrix A, bool clone = true)
-        {
-            var B = clone ? (SparseMatrix)A.Clone() : A;
-
-            B.Keep((i, j, _) => i <= j);
-
-            return B;
-        }
-
-        /// <summary>
         /// Multiplies a real-valued (m-by-n) matrix by a complex vector, y = A*x. 
         /// </summary>
         /// <param name="x">Vector of length n (column count).</param>

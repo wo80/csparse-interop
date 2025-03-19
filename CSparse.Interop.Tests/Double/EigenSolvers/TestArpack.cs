@@ -2,6 +2,7 @@
 {
     using CSparse.Double;
     using CSparse.Double.Solver;
+    using CSparse.Storage;
     using System;
     using System.Diagnostics;
 
