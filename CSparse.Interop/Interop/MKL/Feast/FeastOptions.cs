@@ -7,7 +7,7 @@ namespace CSparse.Interop.MKL.Feast
     public enum FeastMode
     {
         /// <summary>
-        /// Normal execution.
+        /// Standard use for Extended Eigensolver routines. 
         /// </summary>
         Standard = 0,
         /// <summary>
@@ -217,7 +217,7 @@ namespace CSparse.Interop.MKL.Feast
         /// The underlying FEAST options array.
         /// </summary>
         /// <remarks>
-        /// See https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-input-parameters.
+        /// See https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2025-2/extended-eigensolver-input-parameters.html.
         /// </remarks>
         internal int[] fpm;
 
@@ -244,7 +244,7 @@ namespace CSparse.Interop.MKL.Feast
             fpm[4] = 0; // custom initial subspace.
             fpm[5] = 0; // stopping test.
             fpm[6] = 5; // single precision stopping criteria.
-            fpm[13] = 1; // standard use.
+            fpm[13] = 0; // standard use.
             fpm[26] = 0; // check input.
             fpm[27] = 0; // check positive definite.
             fpm[63] = 0; // use custom paradiso options.
