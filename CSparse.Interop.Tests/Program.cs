@@ -67,14 +67,17 @@
 
         private static void SetImportResolver()
         {
+#if NET5_0_OR_GREATER
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 var assembly = AppDomain.CurrentDomain.Load("CSparse.Interop");
 
                 NativeLibrary.SetDllImportResolver(assembly, DllImportResolver);
             }
+#endif
         }
 
+#if NET5_0_OR_GREATER
         private static IntPtr DllImportResolver(string library, Assembly assembly, DllImportSearchPath? searchPath)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -89,5 +92,6 @@
             // Otherwise, fall back to default import resolver.
             return IntPtr.Zero;
         }
+#endif
     }
 }

@@ -4,7 +4,7 @@ namespace CSparse.Interop.MKL.Feast
     using System;
     using System.Runtime.InteropServices;
 
-    // See https://software.intel.com/en-us/mkl-developer-reference-c-extended-eigensolver-routines
+    // See https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2025-2/extended-eigensolver-predefined-interfaces.html
 
     internal static class NativeMethods
     {
@@ -50,24 +50,24 @@ namespace CSparse.Interop.MKL.Feast
         // Standard Eigenvalue Problem
 
         [DllImport(DLL, EntryPoint = "dfeast_scsrev", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void dfeast_scsrev(ref char uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
+        public static extern void dfeast_scsrev(ref byte uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
             int[] fpm, out double epsout, out int loop, ref double emin, ref double emax, ref int m0, IntPtr e,
             IntPtr x, out int m, IntPtr res, out int info);
 
         [DllImport(DLL, EntryPoint = "zfeast_hcsrev", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void zfeast_hcsrev(ref char uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
+        public static extern void zfeast_hcsrev(ref byte uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
             int[] fpm, out double epsout, out int loop, ref double emin, ref double emax, ref int m0, IntPtr e,
             IntPtr x, out int m, IntPtr res, out int info);
 
         // Generalized Eigenvalue Problem
 
         [DllImport(DLL, EntryPoint = "dfeast_scsrgv", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void dfeast_scsrgv(ref char uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
+        public static extern void dfeast_scsrgv(ref byte uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
             IntPtr b, IntPtr ib, IntPtr jb, int[] fpm, out double epsout, out int loop, ref double emin, ref double emax, ref int m0, IntPtr e,
             IntPtr x, out int m, IntPtr res, out int info);
 
         [DllImport(DLL, EntryPoint = "zfeast_hcsrgv", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void zfeast_hcsrgv(ref char uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
+        public static extern void zfeast_hcsrgv(ref byte uplo, ref int n, IntPtr a, IntPtr ia, IntPtr ja,
             IntPtr b, IntPtr ib, IntPtr jb, int[] fpm, out double epsout, out int loop, ref double emin, ref double emax, ref int m0, IntPtr e,
             IntPtr x, out int m, IntPtr res, out int info);
 

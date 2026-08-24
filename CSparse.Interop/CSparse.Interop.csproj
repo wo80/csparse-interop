@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
@@ -28,7 +28,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="CSparse" Version="4.3.0" />
+    <PackageReference Include="CSparse" Version="4.4.1" />
   </ItemGroup>
 
 </Project>

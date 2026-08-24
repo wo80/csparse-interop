@@ -9,7 +9,7 @@ namespace CSparse.Interop.MKL
         /// <summary>
         /// The MKL library name used for p/invoke.
         /// </summary>
-        public const string LibraryName = "mkl_rt.2";
+        public const string LibraryName = "mkl_rt.3";
 
         /// <summary>
         /// Gets the MKL version.

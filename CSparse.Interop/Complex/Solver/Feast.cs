@@ -40,7 +40,7 @@ namespace CSparse.Complex.Solver
         {
             // TODO: check subspace matrix dimensions.
 
-            char uplo = 'F'; // Full matrix.
+            byte uplo = (byte)'F'; // Full matrix.
             int n = A.RowCount;
 
             double epsout; // Relative error on the trace.
@@ -96,7 +96,7 @@ namespace CSparse.Complex.Solver
         {
             // TODO: check subspace matrix dimensions.
 
-            char uplo = 'F'; // Full matrix.
+            byte uplo = (byte)'F'; // Full matrix.
             int n = A.RowCount;
 
             double epsout; // Relative error on the trace.
